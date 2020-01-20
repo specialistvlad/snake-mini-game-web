@@ -1,0 +1,8 @@
+.grid {
+  min-height: 100%;
+  width: 100%;
+}
+
+.cell {
+  border: 1px solid white;
+}
