@@ -1,10 +1,11 @@
 export const colors = {
-    wall: 'black',
+    empty: 'black',
+    wall: 'white',
     food: 'green',
     snake: 'red',
 };
 
-export type TCellType = 'wall' | 'food' | 'snake';
+export type TCellType = 'empty' | 'wall' | 'food' | 'snake';
 
 type TCellColor = string;
 

@@ -7,6 +7,8 @@ export default () => {
   const [area, setArea] = useState(game.getActualArea());
 
   useEffect(() => {
+    // game.tick();
+    //   setArea(game.getActualArea());
     setInterval(() => {
       game.tick();
       setArea(game.getActualArea());

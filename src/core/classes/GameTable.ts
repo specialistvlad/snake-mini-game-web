@@ -2,50 +2,57 @@ import { Snake } from './Snake';
 import { TArea, TCell, TCellType, colors } from '../types';
 
 interface IGameTable {
-    start(): void;
+    reset(): void;
     tick(): TArea;
     getActualArea(): TArea;
 };
 
 export class GameTable implements IGameTable {
-    private size: number = 25;
+    private size: number = 5;
     private snakes: Array<Snake> = [];
     private area: TArea;
+    private randomizeMode: boolean = false;
 
     constructor() {
         this.area = this.makeArea();
-        // this.makeSnake();
+        this.snakes = this.makeSnakes();
     }
 
-    public start(): void {
+    public reset(): void {
 
     }
 
     public tick(): TArea {
-        this.snakes.forEach(element => {
-            element.step();
-        });
-        const random = (size: number) => Math.floor((Math.random() * size));
-        // @ts-ignore
-        const randomColorValue = (): TCellType  => Object.keys(colors)[random(Object.keys(colors).length)];
-        this.area.forEach((row: Array<TCell>) => row.forEach((cell: TCell) => cell.cellType = randomColorValue()));
-        // return 'died';
+        if (this.randomizeMode) {
+            this.randomizeArea();
+            return this.getActualArea();
+        }
+
+        this.snakes.forEach(element => element.step());
         return this.getActualArea();
     }
+
     public getActualArea(): TArea {
         return [...this.area];
     }
 
     private makeArea(): TArea {
-        const row = () => Array<TCell>(this.size).fill({ cellType: 'wall' }).map((item) => ({ ...item }));
+        const row = () => Array<TCell>(this.size).fill({ cellType: 'empty' }).map((item) => ({ ...item }));
         return Array<Array<TCell>>(this.size).fill([]).map(row);
     }
 
-    // private makeSnake() {
-    //     new Snake({
-    //         id: 'My test snake',
-    //         initPoint: [0, 0],
-    //         area,
-    //       }),
-    // }
+    private randomizeArea(): void {
+        const random = (size: number) => Math.floor((Math.random() * size));
+        // @ts-ignore
+        const randomColorValue = (): TCellType  => Object.keys(colors)[random(Object.keys(colors).length)];
+        this.area.forEach((row: Array<TCell>) => row.forEach((cell: TCell) => cell.cellType = randomColorValue()));
+    }
+
+    private makeSnakes() {
+        return [new Snake({
+            name: 'My test snake',
+            initPoint: [2, 2],
+            area: this.area,
+          })];
+    }
 };
