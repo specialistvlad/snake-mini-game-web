@@ -1,6 +1,6 @@
 import React from 'react';
 import './style.css';
-import { colors, TArea, TRow, TCell } from '../../types';
+import { colors, TArea, TRow, TCell } from '../../core/types';
 
 // @ts-ignore
 const Component = ({ area }) => (
