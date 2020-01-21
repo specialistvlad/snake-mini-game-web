@@ -3,8 +3,8 @@ import Grid from '../Grid';
 import './style.css';
 import { colors } from '../../types';
 
-import { GameTable } from '../../modules/GameTable';
-import { Snake } from '../../modules/Snake';
+import { GameTable } from '../../core/modules/GameTable';
+import { Snake } from '../../core/modules/Snake';
 
 const game = new GameTable();
 
