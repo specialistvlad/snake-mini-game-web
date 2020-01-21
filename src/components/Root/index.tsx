@@ -2,11 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Grid from '../Grid';
 import './style.css';
 import { colors } from '../../types';
-
-import { GameTable } from '../../core/modules/GameTable';
-import { Snake } from '../../core/modules/Snake';
-
-const game = new GameTable();
+import game from '../../core/game';
 
 export default () => {
   const [area, setArea] = useState(game.getActualArea());
