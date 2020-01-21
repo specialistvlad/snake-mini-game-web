@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '../Grid';
 import './style.css';
-import { colors } from '../../core/types';
 import game from '../../core/game';
 
 export default () => {
