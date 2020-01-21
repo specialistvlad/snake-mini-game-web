@@ -29,15 +29,14 @@ export class Snake implements ISnake {
     constructor(params: ISnakeCreateParams) {
         this.name = params.name || 'Unknown snake';
         this.area = params.area;
+        if (params.initPoint[0] >= this.area.length) {
+            throw new Error('Initial x point can\'t be great then area size!');
+        }
+
+        if (params.initPoint[1] >= this.area[params.initPoint[0]].length) {
+            throw new Error('Initial x point can\'t be great then area size!');
+        }
         this.snake = [params.initPoint];
-        if (this.snake[0][0] >= this.area.length) {
-            throw new Error('Initial x point can\'t be great then area size!');
-        }
-
-        if (this.snake[0][0] >= this.area.length) {
-            throw new Error('Initial x point can\'t be great then area size!');
-        }
-
 
         this.currentDirection = params.direction || 'up';
         this.nextDirection = params.direction || 'up';
