@@ -3,21 +3,20 @@ import Grid from '../Grid';
 import './style.css';
 import { colors } from '../../types';
 
-const size = 25;
-const random = (max) => Math.floor((Math.random() * max));
-const getArrayLength = (length) => [...Array(length).keys()];
-const getNewArea = (n) => getArrayLength(size).map(() => getArrayLength(size));
-const randomColorValue = () => Object.keys(colors)[random(Object.keys(colors).length)];
-const randomizeArea = (area) => area.map((row) => row.map(randomColorValue));
+import { GameTable } from '../../modules/GameTable';
+import { Snake } from '../../modules/Snake';
+
+const game = new GameTable();
 
 export default () => {
-  const [area, setArea] = useState(getNewArea());
+  const [area, setArea] = useState(game.getActualArea());
 
   useEffect(() => {
     setInterval(() => {
-      setArea(randomizeArea(getNewArea()));
-    }, 50);
+      game.tick();
+      setArea(game.getActualArea());
+    }, 500);
   }, []);
 
-  return (<Grid rows={area}/>);
+  return (<Grid area={area}/>);
 };
