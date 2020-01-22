@@ -8,18 +8,18 @@ interface IGameTable {
 };
 
 export class GameTable implements IGameTable {
-    private size: number = 5;
+    private size: number = 25;
     private snakes: Array<Snake> = [];
-    private area: TArea;
+    private area: TArea = [];
     private randomizeMode: boolean = false;
 
     constructor() {
-        this.area = this.makeArea();
-        this.snakes = this.makeSnakes();
+        this.reset();
     }
 
     public reset(): void {
-
+        this.area = this.makeArea();
+        this.snakes = this.makeSnakes();
     }
 
     public tick(): TArea {
@@ -44,8 +44,7 @@ export class GameTable implements IGameTable {
     private randomizeArea(): void {
         const random = (size: number) => Math.floor((Math.random() * size));
         // @ts-ignore
-        const randomColorValue = (): TCellType  => Object.keys(colors)[random(Object.keys(colors).length)];
-        this.area.forEach((row: Array<TCell>) => row.forEach((cell: TCell) => cell.cellType = randomColorValue()));
+        this.area.forEach((row: Array<TCell>) => row.forEach((cell: TCell) => cell.cellType = Object.keys(colors)[random(Object.keys(colors).length)]));
     }
 
     private makeSnakes() {

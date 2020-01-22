@@ -12,7 +12,7 @@ export default () => {
     setInterval(() => {
       game.tick();
       setArea(game.getActualArea());
-    }, 500);
+    }, 50);
   }, []);
 
   return (<Grid area={area}/>);

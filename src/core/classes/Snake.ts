@@ -27,20 +27,27 @@ export class Snake implements ISnake {
     private nextDirection: TDirection;
 
     constructor(params: ISnakeCreateParams) {
+        this.validateParams(params); // make object is correct
+
+        // setup all params
         this.name = params.name || 'Unknown snake';
         this.area = params.area;
-        if (params.initPoint[0] >= this.area.length) {
-            throw new Error('Initial x point can\'t be great then area size!');
-        }
-
-        if (params.initPoint[1] >= this.area[params.initPoint[0]].length) {
-            throw new Error('Initial x point can\'t be great then area size!');
-        }
-        this.snake = [params.initPoint];
-
+        this.snake = [params.initPoint, [2,3], [2,4]];
         this.currentDirection = params.direction || 'up';
         this.nextDirection = params.direction || 'up';
+
+        // trigger projecting snake coordinates to table without movement 
         this.step(true);
+    }
+
+    private validateParams({ initPoint, area }: ISnakeCreateParams) {
+        if (initPoint[0] >= area.length) {
+            throw new Error('Initial x point can\'t be great then area size!');
+        }
+
+        if (initPoint[1] >= area[initPoint[0]].length) {
+            throw new Error('Initial x point can\'t be great then area size!');
+        }
     }
 
     public step(init: boolean = false): TResult {
