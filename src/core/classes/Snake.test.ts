@@ -8,7 +8,6 @@ const makeSnakeStepsReducer = (snake: Snake) => {
         if (currentValue !== null) {
             snake.direction = currentValue;
         }
-
         return snake.stepReducer(accumulator);
     };
 };

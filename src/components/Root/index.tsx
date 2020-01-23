@@ -1,27 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import Grid from '../Grid';
+import Table from '../Table';
 import './style.css';
 import game from '../../core/game';
 
-const random = (max: number) => Math.floor((Math.random() * max));
-const dir = ['up', 'down', 'left', 'right'];
+// const random = (max: number) => Math.floor((Math.random() * max));
+// const dir = ['up', 'down', 'left', 'right'];
 
 export default () => {
-  const [area, setArea] = useState(game.getActualArea());
+  const [rows, setRows] = useState(game.cellsToColorTable());
 
   useEffect(() => {
-    // game.tick();
-    //   setArea(game.getActualArea());
     setInterval(() => {
-      game.tick();
-      setArea(game.getActualArea());
+      setRows(game.tick());
     }, 50);
 
-    setInterval(() => {
-      // @ts-ignore
-      game.snakes[0].changeDirection(dir[random(4)])
-    }, 1000);
+    // setInterval(() => {
+    //   // @ts-ignore
+    //   game.snakes[0].changeDirection(dir[random(4)])
+    // }, 1000);
   }, []);
 
-  return (<Grid area={area}/>);
+  return (<Table rows={rows}/>);
 };

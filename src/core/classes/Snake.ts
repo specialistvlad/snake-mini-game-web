@@ -41,13 +41,7 @@ export class Snake implements ISnake {
     private move(): void {
         const [last] = this.snake.slice(this.snake.length - 1);
         const nextCoord = this.getNextCoord(last);
-        // console.log(last, nextCoord);
         this.snake = [nextCoord, ...this.snake.slice(0, this.snake.length - 1)];
-        
-        // this.debug();
-        // const nextCellType = this.area[nextCoord[0]][nextCoord[1]].cellType;
-        
-        // this.snake.pop();
     }
 
     private getNextCoord([y, x]: TCoordinate): TCoordinate {
@@ -67,7 +61,7 @@ export class Snake implements ISnake {
 
     set direction(nextDegree: TDegree) {
         this.nextDegree = nextDegree;
-        console.log(`Change direction to: ${Directions[nextDegree]}`);
+        // console.log(`Change direction to: ${Directions[nextDegree]}`);
     }
 
     get direction(): TDegree {

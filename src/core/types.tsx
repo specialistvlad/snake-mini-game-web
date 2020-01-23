@@ -1,39 +1,25 @@
-export const colors = {
+export const CellPalette = {
     empty: 'black',
     wall: 'white',
+    mirror: 'gray',
     food: 'green',
-    snake: 'red',
 };
 
-export type TCellType = 'empty' | 'wall' | 'food' | 'snake';
+export const SnakePalette = ['red', 'blue', 'yellow', 'pearl'];
 
+export enum CellType {
+    empty = 'empty',
+    wall = 'wall',
+    food = 'food',
+    snake = 'snake',
+};
 type TCellColor = string;
-
-export type TCell = {
-    cellType: TCellType,
-    cellColor?: TCellColor,
-};
-
-export type TRow = Array<TCell>;
-export type TArea = Array<Array<TCell>>;
 
 // *******************************************
 // Coordinates and direction on the table
 // *******************************************
 export type TCoordinate = [number, number]; // y, x
 export type TCoordinates = Array<TCoordinate>;
-//
-// 0 |---------------> X
-// -
-// |
-// |       0˚ →
-// |       90˚ ↓
-// |       180˚ ←
-// |       270˚ ↑
-// |
-// ∨
-// 
-// Y
 export enum Directions {
     Right = 0,
     Down = 90,
@@ -46,3 +32,12 @@ export type TDegree = number;
 export type TGameShit = {
     coords: TCoordinates,
 };
+
+export type TCell = {
+    coordinate: TCoordinate,
+    type: CellType,
+    color: TCellColor,
+};
+
+export type TCells = Array<TCell>;
+export type ColorTable = Array<Array<string>>;

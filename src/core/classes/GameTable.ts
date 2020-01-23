@@ -1,58 +1,72 @@
 import { Snake } from './Snake';
-import { TArea, TCell, colors } from '../types';
+import { TCell, ColorTable, TCells, CellType, CellPalette, SnakePalette } from '../types';
 
 interface IGameTable {
     reset(): void;
-    tick(): TArea;
-    getActualArea(): TArea;
+    tick(): ColorTable;
 };
 
 export class GameTable implements IGameTable {
-    private size: number = 25;
+    public size: number = 5;
     public snakes: Array<Snake> = [];
-    private area: TArea = [];
-    private randomizeMode: boolean = false;
+    private cells: TCells = [];
+    private randomizeMode: boolean = true;
 
     constructor() {
         this.reset();
     }
 
     public reset(): void {
-        this.area = this.makeArea();
+        this.cells = [];
         this.snakes = this.makeSnakes();
     }
 
-    public tick(): TArea {
+    public tick(): ColorTable {
         if (this.randomizeMode) {
-            this.randomizeArea();
-            return this.getActualArea();
+            this.randomizeCells();
+            // console.log(this.cellsToColorTable());
+            
+            return this.cellsToColorTable();
         }
+        // const makeSnakeStepsReducer = (snake: Snake) => {
+        //     return (accumulator: TGameShit, currentValue: optionalDegree) => {
+        //         if (currentValue !== null) {
+        //             snake.direction = currentValue;
+        //         }
+        //         return snake.stepReducer(accumulator);
+        //     };
+        // };
 
-        this.area.forEach((row: Array<TCell>) => row.forEach((cell: TCell) => cell.cellType = 'empty'));
-        this.snakes.forEach(element => element.step());
-        return this.getActualArea();
+        return this.cellsToColorTable();
     }
 
-    public getActualArea(): TArea {
-        return [...this.area];
+    public cellsToColorTable(): ColorTable {
+        const table = Array<Array<string>>(this.size).fill([]).map(() => Array<string>(this.size).fill(''));
+        this.cells.forEach(({ coordinate: [y, x], color}: TCell) => table[x][y] = color);
+        return table;
     }
 
-    private makeArea(): TArea {
-        const row = () => Array<TCell>(this.size).fill({ cellType: 'empty' }).map((item) => ({ ...item }));
-        return Array<Array<TCell>>(this.size).fill([]).map(row);
-    }
-
-    private randomizeArea(): void {
+    private randomizeCells(): Array<TCell> {
         const random = (size: number) => Math.floor((Math.random() * size));
-        // @ts-ignore
-        this.area.forEach((row: Array<TCell>) => row.forEach((cell: TCell) => cell.cellType = Object.keys(colors)[random(Object.keys(colors).length)]));
+        return this.cells = Array<TCell>(this.size * this.size).fill({
+            coordinate: [0, 0],
+            type: CellType.empty,
+            color: '',
+        }).map((item: TCell, ind) => {
+            const allColors = [...Object.values(CellPalette), ...SnakePalette];
+            return {
+                ...item,
+                coordinate: [Math.trunc(ind / this.size), Math.trunc(ind % this.size)],
+                color: allColors[random(allColors.length)],
+                type: CellType.empty,
+            };
+        });
     }
 
     private makeSnakes() {
         return [new Snake({
-            name: 'My test snake',
-            initPoint: [2, 2],
-            area: this.area,
+            name: 'My smart snake',
+            initPoint: [Math.round(this.size / this.size), Math.round(this.size / this.size)],
           })];
     }
 };
