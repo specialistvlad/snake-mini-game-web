@@ -17,8 +17,11 @@ export type TCell = {
 export type TRow = Array<TCell>;
 export type TArea = Array<Array<TCell>>;
 
-
+// *******************************************
 // Coordinates and direction on the table
+// *******************************************
+export type TCoordinate = [number, number]; // y, x
+export type TCoordinates = Array<TCoordinate>;
 //
 // 0 |---------------> X
 // -
@@ -31,7 +34,15 @@ export type TArea = Array<Array<TCell>>;
 // ∨
 // 
 // Y
+export enum Directions {
+    Right = 0,
+    Down = 90,
+    Left = 180,
+    Up = 270,
+};
+
 export type TDegree = number;
-export type TCoordinate = [number, number];
-export type TCoordinates = Array<TCoordinate>;
-export enum Directions { Right = 0, Down = 90, Left = 180, Up = 270 }
+
+export type TGameShit = {
+    coords: TCoordinates,
+};
