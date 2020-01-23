@@ -12,7 +12,8 @@ const Component = ({ rows }) => (
           key={`cell-id-${x}`}
           className="cell"
           style={{
-            backgroundColor
+            backgroundColor,
+            opacity: 0.1,
           }}
         />))}
       </tr>

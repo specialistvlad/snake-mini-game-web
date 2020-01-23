@@ -5,7 +5,7 @@ body, #root {
 
 #root {
   background: #222;
-  background: radial-gradient(#333333eb, #111111e0);
+  background: radial-gradient(#333333eb, #11111100);
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;

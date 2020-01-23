@@ -7,7 +7,7 @@ interface IGameTable {
 };
 
 export class GameTable implements IGameTable {
-    public size: number = 5;
+    public size: number = 10;
     public snakes: Array<Snake> = [];
     private cells: TCells = [];
     private randomizeMode: boolean = true;
@@ -24,8 +24,6 @@ export class GameTable implements IGameTable {
     public tick(): ColorTable {
         if (this.randomizeMode) {
             this.randomizeCells();
-            // console.log(this.cellsToColorTable());
-            
             return this.cellsToColorTable();
         }
         // const makeSnakeStepsReducer = (snake: Snake) => {
