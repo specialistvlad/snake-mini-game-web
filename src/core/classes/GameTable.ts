@@ -7,7 +7,7 @@ interface IGameTable {
 };
 
 export class GameTable implements IGameTable {
-    public size: number = 10;
+    public size: number = 15;
     public snakes: Array<Snake> = [];
     private cells: TCells = [];
     private randomizeMode: boolean = false;

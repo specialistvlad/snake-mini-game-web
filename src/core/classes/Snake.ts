@@ -25,6 +25,7 @@ export class Snake implements ISnake {
     constructor(params: TSnakeConstructorParams) {
         this.name = params.name || 'Unknown snake';
         this.snake = [params.initPoint];
+        // this.snake = [params.initPoint, params.initPoint, [params.initPoint[1]+1, params.initPoint[0]]];
         this.currentDegree = params.direction || 0;
         this.nextDegree = this.currentDegree;
         this.tableSize = params.tableSize || 100;
@@ -53,13 +54,13 @@ export class Snake implements ISnake {
         const isNextDirectionInCorrect = Math.abs(Math.abs(this.currentDegree) - Math.abs(this.nextDegree)) === 180;
         switch (isNextDirectionInCorrect ? this.currentDegree : this.nextDegree) {
             case Directions.Left:
-                return [y, x === 0 ? this.tableSize : x - 1];
+                return [y, x === 0 ? this.tableSize - 1 : x - 1];
             case Directions.Right:
                 return [y, x + 1 === this.tableSize ? 0 : x + 1];
             case Directions.Down:
                 return [y + 1 === this.tableSize ? 0 : y + 1, x];
             case Directions.Up:
-                return [y === 0 ? this.tableSize : y - 1, x];
+                return [y === 0 ? this.tableSize - 1 : y - 1, x];
         };
         throw new Error(`I have no idea how to move with this degree: ${this.nextDegree}`)
     }
