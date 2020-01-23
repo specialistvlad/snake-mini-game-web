@@ -23,25 +23,115 @@ describe('Snake', () => {
             .toStrictEqual({ coords: [[0, 0]] }));
 
     describe('move', () => {
-        test('default direction', () =>
-        expect(makeReducerTest([null], { coords: [] }, { name: '', initPoint: [1, 1]}))
-            .toStrictEqual({ coords: [[1, 2]] }));
-        
-        test('default to Right', () =>
-        expect(makeReducerTest([Directions.Right], { coords: [] }, { name: '', initPoint: [1, 1]}))
-            .toStrictEqual({ coords: [[1, 2]] }));
-        
-        test('default to Down', () =>
-        expect(makeReducerTest([Directions.Down], { coords: [] }, { name: '', initPoint: [1, 1]}))
-            .toStrictEqual({ coords: [[2, 1]] }));
+        describe('from default direction to', () => {
+            test('default direction', () =>
+            expect(makeReducerTest([null], { coords: [] }, { name: '', initPoint: [1, 1]}))
+                .toStrictEqual({ coords: [[1, 2]] }));
+            
+            test('default to Right', () =>
+            expect(makeReducerTest([Directions.Right], { coords: [] }, { name: '', initPoint: [1, 1]}))
+                .toStrictEqual({ coords: [[1, 2]] }));
+            
+            test('default to Down', () =>
+            expect(makeReducerTest([Directions.Down], { coords: [] }, { name: '', initPoint: [1, 1]}))
+                .toStrictEqual({ coords: [[2, 1]] }));
+    
+            test('default to Left', () =>
+            expect(makeReducerTest([Directions.Left], { coords: [] }, { name: '', initPoint: [1, 1]}))
+                .toStrictEqual({ coords: [[1, 2]] }));
+    
+            test('default to Up', () =>
+            expect(makeReducerTest([Directions.Up], { coords: [] }, { name: '', initPoint: [1, 1]}))
+                .toStrictEqual({ coords: [[0, 1]] }));
+        });
 
-        test('default to Left', () =>
-        expect(makeReducerTest([Directions.Left], { coords: [] }, { name: '', initPoint: [1, 1]}))
-            .toStrictEqual({ coords: [[1, 2]] }));
+        describe('from Right to', () => {
+            test('default direction', () =>
+            expect(makeReducerTest([null], { coords: [] }, { name: '', initPoint: [1, 1]}))
+                .toStrictEqual({ coords: [[1, 2]] }));
+            
+            test('Right', () =>
+            expect(makeReducerTest([Directions.Right], { coords: [] }, { name: '', initPoint: [1, 1], direction: Directions.Right}))
+                .toStrictEqual({ coords: [[1, 2]] }));
+            
+            test('Down', () =>
+            expect(makeReducerTest([Directions.Down], { coords: [] }, { name: '', initPoint: [1, 1], direction: Directions.Right}))
+                .toStrictEqual({ coords: [[2, 1]] }));
+    
+            test('Left', () =>
+            expect(makeReducerTest([Directions.Left], { coords: [] }, { name: '', initPoint: [1, 1], direction: Directions.Right}))
+                .toStrictEqual({ coords: [[1, 2]] }));
+    
+            test('Up', () =>
+            expect(makeReducerTest([Directions.Up], { coords: [] }, { name: '', initPoint: [1, 1], direction: Directions.Right}))
+                .toStrictEqual({ coords: [[0, 1]] }));
+        });
 
-        test('default to Up', () =>
-        expect(makeReducerTest([Directions.Up], { coords: [] }, { name: '', initPoint: [1, 1]}))
-            .toStrictEqual({ coords: [[0, 1]] }));
+        describe('from Down direction to', () => {
+            test('default direction', () =>
+            expect(makeReducerTest([null], { coords: [] }, { name: '', initPoint: [1, 1], direction: Directions.Down}))
+                .toStrictEqual({ coords: [[2, 1]] }));
+            
+            test('Right', () =>
+            expect(makeReducerTest([Directions.Right], { coords: [] }, { name: '', initPoint: [1, 1], direction: Directions.Down}))
+                .toStrictEqual({ coords: [[1, 2]] }));
+            
+            test('Down', () =>
+            expect(makeReducerTest([Directions.Down], { coords: [] }, { name: '', initPoint: [1, 1], direction: Directions.Down}))
+                .toStrictEqual({ coords: [[2, 1]] }));
+    
+            test('Left', () =>
+            expect(makeReducerTest([Directions.Left], { coords: [] }, { name: '', initPoint: [1, 1], direction: Directions.Down}))
+                .toStrictEqual({ coords: [[1, 0]] }));
+    
+            test('Up', () =>
+            expect(makeReducerTest([Directions.Up], { coords: [] }, { name: '', initPoint: [1, 1], direction: Directions.Down}))
+                .toStrictEqual({ coords: [[2, 1]] }));
+        });
+
+        describe('from Left direction to', () => {
+            test('default direction', () =>
+            expect(makeReducerTest([null], { coords: [] }, { name: '', initPoint: [1, 1], direction: Directions.Left}))
+                .toStrictEqual({ coords: [[1, 0]] }));
+            
+            test('Right', () =>
+            expect(makeReducerTest([Directions.Right], { coords: [] }, { name: '', initPoint: [1, 1], direction: Directions.Left}))
+                .toStrictEqual({ coords: [[1, 0]] }));
+            
+            test('Down', () =>
+            expect(makeReducerTest([Directions.Down], { coords: [] }, { name: '', initPoint: [1, 1], direction: Directions.Left}))
+                .toStrictEqual({ coords: [[2, 1]] }));
+    
+            test('Left', () =>
+            expect(makeReducerTest([Directions.Left], { coords: [] }, { name: '', initPoint: [1, 1], direction: Directions.Left}))
+                .toStrictEqual({ coords: [[1, 0]] }));
+    
+            test('Up', () =>
+            expect(makeReducerTest([Directions.Up], { coords: [] }, { name: '', initPoint: [1, 1], direction: Directions.Left}))
+                .toStrictEqual({ coords: [[0, 1]] }));
+        });
+
+        describe('from Up direction to', () => {
+            test('default direction', () =>
+            expect(makeReducerTest([null], { coords: [] }, { name: '', initPoint: [1, 1], direction: Directions.Up}))
+                .toStrictEqual({ coords: [[0, 1]] }));
+            
+            test('Right', () =>
+            expect(makeReducerTest([Directions.Right], { coords: [] }, { name: '', initPoint: [1, 1], direction: Directions.Up}))
+                .toStrictEqual({ coords: [[1, 2]] }));
+            
+            test('Down', () =>
+            expect(makeReducerTest([Directions.Down], { coords: [] }, { name: '', initPoint: [1, 1], direction: Directions.Up}))
+                .toStrictEqual({ coords: [[0, 1]] }));
+    
+            test('Left', () =>
+            expect(makeReducerTest([Directions.Left], { coords: [] }, { name: '', initPoint: [1, 1], direction: Directions.Up}))
+                .toStrictEqual({ coords: [[1, 0]] }));
+    
+            test('Up', () =>
+            expect(makeReducerTest([Directions.Up], { coords: [] }, { name: '', initPoint: [1, 1], direction: Directions.Up}))
+                .toStrictEqual({ coords: [[0, 1]] }));
+        });
     });
 
     // test('make step', () => {
