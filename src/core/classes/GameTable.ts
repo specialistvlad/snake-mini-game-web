@@ -27,7 +27,7 @@ export class GameTable implements IGameTable {
             return this.cellsToColorTable();
         }
 
-        const gameObjects = [...this.snakes, /*...his.foods*/];
+        const gameObjects = [/*...this.mirrors*/, /*...this.stones*/, /*...this.foods*/, ...this.snakes];
 
         this.cells = gameObjects.reduce((accumulator: TGameStoreFull, item) => {
             const current = item.stepReducer({ coords: accumulator.cells.map((cell: TCell) => cell.coordinate) });
@@ -72,7 +72,8 @@ export class GameTable implements IGameTable {
     private makeSnakes() {
         return [new Snake({
             name: 'My smart snake',
-            initPoint: [Math.round(this.size / this.size), Math.round(this.size / this.size)],
+            initPoint: [Math.trunc(this.size / 2), Math.trunc(this.size / 2)],
+            tableSize: this.size,
           })];
     }
 };

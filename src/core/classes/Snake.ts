@@ -5,6 +5,7 @@ export type TSnakeConstructorParams = {
     initPoint: TCoordinate;
     color?: string;
     direction?: TDegree;
+    tableSize?: number;
 };
 
 interface ISnake {
@@ -18,12 +19,15 @@ export class Snake implements ISnake {
     private currentDegree: TDegree;
     private nextDegree: TDegree;
     private steps: number = -1;
+    private tableSize: number;
+
 
     constructor(params: TSnakeConstructorParams) {
         this.name = params.name || 'Unknown snake';
         this.snake = [params.initPoint];
         this.currentDegree = params.direction || 0;
         this.nextDegree = this.currentDegree;
+        this.tableSize = params.tableSize || 100;
     }
 
     public stepReducer(game: TGameStoreSimple): TGameStoreSimple {
@@ -35,6 +39,7 @@ export class Snake implements ISnake {
         return {
             ...game,
             coords: [ ...this.snake ],
+            // coords: [ ...game.coords, ...this.snake ],
         };
     }
 
@@ -48,15 +53,15 @@ export class Snake implements ISnake {
         const isNextDirectionInCorrect = Math.abs(Math.abs(this.currentDegree) - Math.abs(this.nextDegree)) === 180;
         switch (isNextDirectionInCorrect ? this.currentDegree : this.nextDegree) {
             case Directions.Left:
-                return [y, x - 1];
+                return [y, x === 0 ? this.tableSize : x - 1];
             case Directions.Right:
-                return [y, x + 1];
+                return [y, x + 1 === this.tableSize ? 0 : x + 1];
             case Directions.Down:
-                return [y + 1, x];
+                return [y + 1 === this.tableSize ? 0 : y + 1, x];
             case Directions.Up:
-                return [y - 1, x];
+                return [y === 0 ? this.tableSize : y - 1, x];
         };
-        throw new Error(`I have no idea how to move on this degree: ${this.nextDegree}`)
+        throw new Error(`I have no idea how to move with this degree: ${this.nextDegree}`)
     }
 
     set direction(nextDegree: TDegree) {
