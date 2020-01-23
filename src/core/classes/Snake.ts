@@ -1,4 +1,4 @@
-import { TGameShit, TDegree, TCoordinate, TCoordinates, Directions } from '../types';
+import { TGameStoreSimple, TDegree, TCoordinate, TCoordinates, Directions } from '../types';
 
 export type TSnakeConstructorParams = {
     name: string;
@@ -9,7 +9,7 @@ export type TSnakeConstructorParams = {
 
 interface ISnake {
     direction: TDegree;
-    stepReducer({ coords }: TGameShit): TGameShit;
+    stepReducer({ coords }: TGameStoreSimple): TGameStoreSimple;
 };
 
 export class Snake implements ISnake {
@@ -26,7 +26,7 @@ export class Snake implements ISnake {
         this.nextDegree = this.currentDegree;
     }
 
-    public stepReducer(game: TGameShit): TGameShit {
+    public stepReducer(game: TGameStoreSimple): TGameStoreSimple {
         if (this.steps >= 0) {
             this.move();
         }

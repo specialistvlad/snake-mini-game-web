@@ -12,7 +12,7 @@ export default () => {
   useEffect(() => {
     setInterval(() => {
       setRows(game.tick());
-    }, 50);
+    }, 1000);
 
     // setInterval(() => {
     //   // @ts-ignore

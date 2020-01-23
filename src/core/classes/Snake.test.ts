@@ -1,10 +1,10 @@
 import { Snake, TSnakeConstructorParams } from './Snake';
-import { TGameShit, TDegree, Directions } from '../types';
+import { TGameStoreSimple, TDegree, Directions } from '../types';
 
 type optionalDegree = TDegree | null;
 
 const makeSnakeStepsReducer = (snake: Snake) => {
-    return (accumulator: TGameShit, currentValue: optionalDegree) => {
+    return (accumulator: TGameStoreSimple, currentValue: optionalDegree) => {
         if (currentValue !== null) {
             snake.direction = currentValue;
         }
@@ -13,7 +13,7 @@ const makeSnakeStepsReducer = (snake: Snake) => {
 };
 
 // template for each test for reducers
-const makeReducerTest = (steps: Array<optionalDegree>, gameState: TGameShit, snakeParams: TSnakeConstructorParams) =>
+const makeReducerTest = (steps: Array<optionalDegree>, gameState: TGameStoreSimple, snakeParams: TSnakeConstructorParams) =>
     [null, ...steps].reduce(makeSnakeStepsReducer(new Snake(snakeParams)), { coords: [] });
 
 describe('Snake', () => {
