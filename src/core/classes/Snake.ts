@@ -1,30 +1,24 @@
-import { TArea } from '../types';
-
-type TDirection = 'up' | 'down' | 'left' | 'right';
-type TResult = 'impossible' | 'success' | 'died'; 
-export type Coordinate = [number, number];
-
-type Coordinates = Array<Coordinate>;
+import { TArea, TDegree, TCoordinate, TCoordinates, Directions } from '../types';
 
 interface ISnakeCreateParams {
     name: string;
-    initPoint: Coordinate;
+    initPoint: TCoordinate;
     area: TArea,
     color?: string;
-    direction?: TDirection;
+    direction?: TDegree;
 };
 
 interface ISnake {
-    changeDirection(nextDirection: TDirection): boolean;
-    step(): TResult;
+    direction: TDegree;
+    step(): void;
 };
 
 export class Snake implements ISnake {
     public name: string;
-    private snake: Coordinates;
+    private snake: TCoordinates;
     private area: TArea;
-    private currentDirection: TDirection;
-    private nextDirection: TDirection;
+    private currentDegree: TDegree;
+    private nextDegree: TDegree;
 
     constructor(params: ISnakeCreateParams) {
         this.validateParams(params); // make object is correct
@@ -32,12 +26,11 @@ export class Snake implements ISnake {
         // setup all params
         this.name = params.name || 'Unknown snake';
         this.area = params.area;
-        this.snake = [params.initPoint, [2,3], [2,4]];
-        this.currentDirection = params.direction || 'up';
-        this.nextDirection = params.direction || 'up';
+        this.snake = [params.initPoint];
+        this.currentDegree = params.direction || 0;
+        this.nextDegree = this.currentDegree;
 
-        // trigger projecting snake coordinates to table without movement 
-        this.step(true);
+        this.render();
     }
 
     private validateParams({ initPoint, area }: ISnakeCreateParams) {
@@ -50,39 +43,32 @@ export class Snake implements ISnake {
         }
     }
 
-    public step(init: boolean = false): TResult {
+    public step(): void {
         // this.debug();
-        const [last] = this.snake.slice(this.snake.length - 1); // in food was found then need return last element
-        
-        if (!init) {
-            this.snake.unshift(this.getNextCoordForAngle(0));
-            this.snake.pop();
-        }
+        const nextCoord = this.getNextCoordForAngle(0);
+        const nextCellType = this.area[nextCoord[0]][nextCoord[1]].cellType;
+        const [last] = this.snake.slice(this.snake.length - 1);
 
-        
+        this.snake.unshift(nextCoord);
+        this.snake.pop();
+        this.render();
+    }
+
+    public render() {
         this.snake.forEach(([x, y]) => this.area[x][y].cellType = 'snake');
-        this.area[last[0]][last[1]].cellType = 'empty';
-        return 'died';
     }
 
-    public changeDirection(nextDirection: TDirection): boolean {
-        if (this.isImpossibleDirection(nextDirection)) {
-            return false;
-        }
-
-        this.nextDirection = nextDirection;
-        return true;
+    set direction(nextDegree: TDegree) {
+        this.nextDegree = nextDegree;
+        console.log(nextDegree, `Change direction to: ${nextDegree}˚ = ${Directions[nextDegree]}`);
     }
 
-    private isImpossibleDirection(nextDirection: TDirection): boolean {
-        return (this.currentDirection === 'up' && nextDirection === 'down') ||
-            (this.currentDirection === 'down' && nextDirection === 'up') ||
-            (this.currentDirection === 'left' && nextDirection === 'right') ||
-            (this.currentDirection === 'right' && nextDirection === 'left');
+    get direction(): TDegree {
+        return this.nextDegree;
     }
 
-    private getNextCoordForAngle(angle: number): Coordinate {
-        const [[x, y]] = this.snake.slice(0);
+    private getNextCoordForAngle(angle: number): TCoordinate {
+        const [[y, x]] = this.snake.slice(0);
         if (y >= this.area.length - 1) {
             return [x, 0];
         }

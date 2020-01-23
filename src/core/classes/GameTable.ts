@@ -1,5 +1,5 @@
 import { Snake } from './Snake';
-import { TArea, TCell, TCellType, colors } from '../types';
+import { TArea, TCell, colors } from '../types';
 
 interface IGameTable {
     reset(): void;
@@ -9,7 +9,7 @@ interface IGameTable {
 
 export class GameTable implements IGameTable {
     private size: number = 25;
-    private snakes: Array<Snake> = [];
+    public snakes: Array<Snake> = [];
     private area: TArea = [];
     private randomizeMode: boolean = false;
 
@@ -28,6 +28,7 @@ export class GameTable implements IGameTable {
             return this.getActualArea();
         }
 
+        this.area.forEach((row: Array<TCell>) => row.forEach((cell: TCell) => cell.cellType = 'empty'));
         this.snakes.forEach(element => element.step());
         return this.getActualArea();
     }
