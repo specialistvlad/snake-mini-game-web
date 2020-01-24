@@ -3,13 +3,14 @@ import { TGameState, TDegree, Directions, CellType } from '../types';
 
 type optionalDegree = TDegree | null;
 
-const defaultState = { cells: [{ coordinates: [0, 0], type: CellType.snake, color: 'red' }] };
+const defaultState = { cells: [] };
+
 const makeSnakeStepsReducer = (snake: Snake) => 
     (accumulator: TGameState, currentValue: optionalDegree) => {
         if (currentValue !== null) {
             snake.direction = currentValue;
         }
-        return snake.stepReducer(accumulator);
+        return snake.stepReducer(defaultState);
     };
 
 // template for each test for reducers

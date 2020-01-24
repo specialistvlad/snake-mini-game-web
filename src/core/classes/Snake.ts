@@ -21,6 +21,7 @@ export class Snake implements ISnake {
     private nextDegree: TDegree;
     private steps: number = -1;
     private tableSize: number;
+    private counter: number = 0;
 
 
     constructor(params: TSnakeConstructorParams) {
@@ -41,12 +42,14 @@ export class Snake implements ISnake {
 
         return {
             ...game,
-            cells: [ ...this.snake.map(item => ({
-                coordinate: item,
-                type: CellType.snake,
-                color: this.color,
-            })) ],
-            // coords: [ ...game.coords, ...this.snake ],
+            cells: [
+                ...game.cells,
+                ...this.snake.map(item => ({
+                    coordinate: item,
+                    type: CellType.snake,
+                    color: this.color,
+                })),
+            ],
         };
     }
 
