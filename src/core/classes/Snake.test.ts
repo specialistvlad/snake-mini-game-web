@@ -15,13 +15,16 @@ const makeSnakeStepsReducer = (snake: Snake) =>
 
 // template for each test for reducers
 const makeReducerTest = (
-    steps: Array<optionalDegree>,
+    directionsList: Array<optionalDegree>,
     snake: TCoordinates,
-    params?: any, 
+    snakeAdditionalParams?: any, 
     ) =>
     // @ts-ignore
-    [null, ...steps]
-        .reduce(makeSnakeStepsReducer(new Snake({ name: '', initPoint: snake[0], ...params })), defaultState);
+    [null, ...directionsList].reduce(makeSnakeStepsReducer(new Snake({
+        name: '',
+        snake,
+        ...snakeAdditionalParams,
+    })), defaultState);
 
 const matchCoordinates = (coordinate: TCoordinates) => ({ cells: coordinate.map(item => (expect.objectContaining({ coordinate: item })))});
 

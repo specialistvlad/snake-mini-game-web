@@ -2,7 +2,7 @@ import { TGameState, TDegree, TCoordinate, TCoordinates, Directions, CellType } 
 
 export type TSnakeConstructorParams = {
     name: string;
-    initPoint: TCoordinate;
+    snake: TCoordinates;
     color?: string;
     direction?: TDegree;
     tableSize?: number;
@@ -27,7 +27,7 @@ export class Snake implements ISnake {
     constructor(params: TSnakeConstructorParams) {
         this.name = params.name || 'Unknown snake';
         this.color = params.color || 'pink';
-        this.snake = [params.initPoint];
+        this.snake = params.snake;
         this.currentDegree = params.direction || 0;
         this.nextDegree = this.currentDegree;
         this.tableSize = params.tableSize || 100;

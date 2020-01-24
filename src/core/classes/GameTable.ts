@@ -36,7 +36,7 @@ export class GameTable implements IGameTable {
     private makeSnakes() {
         return [new Snake({
             name: 'My smart snake',
-            initPoint: [Math.trunc(this.size / 2), Math.trunc(this.size / 2)],
+            snake: [[Math.trunc(this.size / 2), Math.trunc(this.size / 2)]],
             tableSize: this.size,
             color: 'violet'
           })];
