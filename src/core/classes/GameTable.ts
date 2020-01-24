@@ -1,5 +1,5 @@
 import { Snake } from './Snake';
-import { TCell, ColorTable, TCells, CellType, CellPalette, SnakePalette, TGameStoreSimple, TGameStoreFull } from '../types';
+import { TCell, ColorTable, TCells, CellType, CellPalette, SnakePalette, TGameState } from '../types';
 
 interface IGameTable {
     reset(): void;
@@ -27,26 +27,11 @@ export class GameTable implements IGameTable {
             return this.cellsToColorTable();
         }
 
-        const gameObjects = [/*...this.mirrors*/, /*...this.stones*/, /*...this.foods*/, ...this.snakes];
-
-        // const { cells, ...gameState } = gameObjects.reduce((accumulator: TGameStoreFull, item) =>
-        //     item.stepReducer(accumulator)
-        // );
-
-        // this.cells = cells;
-        this.cells = gameObjects.reduce((accumulator: TGameStoreFull, item) => {
-            const current = item.stepReducer({ coords: accumulator.cells.map((cell: TCell) => cell.coordinate) });
-            return {
-                ...current,
-                cells: current.coords.map((coordinate) => ({
-                    coordinate: coordinate,
-                    type: CellType.snake,
-                    color: SnakePalette[0],
-                })),
-            };
-        }, {
-            cells: [],
-        }).cells;
+        const gameObjects = Array<Snake>(...this.snakes);
+        const defaultState = { cells: [] };
+        this.cells = gameObjects
+            .reduce((accumulator: TGameState, item: Snake) => item.stepReducer(accumulator), defaultState)
+            .cells;
 
         return this.cellsToColorTable();
     }

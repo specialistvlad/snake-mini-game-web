@@ -29,11 +29,7 @@ export enum Directions {
 
 export type TDegree = number;
 
-export type TGameStoreSimple = {
-    coords: TCoordinates,
-};
-
-export type TGameStoreFull = {
+export type TGameState = {
     cells: TCells,
 };
 
