@@ -15,6 +15,7 @@ interface ISnake {
 
 export class Snake implements ISnake {
     private name: string;
+    private color: string;
     private snake: TCoordinates;
     private currentDegree: TDegree;
     private nextDegree: TDegree;
@@ -24,6 +25,7 @@ export class Snake implements ISnake {
 
     constructor(params: TSnakeConstructorParams) {
         this.name = params.name || 'Unknown snake';
+        this.color = params.color || 'pink';
         this.snake = [params.initPoint];
         // this.snake = [params.initPoint, params.initPoint, [params.initPoint[1]+1, params.initPoint[0]]];
         this.currentDegree = params.direction || 0;
@@ -42,7 +44,7 @@ export class Snake implements ISnake {
             cells: [ ...this.snake.map(item => ({
                 coordinate: item,
                 type: CellType.snake,
-                color: 'violet'
+                color: this.color,
             })) ],
             // coords: [ ...game.coords, ...this.snake ],
         };

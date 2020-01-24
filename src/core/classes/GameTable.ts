@@ -7,32 +7,29 @@ interface IGameTable {
 };
 
 export class GameTable implements IGameTable {
+    private defaultState = { cells: [] };
     public size: number = 15;
     public snakes: Array<Snake> = [];
-    private cells: TCells = [];
+    private state: TGameState = this.defaultState;
 
     constructor() {
         this.reset();
     }
 
     public reset(): void {
-        this.cells = [];
+        this.state = this.defaultState;
         this.snakes = this.makeSnakes();
     }
 
     public tick(): ColorTable {
         const gameObjects = Array<Snake>(...this.snakes);
-        const defaultState = { cells: [] };
-        this.cells = gameObjects
-            .reduce((accumulator: TGameState, item: Snake) => item.stepReducer(accumulator), defaultState)
-            .cells;
-
+        this.state = gameObjects.reduce((accumulator: TGameState, item: Snake) => item.stepReducer(accumulator), this.defaultState);
         return this.cellsToColorTable();
     }
 
     public cellsToColorTable(): ColorTable {
         const table = Array<Array<string>>(this.size).fill([]).map(() => Array<string>(this.size).fill(''));
-        this.cells.forEach(({ coordinate: [y, x], color}: TCell) => table[x][y] = color);
+        this.state.cells.forEach(({ coordinate: [y, x], color}: TCell) => table[x][y] = color);
         return table;
     }
 
@@ -41,6 +38,7 @@ export class GameTable implements IGameTable {
             name: 'My smart snake',
             initPoint: [Math.trunc(this.size / 2), Math.trunc(this.size / 2)],
             tableSize: this.size,
+            color: 'violet'
           })];
     }
 };
