@@ -136,4 +136,22 @@ describe('Snake', () => {
                 .toMatchObject({ cells: [expect.objectContaining({ coordinate: [0, 1] })]}));
         });
     });
+
+    describe('move through the mirror', () => {
+        test('default to Right', () =>
+        expect(makeReducerTest([null], { name: '', initPoint: [19, 19], tableSize: 20, direction: Directions.Right}))
+            .toMatchObject({ cells: [expect.objectContaining({ coordinate: [19, 0] })]}));
+        
+        test('default to Down', () =>
+        expect(makeReducerTest([null], { name: '', initPoint: [20, 20], tableSize: 21, direction: Directions.Down }))
+            .toMatchObject({ cells: [expect.objectContaining({ coordinate: [0, 20] })]}));
+
+        test('default to Left  with default table size', () =>
+        expect(makeReducerTest([null], { name: '', initPoint: [0, 0], direction: Directions.Left}))
+            .toMatchObject({ cells: [expect.objectContaining({ coordinate: [0, 99] })]}));
+
+        test('default to Up', () =>
+        expect(makeReducerTest([null], { name: '', initPoint: [0, 0], tableSize: 20, direction: Directions.Up}))
+            .toMatchObject({ cells: [expect.objectContaining({ coordinate: [19, 0] })]}));
+    });
 });
