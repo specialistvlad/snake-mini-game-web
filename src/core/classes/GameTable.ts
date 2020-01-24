@@ -1,5 +1,5 @@
 import { Snake } from './Snake';
-import { TCell, ColorTable, TCells, CellType, CellPalette, SnakePalette, TGameState } from '../types';
+import { TCell, ColorTable, TGameState } from '../types';
 
 interface IGameTable {
     reset(): void;

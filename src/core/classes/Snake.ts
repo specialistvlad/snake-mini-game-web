@@ -28,7 +28,6 @@ export class Snake implements ISnake {
         this.name = params.name || 'Unknown snake';
         this.color = params.color || 'pink';
         this.snake = [params.initPoint];
-        // this.snake = [params.initPoint, params.initPoint, [params.initPoint[1]+1, params.initPoint[0]]];
         this.currentDegree = params.direction || 0;
         this.nextDegree = this.currentDegree;
         this.tableSize = params.tableSize || 100;
