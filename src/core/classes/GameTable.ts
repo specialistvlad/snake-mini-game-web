@@ -29,6 +29,11 @@ export class GameTable implements IGameTable {
 
         const gameObjects = [/*...this.mirrors*/, /*...this.stones*/, /*...this.foods*/, ...this.snakes];
 
+        // const { cells, ...gameState } = gameObjects.reduce((accumulator: TGameStoreFull, item) =>
+        //     item.stepReducer(accumulator)
+        // );
+
+        // this.cells = cells;
         this.cells = gameObjects.reduce((accumulator: TGameStoreFull, item) => {
             const current = item.stepReducer({ coords: accumulator.cells.map((cell: TCell) => cell.coordinate) });
             return {
