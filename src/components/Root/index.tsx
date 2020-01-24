@@ -16,9 +16,9 @@ export default () => {
 
     setInterval(() => {
       // @ts-ignore
-      // game.snakes[0].direction = dir[random(4)];
+      game.snakes[0].direction = dir[random(4)];
       // game.snakes[0].direction = dir[2];
-    }, 1500);
+    }, 750);
   }, []);
 
   return (<Table rows={rows}/>);

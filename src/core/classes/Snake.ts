@@ -21,7 +21,6 @@ export class Snake implements ISnake {
     private nextDegree: TDegree;
     private steps: number = -1;
     private tableSize: number;
-    private counter: number = 0;
 
 
     constructor(params: TSnakeConstructorParams) {
@@ -34,8 +33,12 @@ export class Snake implements ISnake {
     }
 
     public stepReducer(game: TGameState): TGameState {
+        console.log('Iteration #', this.steps, 'of', this.name);
+        
         if (this.steps >= 0) {
+            console.log('before', this.snake);
             this.move();
+            console.log('after', this.snake);
         }
         this.steps++;
 
@@ -54,7 +57,8 @@ export class Snake implements ISnake {
 
     private move(): void {
         const [last] = this.snake.slice(this.snake.length - 1);
-        const nextCoord = this.getNextCoord(last);
+        const [first] = this.snake.slice(0);
+        const nextCoord = this.getNextCoord(first);
         this.snake = [nextCoord, ...this.snake.slice(0, this.snake.length - 1)];
     }
 
@@ -70,7 +74,7 @@ export class Snake implements ISnake {
             case Directions.Up:
                 return [y === 0 ? this.tableSize - 1 : y - 1, x];
         };
-        throw new Error(`I have no idea how to move with this degree: ${this.nextDegree}`)
+        throw new Error(`I have no idea how to move this degree o_O: ${this.nextDegree}`)
     }
 
     set direction(nextDegree: TDegree) {
