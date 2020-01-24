@@ -1,12 +1,12 @@
 import { Snake } from './Snake';
 import { TCell, ColorTable, TGameState } from '../types';
 
-interface IGameTable {
+interface IGame {
     reset(): void;
     tick(): ColorTable;
 };
 
-export class GameTable implements IGameTable {
+export class Game implements IGame {
     private defaultState = { cells: [] };
     public size: number = 15;
     public snakes: Array<Snake> = [];
@@ -23,7 +23,7 @@ export class GameTable implements IGameTable {
 
     public tick(): ColorTable {
         const gameObjects = Array<Snake>(...this.snakes);
-        this.state = gameObjects.reduce((accumulator: TGameState, item: Snake) => item.stepReducer(accumulator), this.defaultState);
+        this.state = gameObjects.reduce((accumulator: TGameState, item: Snake) => item.reducer(accumulator), this.defaultState);
         return this.cellsToColorTable();
     }
 

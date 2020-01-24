@@ -1,4 +1,5 @@
-import { TGameState, TDegree, TCoordinate, TCoordinates, Directions, CellType } from '../types';
+import { TGameState, TDegree, TCoordinate, TCoordinates, Directions, CellType, TCells } from '../types';
+import { IGameObject } from './GameObject';
 
 export type TSnakeConstructorParams = {
     name: string;
@@ -8,12 +9,7 @@ export type TSnakeConstructorParams = {
     tableSize?: number;
 };
 
-interface ISnake {
-    direction: TDegree;
-    stepReducer(state: TGameState): TGameState;
-};
-
-export class Snake implements ISnake {
+export class Snake implements IGameObject {
     private name: string;
     private color: string;
     private snake: TCoordinates;
@@ -21,7 +17,8 @@ export class Snake implements ISnake {
     private nextDegree: TDegree;
     private steps: number = -1;
     private tableSize: number;
-
+    private died: boolean = false;
+    // public direction: TDegree;
 
     constructor(params: TSnakeConstructorParams) {
         this.name = params.name || 'Unknown snake';
@@ -32,10 +29,11 @@ export class Snake implements ISnake {
         this.tableSize = params.tableSize || 100;
     }
 
-    public stepReducer(game: TGameState): TGameState {
-        if (this.steps >= 0) {
-            this.move();
+    public reducer(game: TGameState): TGameState {
+        if (this.steps >= 0 && !this.died) {
+            this.move(game.cells);
         }
+
         this.steps++;
 
         return {
@@ -51,11 +49,18 @@ export class Snake implements ISnake {
         };
     }
 
-    private move(): void {
+    private move(gameCells: TCells): void {
         const [first] = this.snake.slice(0);
         // const [last] = this.snake.slice(this.snake.length - 1);
-        const nextCoord = this.getNextCoord(first);
-        this.snake = [nextCoord, ...this.snake.slice(0, this.snake.length - 1)];
+        const next = this.getNextCoord(first);
+        const nextElementOnTable = gameCells.find(({ coordinate }) => next[0] === coordinate[0] && next[1] === coordinate[1]);
+        const collision = this.snake.find(([y, x]) => next[0] === y && next[1] === x);
+        
+        if (collision || nextElementOnTable?.type === CellType.snake || nextElementOnTable?.type === CellType.wall) {
+            this.died = true;
+            return;
+        }
+        this.snake = [next, ...this.snake.slice(0, this.snake.length - 1)];
     }
 
     private getNextCoord([y, x]: TCoordinate): TCoordinate {

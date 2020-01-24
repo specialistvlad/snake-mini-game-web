@@ -19,7 +19,7 @@ const snakeTest = (
             if (currentValue !== null) {
                 snake.direction = currentValue;
             }
-            return [ ...accumulator, snake.stepReducer({ cells: [] }) ];
+            return [ ...accumulator, snake.reducer({ cells: [] }) ];
         }, []);
     };
 

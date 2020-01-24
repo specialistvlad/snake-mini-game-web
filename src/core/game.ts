@@ -1,3 +1,3 @@
-import { GameTable } from './classes/GameTable';
+import { Game } from './classes/Game';
 
-export default new GameTable();
+export default new Game();
