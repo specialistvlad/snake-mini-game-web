@@ -103,4 +103,17 @@ describe('Snake', () => {
         expect(snakeTest([null], [[0, 0]], { direction: Directions.Up, tableSize: 20 }))
             .toMatchObject(match([[[0, 0]], [[19, 0]]])));
     });
+
+    describe('Long snake', () => {
+        test('default direction', () =>
+        expect(snakeTest([null, null, Directions.Down, null, Directions.Left, null], [[0, 1], [0, 0]])).toMatchObject(match([
+            [[0, 1], [0, 0]],
+            [[0, 2], [0, 1]],
+            [[0, 3], [0, 2]],
+            [[1, 3], [0, 3]],
+            [[2, 3], [1, 3]],
+            [[2, 2], [2, 3]],
+            [[2, 1], [2, 2]],
+        ])));
+    });
 });

@@ -1,10 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import useEventListener from '@use-it/event-listener';
 import Table from '../Table';
 import './style.css';
 import game from '../../core/game';
 
-const random = (max: number) => Math.floor((Math.random() * max));
-const dir = [0, 90, 180, 270];
+const keys = {
+  ArrowRight: 0,
+  ArrowDown: 90,
+  ArrowLeft: 180,
+  ArrowUp: 270,
+  KeyD: 0,
+  KeyS: 90,
+  KeyA: 180,
+  KeyW: 270,
+};
 
 export default () => {
   const [rows, setRows] = useState(game.cellsToColorTable());
@@ -12,14 +21,16 @@ export default () => {
   useEffect(() => {
     setInterval(() => {
       setRows(game.tick());
-    }, 250);
-
-    setInterval(() => {
-      // @ts-ignore
-      game.snakes[0].direction = dir[random(4)];
-      // game.snakes[0].direction = dir[2];
-    }, 750);
+    }, 100);
   }, []);
+
+  useEventListener('keydown', useCallback(({ code }) => {
+    if (!Object.keys(keys).includes(code)) {
+      return;
+    }
+    // @ts-ignore
+    game.snakes[0].direction = keys[code];
+  }, []));
 
   return (<Table rows={rows}/>);
 };

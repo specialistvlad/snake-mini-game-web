@@ -29,7 +29,7 @@ export class GameTable implements IGameTable {
 
     public cellsToColorTable(): ColorTable {
         const table = Array<Array<string>>(this.size).fill([]).map(() => Array<string>(this.size).fill(''));
-        this.state.cells.forEach(({ coordinate: [y, x], color}: TCell) => table[x][y] = color);
+        this.state.cells.forEach(({ coordinate: [x, y], color}: TCell) => table[x][y] = color);
         return table;
     }
 

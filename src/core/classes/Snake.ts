@@ -33,12 +33,8 @@ export class Snake implements ISnake {
     }
 
     public stepReducer(game: TGameState): TGameState {
-        console.log('Iteration #', this.steps, 'of', this.name);
-        
         if (this.steps >= 0) {
-            console.log('before', this.snake);
             this.move();
-            console.log('after', this.snake);
         }
         this.steps++;
 
@@ -56,15 +52,19 @@ export class Snake implements ISnake {
     }
 
     private move(): void {
-        const [last] = this.snake.slice(this.snake.length - 1);
         const [first] = this.snake.slice(0);
+        // const [last] = this.snake.slice(this.snake.length - 1);
         const nextCoord = this.getNextCoord(first);
         this.snake = [nextCoord, ...this.snake.slice(0, this.snake.length - 1)];
     }
 
     private getNextCoord([y, x]: TCoordinate): TCoordinate {
-        const isNextDirectionInCorrect = Math.abs(Math.abs(this.currentDegree) - Math.abs(this.nextDegree)) === 180;
-        switch (isNextDirectionInCorrect ? this.currentDegree : this.nextDegree) {
+        const isNextDirectionCorrect = Math.abs(this.currentDegree - this.nextDegree) !== 180;
+        if (isNextDirectionCorrect) {
+            this.currentDegree = this.nextDegree;
+        }
+    
+        switch (isNextDirectionCorrect ? this.nextDegree : this.currentDegree) {
             case Directions.Left:
                 return [y, x === 0 ? this.tableSize - 1 : x - 1];
             case Directions.Right:
@@ -79,7 +79,6 @@ export class Snake implements ISnake {
 
     set direction(nextDegree: TDegree) {
         this.nextDegree = nextDegree;
-        // console.log(`Change direction to: ${Directions[nextDegree]}`);
     }
 
     get direction(): TDegree {
