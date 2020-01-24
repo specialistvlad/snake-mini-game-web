@@ -3,7 +3,7 @@ import { TGameState, TDegree, Directions, TCoordinates } from '../types';
 
 type optionalDegree = TDegree | null;
 
-const makeReducerTest = (
+const snakeTest = (
     directionsList: Array<optionalDegree>,
     snakeCoordinates: TCoordinates,
     snakeAdditionalParams?: any, 
@@ -27,80 +27,80 @@ const match = (steps: Array<TCoordinates>) => steps.map(coordinates => ({ cells:
 
 describe('Snake', () => {
     test('snake init step works correctly(without move forward, only rendering)', () =>
-        expect(makeReducerTest([], [[0, 0]])).toMatchObject(match([[[0, 0]]])));
+        expect(snakeTest([], [[0, 0]])).toMatchObject(match([[[0, 0]]])));
 
     describe('move', () => {
         describe('from default direction to', () => {
-            test('default direction - new', () => expect(makeReducerTest([null], [[1, 1]])).toMatchObject(match([[[1, 1]], [[1, 2]]])));
-            test('default to Right', () => expect(makeReducerTest([Directions.Right], [[1, 1]])).toMatchObject(match([[[1, 1]], [[1, 2]]])));
-            test('default to Down', () => expect(makeReducerTest([Directions.Down], [[1, 1]])).toMatchObject(match([[[1, 1]], [[2, 1]]])));
-            test('default to Left', () => expect(makeReducerTest([Directions.Left], [[1, 1]])).toMatchObject(match([[[1, 1]], [[1, 2]]])));
-            test('default to Up', () => expect(makeReducerTest([Directions.Up], [[1, 1]])).toMatchObject(match([[[1, 1]], [[0, 1]]])));
+            test('default direction - new', () => expect(snakeTest([null], [[1, 1]])).toMatchObject(match([[[1, 1]], [[1, 2]]])));
+            test('default to Right', () => expect(snakeTest([Directions.Right], [[1, 1]])).toMatchObject(match([[[1, 1]], [[1, 2]]])));
+            test('default to Down', () => expect(snakeTest([Directions.Down], [[1, 1]])).toMatchObject(match([[[1, 1]], [[2, 1]]])));
+            test('default to Left', () => expect(snakeTest([Directions.Left], [[1, 1]])).toMatchObject(match([[[1, 1]], [[1, 2]]])));
+            test('default to Up', () => expect(snakeTest([Directions.Up], [[1, 1]])).toMatchObject(match([[[1, 1]], [[0, 1]]])));
         });
 
         describe('from Right to', () => {
-            test('default direction', () => expect(makeReducerTest([null], [[1, 1]])).toMatchObject(match([[[1, 1]], [[1, 2]]])));
-            test('Right', () => expect(makeReducerTest([Directions.Right], [[1, 1]], { direction: Directions.Right })).toMatchObject(match([[[1, 1]], [[1, 2]]])));
-            test('Down', () => expect(makeReducerTest([Directions.Down], [[1, 1]], { direction: Directions.Right })).toMatchObject(match([[[1, 1]], [[2, 1]]])));
-            test('Left', () => expect(makeReducerTest([Directions.Left], [[1, 1]], { direction: Directions.Right })).toMatchObject(match([[[1, 1]], [[1, 2]]])));
-            test('Up', () => expect(makeReducerTest([Directions.Up], [[1, 1]], { direction: Directions.Right })).toMatchObject(match([[[1, 1]], [[0, 1]]])));
+            test('default direction', () => expect(snakeTest([null], [[1, 1]])).toMatchObject(match([[[1, 1]], [[1, 2]]])));
+            test('Right', () => expect(snakeTest([Directions.Right], [[1, 1]], { direction: Directions.Right })).toMatchObject(match([[[1, 1]], [[1, 2]]])));
+            test('Down', () => expect(snakeTest([Directions.Down], [[1, 1]], { direction: Directions.Right })).toMatchObject(match([[[1, 1]], [[2, 1]]])));
+            test('Left', () => expect(snakeTest([Directions.Left], [[1, 1]], { direction: Directions.Right })).toMatchObject(match([[[1, 1]], [[1, 2]]])));
+            test('Up', () => expect(snakeTest([Directions.Up], [[1, 1]], { direction: Directions.Right })).toMatchObject(match([[[1, 1]], [[0, 1]]])));
         });
 
         describe('from Down direction to', () => {
-            test('default direction', () => expect(makeReducerTest([null], [[1, 1]], { direction: Directions.Down }))
+            test('default direction', () => expect(snakeTest([null], [[1, 1]], { direction: Directions.Down }))
                 .toMatchObject(match([[[1, 1]], [[2, 1]]])));
-            test('Right', () => expect(makeReducerTest([Directions.Right], [[1, 1]], { direction: Directions.Down }))
+            test('Right', () => expect(snakeTest([Directions.Right], [[1, 1]], { direction: Directions.Down }))
                 .toMatchObject(match([[[1, 1]], [[1, 2]]])));
-            test('Down', () => expect(makeReducerTest([Directions.Down], [[1, 1]], { direction: Directions.Down }))
+            test('Down', () => expect(snakeTest([Directions.Down], [[1, 1]], { direction: Directions.Down }))
                 .toMatchObject(match([[[1, 1]], [[2, 1]]])));
-            test('Left', () => expect(makeReducerTest([Directions.Left], [[1, 1]], { direction: Directions.Down }))
+            test('Left', () => expect(snakeTest([Directions.Left], [[1, 1]], { direction: Directions.Down }))
                 .toMatchObject(match([[[1, 1]], [[1, 0]]])));
-            test('Up', () => expect(makeReducerTest([Directions.Up], [[1, 1]], { direction: Directions.Down }))
+            test('Up', () => expect(snakeTest([Directions.Up], [[1, 1]], { direction: Directions.Down }))
                 .toMatchObject(match([[[1, 1]], [[2, 1]]])));
         });
 
         describe('from Left direction to', () => {
-            test('default direction', () => expect(makeReducerTest([null], [[1, 1]], { direction: Directions.Left }))
+            test('default direction', () => expect(snakeTest([null], [[1, 1]], { direction: Directions.Left }))
                 .toMatchObject(match([[[1, 1]], [[1, 0]]])));
-            test('Right', () => expect(makeReducerTest([Directions.Right], [[1, 1]], { direction: Directions.Left }))
+            test('Right', () => expect(snakeTest([Directions.Right], [[1, 1]], { direction: Directions.Left }))
                 .toMatchObject(match([[[1, 1]], [[1, 0]]])));
-            test('Down', () => expect(makeReducerTest([Directions.Down], [[1, 1]], { direction: Directions.Left }))
+            test('Down', () => expect(snakeTest([Directions.Down], [[1, 1]], { direction: Directions.Left }))
                 .toMatchObject(match([[[1, 1]], [[2, 1]]])));
-            test('Left', () => expect(makeReducerTest([Directions.Left], [[1, 1]], { direction: Directions.Left }))
+            test('Left', () => expect(snakeTest([Directions.Left], [[1, 1]], { direction: Directions.Left }))
                 .toMatchObject(match([[[1, 1]], [[1, 0]]])));
-            test('Up', () => expect(makeReducerTest([Directions.Up], [[1, 1]], { direction: Directions.Left }))
+            test('Up', () => expect(snakeTest([Directions.Up], [[1, 1]], { direction: Directions.Left }))
                 .toMatchObject(match([[[1, 1]], [[0, 1]]])));
         });
 
         describe('from Up direction to', () => {
-            test('default direction', () => expect(makeReducerTest([null], [[1, 1]], { direction: Directions.Up }))
+            test('default direction', () => expect(snakeTest([null], [[1, 1]], { direction: Directions.Up }))
                 .toMatchObject(match([[[1, 1]], [[0, 1]]])));
-            test('Right', () => expect(makeReducerTest([Directions.Right], [[1, 1]], { direction: Directions.Up }))
+            test('Right', () => expect(snakeTest([Directions.Right], [[1, 1]], { direction: Directions.Up }))
                 .toMatchObject(match([[[1, 1]], [[1, 2]]])));
-            test('Down', () => expect(makeReducerTest([Directions.Down], [[1, 1]], { direction: Directions.Up }))
+            test('Down', () => expect(snakeTest([Directions.Down], [[1, 1]], { direction: Directions.Up }))
                 .toMatchObject(match([[[1, 1]], [[0, 1]]])));
-            test('Left', () => expect(makeReducerTest([Directions.Left], [[1, 1]], { direction: Directions.Up }))
+            test('Left', () => expect(snakeTest([Directions.Left], [[1, 1]], { direction: Directions.Up }))
                 .toMatchObject(match([[[1, 1]], [[1, 0]]])));
-            test('Up', () => expect(makeReducerTest([Directions.Up], [[1, 1]], { direction: Directions.Up }))
+            test('Up', () => expect(snakeTest([Directions.Up], [[1, 1]], { direction: Directions.Up }))
                 .toMatchObject(match([[[1, 1]], [[0, 1]]])));
         });
     });
 
     describe('move through the mirror', () => {
         test('default to Right', () =>
-        expect(makeReducerTest([null], [[19, 19]], { direction: Directions.Right, tableSize: 20 }))
+        expect(snakeTest([null], [[19, 19]], { direction: Directions.Right, tableSize: 20 }))
             .toMatchObject(match([[[19, 19]], [[19, 0]]])));
         
         test('default to Down', () =>
-        expect(makeReducerTest([null], [[20, 20]], { direction: Directions.Down, tableSize: 21 }))
+        expect(snakeTest([null], [[20, 20]], { direction: Directions.Down, tableSize: 21 }))
             .toMatchObject(match([[[20, 20]], [[0, 20]]])));
 
         test('default to Left  with default table size', () =>
-        expect(makeReducerTest([null], [[0, 0]], { direction: Directions.Left }))
+        expect(snakeTest([null], [[0, 0]], { direction: Directions.Left }))
             .toMatchObject(match([[[0, 0]], [[0, 99]]])));
 
         test('default to Up', () =>
-        expect(makeReducerTest([null], [[0, 0]], { direction: Directions.Up, tableSize: 20 }))
+        expect(snakeTest([null], [[0, 0]], { direction: Directions.Up, tableSize: 20 }))
             .toMatchObject(match([[[0, 0]], [[19, 0]]])));
     });
 });
