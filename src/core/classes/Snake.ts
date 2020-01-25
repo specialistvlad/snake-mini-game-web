@@ -32,9 +32,7 @@ export class Snake extends GameObject {
     public static make(tableSize: number): Array<Snake> {
         return [new Snake({
             name: 'My smart snake',
-            // snake: [[Math.trunc(this.size / 2), Math.trunc(this.size / 2)]],
-            snake: [[0, 7],[0, 6],[0, 5],[0, 4],[0, 3],[0, 2], [0, 1], [0, 0]],
-            // snake: [[0, 0], [0, 1], [0, 2], [0, 3]],
+            snake: [[Math.trunc(tableSize / 2), Math.trunc(tableSize / 2)]],
             tableSize: tableSize,
             color: 'violet'
           })];
@@ -60,7 +58,7 @@ export class Snake extends GameObject {
 
     private move(gameCells: TCells): void {
         const [first] = this.snake.slice(0);
-        // const [last] = this.snake.slice(this.snake.length - 1);
+        const [last] = this.snake.slice(this.snake.length - 1);
         const next = this.getNextCoord(first);
         const nextElementOnTable = gameCells.find(({ coordinate }) => next[0] === coordinate[0] && next[1] === coordinate[1]);
         const collision = this.snake.find(([y, x]) => next[0] === y && next[1] === x);
@@ -69,7 +67,21 @@ export class Snake extends GameObject {
             this.died = true;
             return;
         }
-        this.snake = [next, ...this.snake.slice(0, this.snake.length - 1)];
+
+        if (nextElementOnTable?.type === CellType.food) {
+            this.snake = [
+                next,
+                ...this.snake.slice(0, this.snake.length - 1),
+                last,
+            ];
+            return;
+        }
+
+        this.snake = [
+            next,
+            ...this.snake.slice(0, this.snake.length - 1),
+        ];
+        
     }
 
     private getNextCoord([y, x]: TCoordinate): TCoordinate {
