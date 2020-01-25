@@ -1,12 +1,13 @@
 import { Snake, TSnakeConstructorParams } from './Snake';
-import { TGameState, TDegree, Directions, TCoordinates } from '../types';
+import { TGameState, TDegree, Directions, TCoordinates, CellType } from '../types';
 
 type optionalDegree = TDegree | null;
 
 const snakeTest = (
     directionsList: Array<optionalDegree>,
     snakeCoordinates: TCoordinates,
-    snakeAdditionalParams?: any, 
+    snakeAdditionalParams?: any,
+    gameState: TGameState = { cells: [] },
     ) => {
         const snake = new Snake({
             name: '',
@@ -19,7 +20,7 @@ const snakeTest = (
             if (currentValue !== null) {
                 snake.direction = currentValue;
             }
-            return [ ...accumulator, snake.reducer({ cells: [] }) ];
+            return [ ...accumulator, snake.reducer(gameState) ];
         }, []);
     };
 
@@ -114,6 +115,15 @@ describe('Snake', () => {
             [[2, 3], [1, 3]],
             [[2, 2], [2, 3]],
             [[2, 1], [2, 2]],
+        ])));
+    });
+
+    describe('Dinner', () => {
+        const state: TGameState = { cells: [{ coordinate: [0, 1], type: CellType.food, color: '' }] };
+        test('eat something and grow', () =>
+        expect(snakeTest([null], [[0, 0]], {}, state)).toMatchObject(match([
+            [[0, 1], [0, 0]],
+            [[0, 1], [0, 1], [0, 0]],
         ])));
     });
 });
