@@ -26,8 +26,13 @@ export class Game implements IGame {
 
     public tick(): ColorTable {
         const gameObjects = Array<GameObject>(...this.food, ...this.snakes);
-        this.state = gameObjects.reduce((accumulator: TGameState, item: GameObject) => item.reducer(accumulator), this.defaultState);
+        this.state = this.reduce(gameObjects, this.reduce(gameObjects, this.defaultState, true), false);
         return this.cellsToColorTable();
+    }
+
+    public reduce(array: Array<GameObject>, state: TGameState, forward: boolean = true): TGameState {
+        const methodName = forward ? 'reduce' : 'reduceRight';
+        return array[methodName]((accumulator: TGameState, item: GameObject) => item.reducer(accumulator, forward), state);
     }
 
     public cellsToColorTable(): ColorTable {

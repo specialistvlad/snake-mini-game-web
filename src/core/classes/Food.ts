@@ -19,7 +19,7 @@ export class Food extends GameObject {
   protected logic(currentState: TGameState): TGameState {
     if (this.secondsFromLastDinner() > this.dinnerRefreshSeconds) {
       this.dinnerTime();
-      return {
+      return this.localState = {
         cells: [{
           coordinate: this.randomCoordinate(this.tableSize),
           type: CellType.food,
@@ -29,6 +29,13 @@ export class Food extends GameObject {
     }
   
     return this.localState;
+  }
+
+  protected backwardLogic(currentState: TGameState): TGameState {
+    if (this.findCellsByCoord(currentState.cells, this.localState.cells[0].coordinate).length === 2) {
+        this.moreFoooood()
+    }
+    return currentState;
   }
 
   protected dinnerTime() {
@@ -41,5 +48,9 @@ export class Food extends GameObject {
 
   get dinnerEachSeconds(): number {
     return this.dinnerRefreshSeconds;
+  }
+
+  protected moreFoooood() {
+    this.lastDinnerTime = 0;
   }
 }

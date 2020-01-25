@@ -41,7 +41,7 @@ export class Snake extends GameObject {
     protected logic(currentState: TGameState, dryRun: boolean = false): TGameState {
         if (!dryRun) {
             if (this.steps >= 0 && !this.died) {
-                this.move(currentState.cells);
+                this.step(currentState.cells);
             }
     
             this.steps++;
@@ -56,7 +56,7 @@ export class Snake extends GameObject {
         };
       }
 
-    private move(gameCells: TCells): void {
+    private step(gameCells: TCells): void {
         const [first] = this.snake.slice(0);
         const [last] = this.snake.slice(this.snake.length - 1);
         const next = this.getNextCoord(first);

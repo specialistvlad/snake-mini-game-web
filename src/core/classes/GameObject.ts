@@ -1,20 +1,28 @@
-import { TGameState, TCoordinate } from '../types';
+import { TGameState, TCoordinate, TCells } from '../types';
 
 interface IGameObject {
-  reducer(state: TGameState): TGameState;
+  reducer(currentState: TGameState, forward: boolean, dryRun: boolean): TGameState;
 };
 
 export abstract class GameObject implements IGameObject {
   protected defaultState: TGameState = { cells: [] };
   protected localState: TGameState = this.defaultState;
 
-  protected logic(game: TGameState): TGameState {
+  protected logic(currentState: TGameState): TGameState {
     throw new Error('Must be implemented!');
   }
 
-  public reducer(currentState: TGameState = this.defaultState, dryRun: boolean = false): TGameState {
-    if (!dryRun) {
+  protected backwardLogic(currentState: TGameState): TGameState {
+    return currentState;
+  }
+
+  public reducer(currentState: TGameState = this.defaultState, forward: boolean = true, dryRun: boolean = false): TGameState {
+    if (!dryRun && forward) {
       this.localState = this.logic(currentState);
+    }
+
+    if (!dryRun && !forward) {
+      return this.backwardLogic(currentState);
     }
 
     return {
@@ -41,5 +49,9 @@ export abstract class GameObject implements IGameObject {
 
   protected randomCoordinate(max: number): TCoordinate {
     return [this.random(max), this.random(max)];
+  }
+
+  protected findCellsByCoord(cells: TCells, [y, x]: TCoordinate): TCells {
+    return cells.filter(({ coordinate, type }) => coordinate[0] === y && coordinate[1] === x);
   }
 }
