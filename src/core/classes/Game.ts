@@ -10,7 +10,7 @@ interface IGame {
 
 export class Game implements IGame {
     private defaultState = { cells: [] };
-    public size: number = 15;
+    public size: number = 20;
     private state: TGameState = this.defaultState;
     public snakes: Array<Snake> = [];
     public food: Array<Food> = [];
@@ -26,7 +26,7 @@ export class Game implements IGame {
 
     public tick(): ColorTable {
         const gameObjects = Array<GameObject>(...this.food, ...this.snakes);
-        this.state = this.reduce(gameObjects, this.reduce(gameObjects, this.defaultState, true), false);
+        this.state = this.reduce(gameObjects, this.reduce(gameObjects, this.defaultState), false);
         return this.cellsToColorTable();
     }
 

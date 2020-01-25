@@ -13,7 +13,7 @@ const Component = ({ rows }) => (
           className="cell"
           style={{
             backgroundColor,
-            opacity: 0.5,
+            // opacity: 0.5,
           }}
         />))}
       </tr>

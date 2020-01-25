@@ -5,8 +5,6 @@ export const CellPalette = {
     food: 'green',
 };
 
-export const SnakePalette = ['red', 'blue', 'yellow', 'pearl'];
-
 export enum CellType {
     empty = 'empty',
     wall = 'wall',

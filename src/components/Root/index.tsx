@@ -21,7 +21,7 @@ export default () => {
   useEffect(() => {
     setInterval(() => {
       setRows(game.tick());
-    }, 100);
+    }, 125);
   }, []);
 
   useEventListener('keydown', useCallback(({ code }) => {

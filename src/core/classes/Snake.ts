@@ -1,3 +1,4 @@
+import chroma from 'chroma-js';
 import { TGameState, TDegree, TCoordinate, TCoordinates, Directions, CellType, TCells } from '../types';
 import { GameObject } from './GameObject';
 
@@ -34,7 +35,7 @@ export class Snake extends GameObject {
             name: 'My smart snake',
             snake: [[Math.trunc(tableSize / 2), Math.trunc(tableSize / 2)]],
             tableSize: tableSize,
-            color: 'violet'
+            color: chroma.random().hex(),
           })];
     }
 
@@ -48,13 +49,19 @@ export class Snake extends GameObject {
         }
 
         return {
-            cells: this.snake.map(item => ({
+            cells: this.snake.map((item, index) => ({
                 coordinate: item,
                 type: CellType.snake,
-                color: this.color,
+                color: this.colorful(index),
             })),
         };
       }
+
+    private colorful(index: number): string {
+        const len = this.snake.length - 1;
+        // return index === 0 ? this.color : chroma.random().hex();
+        return index === 0 ? this.color : chroma(this.color).saturate(index).darken((index / len) * 2).hex();
+    }
 
     private step(gameCells: TCells): void {
         const [first] = this.snake.slice(0);
