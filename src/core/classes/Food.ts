@@ -1,4 +1,4 @@
-import { TGameState, CellType, CellPalette, TCoordinate } from '../types';
+import { TGameState, CellType, CellPalette } from '../types';
 import { GameObject } from './GameObject';
 
 export class Food extends GameObject {
