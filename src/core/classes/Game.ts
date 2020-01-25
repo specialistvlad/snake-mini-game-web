@@ -1,7 +1,7 @@
 import { Snake } from './Snake';
 import { Food } from './Food';
 import { GameObject } from './GameObject';
-import { TCell, TCells, ColorTable, TGameState } from '../types';
+import { TCell, ColorTable, TGameState } from '../types';
 
 interface IGame {
     reset(): void;

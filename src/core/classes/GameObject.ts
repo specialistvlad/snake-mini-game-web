@@ -1,4 +1,4 @@
-import { TGameState, TCoordinate, TCoordinates, CellType, CellPalette } from '../types';
+import { TGameState, TCoordinate } from '../types';
 
 interface IGameObject {
   reducer(state: TGameState): TGameState;
@@ -33,5 +33,9 @@ export abstract class GameObject implements IGameObject {
         ...this.localState.cells,
       ],
     };
+  }
+
+  protected secondsFromUnixEpoch() {
+    return Date.now() / 1000;
   }
 }
