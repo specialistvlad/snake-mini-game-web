@@ -1,5 +1,5 @@
 import { TGameState, TDegree, TCoordinate, TCoordinates, Directions, CellType, TCells } from '../types';
-import { IGameObject } from './GameObject';
+import { GameObject } from './GameObject';
 
 export type TSnakeConstructorParams = {
     name: string;
@@ -9,7 +9,7 @@ export type TSnakeConstructorParams = {
     tableSize?: number;
 };
 
-export class Snake implements IGameObject {
+export class Snake extends GameObject {
     private name: string;
     private color: string;
     private snake: TCoordinates;
@@ -18,9 +18,9 @@ export class Snake implements IGameObject {
     private steps: number = -1;
     private tableSize: number;
     private died: boolean = false;
-    // public direction: TDegree;
 
     constructor(params: TSnakeConstructorParams) {
+        super();
         this.name = params.name || 'Unknown snake';
         this.color = params.color || 'pink';
         this.snake = params.snake;
@@ -29,25 +29,34 @@ export class Snake implements IGameObject {
         this.tableSize = params.tableSize || 100;
     }
 
-    public reducer(game: TGameState): TGameState {
-        if (this.steps >= 0 && !this.died) {
-            this.move(game.cells);
+    public static make(tableSize: number): Array<Snake> {
+        return [new Snake({
+            name: 'My smart snake',
+            // snake: [[Math.trunc(this.size / 2), Math.trunc(this.size / 2)]],
+            snake: [[0, 7],[0, 6],[0, 5],[0, 4],[0, 3],[0, 2], [0, 1], [0, 0]],
+            // snake: [[0, 0], [0, 1], [0, 2], [0, 3]],
+            tableSize: tableSize,
+            color: 'violet'
+          })];
+    }
+
+    protected logic(currentState: TGameState, dryRun: boolean = false): TGameState {
+        if (!dryRun) {
+            if (this.steps >= 0 && !this.died) {
+                this.move(currentState.cells);
+            }
+    
+            this.steps++;
         }
 
-        this.steps++;
-
         return {
-            ...game,
-            cells: [
-                ...game.cells,
-                ...this.snake.map(item => ({
-                    coordinate: item,
-                    type: CellType.snake,
-                    color: this.color,
-                })),
-            ],
+            cells: this.snake.map(item => ({
+                coordinate: item,
+                type: CellType.snake,
+                color: this.color,
+            })),
         };
-    }
+      }
 
     private move(gameCells: TCells): void {
         const [first] = this.snake.slice(0);
@@ -84,9 +93,5 @@ export class Snake implements IGameObject {
 
     set direction(nextDegree: TDegree) {
         this.nextDegree = nextDegree;
-    }
-
-    get direction(): TDegree {
-        return this.nextDegree;
     }
 };
