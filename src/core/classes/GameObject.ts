@@ -28,8 +28,6 @@ export abstract class GameObject implements IGameObject {
   }
 
   protected random(max: number) {
-    console.log('a', max);
-    
     return Math.floor((Math.random() * max));
   }
 
