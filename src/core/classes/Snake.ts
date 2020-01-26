@@ -1,5 +1,5 @@
 import chroma from 'chroma-js';
-import { TGameState, TDegree, TCoordinate, TCoordinates, Directions, CellType, TCells } from '../types';
+import { TGameState, TDegree, TCoordinate, TCoordinates, Directions, CellType, TCells, TCell } from '../types';
 import { GameObject } from './GameObject';
 
 export type TSnakeConstructorParams = {
@@ -64,34 +64,51 @@ export class Snake extends GameObject {
     }
 
     private step(gameCells: TCells): void {
-        const [first] = this.snake.slice(0);
-        const [last] = this.snake.slice(this.snake.length - 1);
-        const next = this.getNextCoord(first);
+        const next = this.getNextCoord();
         const nextElementOnTable = gameCells.find(({ coordinate }) => next[0] === coordinate[0] && next[1] === coordinate[1]);
-        const collision = this.snake.find(([y, x]) => next[0] === y && next[1] === x);
-        
-        if (collision || nextElementOnTable?.type === CellType.snake || nextElementOnTable?.type === CellType.wall) {
-            this.died = true;
+
+        if (this.collision(gameCells, nextElementOnTable, next)) { // do nothing if collision with tail of with another snakes was detected
             return;
         }
 
-        if (nextElementOnTable?.type === CellType.food) {
-            this.snake = [
-                next,
-                ...this.snake.slice(0, this.snake.length - 1),
-                last,
-            ];
+        if (this.tastyFood(gameCells, nextElementOnTable)) { // grow
+            this.snake = [next, ...this.snake];
             return;
         }
 
-        this.snake = [
-            next,
-            ...this.snake.slice(0, this.snake.length - 1),
-        ];
-        
+        if (this.loseWeight()) {
+            if (this.snake.length === 1) {
+                this.died = true;
+                return;
+            }
+            this.snake = [next, ...this.snake.slice(0, this.snake.length - 2)];
+        }
+
+        this.snake = [next, ...this.snake.slice(0, this.snake.length - 1)];
     }
 
-    private getNextCoord([y, x]: TCoordinate): TCoordinate {
+
+    private loseWeight(): boolean {
+        // not implemented loose weight mode
+        return false;
+    }
+
+
+    private collision(gameCells: TCells, nextCell: TCell | undefined, next: TCoordinate): boolean {
+        const collision = this.snake.find(([y, x]) => next[0] === y && next[1] === x);
+        
+        if (collision || nextCell?.type === CellType.snake || nextCell?.type === CellType.wall) {
+            return this.died = true;
+        }
+        return false;
+    }
+
+    private tastyFood(gameCells: TCells, nextCell: TCell | undefined): boolean {
+        return nextCell?.type === CellType.food;
+    }
+
+    private getNextCoord(): TCoordinate {
+        const [y, x] = this.snake.slice(0)[0];
         const isNextDirectionCorrect = Math.abs(this.currentDegree - this.nextDegree) !== 180;
         if (isNextDirectionCorrect) {
             this.currentDegree = this.nextDegree;
