@@ -12,7 +12,7 @@ export const Controls: FC<{
   const right = useCallback(() => callback({ code: 'ArrowRight' }), [callback]);
   const down = useCallback(() => callback({ code: 'ArrowDown' }), [callback]);
   const resetGame = useCallback(() => callback({ code: 'resetGame' }), [callback]);
-  
+
 // https://stackoverflow.com/questions/34639583/how-can-i-create-responsive-joystick-layout-buttons-in-html
   return (<div className={className}> 
     <div id="joystick" style={{ width: '20%' }}>
@@ -39,11 +39,11 @@ export const Controls: FC<{
         <path d="M50,86 54,78 46,78Z" fill="rgba(0,0,0,0.8)" />
         <path d="M14,50 22,54 22,46Z" fill="rgba(0,0,0,0.8)" />
         <path d="M86,50 78,54 78,46Z" fill="rgba(0,0,0,0.8)" />
-        <circle cx="50" cy="50" r="20" stroke="black" stroke-width="0" fill="rgba(0,0,0,0)" onClick={resetGame}/>
-        <circle cx="50" cy="15" r="20" stroke="black" stroke-width="0" fill="rgba(0,0,0,0)" onClick={up}/>
-        <circle cx="15" cy="50" r="20" stroke="black" stroke-width="0" fill="rgba(0,0,0,0)" onClick={left}/>
-        <circle cx="85" cy="50" r="20" stroke="black" stroke-width="0" fill="rgba(0,0,0,0)" onClick={right}/>
-        <circle cx="50" cy="85" r="20" stroke="black" stroke-width="0" fill="rgba(0,0,0,0)" onClick={down}/>
+        <circle cx="50" cy="50" r="20" stroke="black" strokeWidth="0" fill="rgba(0,0,0,0)" onClick={resetGame}/>
+        <circle cx="50" cy="15" r="20" stroke="black" strokeWidth="0" fill="rgba(0,0,0,0)" onClick={up}/>
+        <circle cx="15" cy="50" r="20" stroke="black" strokeWidth="0" fill="rgba(0,0,0,0)" onClick={left}/>
+        <circle cx="85" cy="50" r="20" stroke="black" strokeWidth="0" fill="rgba(0,0,0,0)" onClick={right}/>
+        <circle cx="50" cy="85" r="20" stroke="black" strokeWidth="0" fill="rgba(0,0,0,0)" onClick={down}/>
       </svg>
     </div>
   </div>);
