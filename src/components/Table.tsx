@@ -1,8 +1,14 @@
 import React, { FC } from 'react';
 import { TColorTable, TColorTableRow } from '../core/types';
 
-export const Table: FC<{ rows: TColorTable }> = ({ rows }) => (
-  <table className="grid">
+export const Table: FC<{
+  className?: string,
+  rows: TColorTable,
+}> = ({
+  className,
+  rows,
+}) => (
+  <table className={`${className} table`}>
     <tbody>
     {rows.map((row: TColorTableRow, indY: number) => (
       <tr key={`row-id-${indY}`}>
@@ -10,12 +16,7 @@ export const Table: FC<{ rows: TColorTable }> = ({ rows }) => (
         (<td
           key={`cell-id-${indX}`}
           className="cell"
-          style={{
-            border: '1px solid #333333',
-            backgroundColor,
-            width: 25,
-            height: 25,
-          }}
+          style={{ backgroundColor }}
         ></td>))}
       </tr>
     ))}

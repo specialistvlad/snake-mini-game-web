@@ -7,30 +7,7 @@ import { Table } from './Table';
 import { ScoreBoard } from './ScoreBoard';
 import { Controls } from './Controls';
 
-// body, #root {
-//   /* height: 500px; */
-//   /* width: 500px; */
-// }
-
-// #root {
-//   background: #222;
-//   background: radial-gradient(#333333eb, #11111100);
-//   background-position: center center;
-//   background-repeat: no-repeat;
-//   background-size: cover;
-//   color: #fff;
-// }
-
-// .root {
-//   display: 'flex';
-// }
-
-// .column {
-//   flex: 1;
-// }
-
-
-export const Root = () => {
+export const Game = () => {
   const [rows, setRows] = useState(game.cellsToColorTable());
   const [score, setScore] = useState(game.score());
 
@@ -78,15 +55,15 @@ export const Root = () => {
     setInterval(() => {
       setRows(game.tick());
       setScore(game.score());
-    }, 125);
+    }, 175);
   }, []);
 
   return (
-  <div className="root" {...handlers}>
-    <div className="column"><Table rows={rows}/></div>
-    <div className="column">
-      <ScoreBoard score={score} />
-      <Controls callback={controlsCallback}/>
+  <div className="game" {...handlers}>
+    <Table className="column left-column" rows={rows}/>
+    <div className="column right-column">
+      <ScoreBoard className="column score" score={score} />
+      <Controls className="column controls" callback={controlsCallback}/>
     </div>
   </div>
   );

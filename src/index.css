@@ -1,16 +1,69 @@
 @import './reset.css';
 
 body {
-  background-color: black;
+  background-color: white;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.game {
+  background-color: #222;
+  border: 1px solid #333333;
+  display: flex;
+}
+
+.column {
+  flex: 1;
+}
+
+.right-column {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.score {
+  padding: 20px;
+}
+
+.score h1 {
+  font-size: large;
+}
+
+.score table {
+  width: 100%;
+}
+
+.score .table {
+  display: inline-block;
+}
+
+th {
+ text-align: left;
+}
+
+.score .table .cell {
+  width: 12px;
+  height: 12px;
+  padding: 5px;
+}
+
+.left-column .table {
+  background: radial-gradient(#333333eb, #11111100);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #fff;
+}
+
+.table .cell {
+  border: 1px solid #333333;
+  width: 25px;
+  height: 25px;
+}
+
+.died {
+  text-decoration: line-through;
 }
