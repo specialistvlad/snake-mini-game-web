@@ -6,6 +6,7 @@ import { TCell, ColorTable, TGameState } from '../types';
 interface IGame {
     reset(): void;
     tick(): ColorTable;
+    getSnake(): Snake;
 };
 
 export class Game implements IGame {
@@ -39,5 +40,9 @@ export class Game implements IGame {
         const table = Array<Array<string>>(this.size).fill([]).map(() => Array<string>(this.size).fill(''));
         this.state.cells.forEach(({ coordinate: [x, y], color}: TCell) => table[x][y] = color);
         return table;
+    }
+
+    public getSnake(): Snake {
+        return this.snakes[0];
     }
 };
