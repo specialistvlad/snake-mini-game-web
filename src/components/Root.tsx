@@ -2,11 +2,33 @@ import React, { useState, useEffect, useCallback } from 'react';
 import useEventListener from '@use-it/event-listener';
 import { useSwipeable } from 'react-swipeable'
 
-import game from '../../core/game';
-import { Table } from '../Table';
-import { ScoreBoard } from '../ScoreBoard';
-import { Controls } from '../Controls';
-import './style.css';
+import game from '../core/game';
+import { Table } from './Table';
+import { ScoreBoard } from './ScoreBoard';
+import { Controls } from './Controls';
+
+// body, #root {
+//   /* height: 500px; */
+//   /* width: 500px; */
+// }
+
+// #root {
+//   background: #222;
+//   background: radial-gradient(#333333eb, #11111100);
+//   background-position: center center;
+//   background-repeat: no-repeat;
+//   background-size: cover;
+//   color: #fff;
+// }
+
+// .root {
+//   display: 'flex';
+// }
+
+// .column {
+//   flex: 1;
+// }
+
 
 export const Root = () => {
   const [rows, setRows] = useState(game.cellsToColorTable());

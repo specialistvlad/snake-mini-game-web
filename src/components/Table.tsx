@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
-import './style.css';
-import { TColorTable, TColorTableRow } from '../../core/types';
+import { TColorTable, TColorTableRow } from '../core/types';
 
 export const Table: FC<{ rows: TColorTable }> = ({ rows }) => (
   <table className="grid">
@@ -11,8 +10,13 @@ export const Table: FC<{ rows: TColorTable }> = ({ rows }) => (
         (<td
           key={`cell-id-${indX}`}
           className="cell"
-          style={{ backgroundColor}}
-        />))}
+          style={{
+            border: '1px solid #333333',
+            backgroundColor,
+            width: 25,
+            height: 25,
+          }}
+        ></td>))}
       </tr>
     ))}
     </tbody>

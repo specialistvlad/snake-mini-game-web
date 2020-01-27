@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
-import './style.css';
-import { TScoreTable } from '../../core/types';
-import { Table } from '../Table';
+import { TScoreTable } from '../core/types';
+import { Table } from './Table';
 
 export const ScoreBoard: FC<{ score: TScoreTable }> = ({ score }) =>
 <div>

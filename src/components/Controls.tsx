@@ -1,7 +1,5 @@
 import React, { FC, useCallback } from 'react';
 
-import './style.css';
-
 export const Controls: FC<{ callback: Function }> = ({ callback }) => {
   const up = useCallback(() => callback({ code: 'ArrowUp' }), [callback]);
   const left = useCallback(() => callback({ code: 'ArrowLeft' }), [callback]);
