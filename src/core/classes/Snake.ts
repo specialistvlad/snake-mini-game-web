@@ -1,5 +1,5 @@
 import chroma from 'chroma-js';
-import { TGameState, TDegree, TCoordinate, TCoordinates, Directions, CellType, TCells, TCell } from '../types';
+import { TGameState, TDegree, TCoordinate, TCoordinates, Directions, CellType, TCells, TCell, TSnakePreview, TCellColor } from '../types';
 import { GameObject } from './GameObject';
 
 export type TSnakeConstructorParams = {
@@ -11,18 +11,18 @@ export type TSnakeConstructorParams = {
 };
 
 export class Snake extends GameObject {
-    private name: string;
+    private _name: string;
+    private _died: boolean = false;
     private color: string;
     private snake: TCoordinates;
     private currentDegree: TDegree;
     private nextDegree: TDegree;
     private steps: number = -1;
     private tableSize: number;
-    private died: boolean = false;
 
     constructor(params: TSnakeConstructorParams) {
         super();
-        this.name = params.name || 'Unknown snake';
+        this._name = params.name || 'Unknown snake';
         this.color = params.color || 'pink';
         this.snake = params.snake;
         this.currentDegree = params.direction || 0;
@@ -37,6 +37,30 @@ export class Snake extends GameObject {
             tableSize: tableSize,
             color: chroma.random().hex(),
           })];
+    }
+
+    public set direction(nextDegree: TDegree) {
+        this.nextDegree = nextDegree;
+    }
+
+    public get name(): string {
+        return this._name;
+    }
+
+    public get length(): number {
+        return this.snake.length;
+    }
+
+    get died(): boolean {
+        return this._died;
+    }
+
+    public get preview(): TSnakePreview {
+        const previewLength = 5;
+        return (Array<TCellColor>(previewLength)
+            .fill('')
+            .map((item, index) => this.colorful(index))
+            .slice(0, this.length >= previewLength ? previewLength : this.length) as TSnakePreview);
     }
 
     protected logic(currentState: TGameState, dryRun: boolean = false): TGameState {
@@ -78,7 +102,7 @@ export class Snake extends GameObject {
 
         if (this.loseWeight()) {
             if (this.snake.length === 1) {
-                this.died = true;
+                this._died = true;
                 return;
             }
             this.snake = [next, ...this.snake.slice(0, this.snake.length - 2)];
@@ -98,7 +122,7 @@ export class Snake extends GameObject {
         const collision = this.snake.find(([y, x]) => next[0] === y && next[1] === x);
         
         if (collision || nextCell?.type === CellType.snake || nextCell?.type === CellType.wall) {
-            return this.died = true;
+            return this._died = true;
         }
         return false;
     }
@@ -125,9 +149,5 @@ export class Snake extends GameObject {
                 return [y === 0 ? this.tableSize - 1 : y - 1, x];
         };
         throw new Error(`I have no idea how to move this degree o_O: ${this.nextDegree}`)
-    }
-
-    set direction(nextDegree: TDegree) {
-        this.nextDegree = nextDegree;
     }
 };

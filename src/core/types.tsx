@@ -11,7 +11,7 @@ export enum CellType {
     food = 'food',
     snake = 'snake',
 };
-type TCellColor = string;
+export type TCellColor = string;
 
 // *******************************************
 // Coordinates and direction on the table
@@ -38,4 +38,14 @@ export type TCell = {
 };
 
 export type TCells = Array<TCell>;
-export type ColorTable = Array<Array<string>>;
+export type TColorTableRow = Array<string>;
+export type TColorTable = Array<TColorTableRow>;
+
+export type TSnakePreview = [TCellColor, TCellColor, TCellColor, TCellColor, TCellColor];
+export type TScore = {
+    name: string;
+    died: boolean;
+    length: number,
+    preview: TSnakePreview,
+};
+export type TScoreTable = Array<TScore>;

@@ -1,25 +1,20 @@
-import React from 'react';
+import React, { FC } from 'react';
 import './style.css';
+import { TColorTable, TColorTableRow } from '../../core/types';
 
-// @ts-ignore
-const Component = ({ rows }) => (
+export const Table: FC<{ rows: TColorTable }> = ({ rows }) => (
   <table className="grid">
     <tbody>
-    {rows.map((row: [], y: number) => (
-      <tr key={`row-id-${y}`}>
-        {row.map((backgroundColor: string, x: number) =>
+    {rows.map((row: TColorTableRow, indY: number) => (
+      <tr key={`row-id-${indY}`}>
+        {row.map((backgroundColor: string, indX: number) =>
         (<td
-          key={`cell-id-${x}`}
+          key={`cell-id-${indX}`}
           className="cell"
-          style={{
-            backgroundColor,
-            // opacity: 0.5,
-          }}
+          style={{ backgroundColor}}
         />))}
       </tr>
     ))}
     </tbody>
   </table>
 );
-
-export default Component;

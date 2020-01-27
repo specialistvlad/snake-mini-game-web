@@ -1,20 +1,23 @@
 import { Snake } from './Snake';
 import { Food } from './Food';
 import { GameObject } from './GameObject';
-import { TCell, ColorTable, TGameState } from '../types';
+import { TCell, TColorTable, TGameState, TScoreTable } from '../types';
 
 interface IGame {
     reset(): void;
-    tick(): ColorTable;
+    tick(): TColorTable;
+    cellsToColorTable(): TColorTable;
     getSnake(): Snake;
+    score(): TScoreTable;
+    // food(): TFoodScore;
 };
 
 export class Game implements IGame {
     private defaultState = { cells: [] };
-    public size: number = 20;
+    private size: number = 20;
     private state: TGameState = this.defaultState;
-    public snakes: Array<Snake> = [];
-    public food: Array<Food> = [];
+    private snakes: Array<Snake> = [];
+    private food: Array<Food> = [];
 
     constructor() {
         this.reset();
@@ -25,7 +28,7 @@ export class Game implements IGame {
         this.food = Food.make(this.size);
     }
 
-    public tick(): ColorTable {
+    public tick(): TColorTable {
         const gameObjects = Array<GameObject>(...this.food, ...this.snakes);
         this.state = this.reduce(gameObjects, this.reduce(gameObjects, this.defaultState), false);
         return this.cellsToColorTable();
@@ -36,7 +39,7 @@ export class Game implements IGame {
         return array[methodName]((accumulator: TGameState, item: GameObject) => item.reducer(accumulator, forward), state);
     }
 
-    public cellsToColorTable(): ColorTable {
+    public cellsToColorTable(): TColorTable {
         const table = Array<Array<string>>(this.size).fill([]).map(() => Array<string>(this.size).fill(''));
         this.state.cells.forEach(({ coordinate: [x, y], color}: TCell) => table[x][y] = color);
         return table;
@@ -44,5 +47,14 @@ export class Game implements IGame {
 
     public getSnake(): Snake {
         return this.snakes[0];
+    }
+
+    public score(): TScoreTable {
+        return this.snakes.map(item => ({
+            name: item.name,
+            died: item.died,
+            length: item.length,
+            preview: item.preview,
+        }));
     }
 };

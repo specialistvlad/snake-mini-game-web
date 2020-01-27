@@ -2,6 +2,7 @@
   "name": "snake-ml-experiment",
   "homepage": "https://specialistvlad.github.io/snake-ml-experiment/",
   "version": "0.1.0",
+  "license": "MIT",
   "private": false,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",

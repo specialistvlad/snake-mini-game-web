@@ -13,7 +13,11 @@ export class Food extends GameObject {
   }
 
   public static make(tableSize: number): Array<Food> {
-    return [new Food(tableSize)];
+    return [
+      new Food(tableSize),
+      new Food(tableSize),
+      new Food(tableSize),
+    ];
   }
 
   protected logic(currentState: TGameState): TGameState {
