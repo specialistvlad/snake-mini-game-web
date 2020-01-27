@@ -34,9 +34,6 @@ export default () => {
       case 'KeyW':
         mySnake.direction = 270
       break;
-  
-      default:
-        console.log(event);
     }
   }, []);
 
