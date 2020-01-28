@@ -25,6 +25,6 @@ export const Table: FC<{
       ))}
       </tbody>
     </table>
-    {gameOver ? (<div className="game-over">Game Over</div>) : null}
+    {gameOver ? (<div className="game-over"><span>Game Over</span></div>) : null}
   </>
 );

@@ -70,7 +70,9 @@ export const Game = () => {
   return (
   <div className="game" {...handlers}>
     <div className="column left-column" >
-      <Table rows={rows} gameOver={gameOver} />
+      <div className="table-container">
+        <Table rows={rows} gameOver={gameOver} />
+      </div>
     </div>
     <div className="column right-column">
       <ScoreBoard className="column score" score={score} />

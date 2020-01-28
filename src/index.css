@@ -73,9 +73,24 @@ th {
   text-decoration: line-through;
 }
 
+.table-container {
+  position: relative;
+    display: inline-block;
+}
+
 .game-over {
+  height: 100%;
   top: 0px;
   left: 0px;
   font-size: xx-large;
-  background-color: red;
+  background-color: rgba(255,125,35,0.5);
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  display: table; 
+}
+
+.game-over span {
+  display: table-cell;
+  vertical-align: middle;
 }
