@@ -11,7 +11,7 @@ export const Controls: FC<{
   const left = useCallback(() => callback({ code: 'ArrowLeft' }), [callback]);
   const right = useCallback(() => callback({ code: 'ArrowRight' }), [callback]);
   const down = useCallback(() => callback({ code: 'ArrowDown' }), [callback]);
-  const resetGame = useCallback(() => callback({ code: 'resetGame' }), [callback]);
+  const resetGame = useCallback(() => callback({ code: 'ResetGame' }), [callback]);
 
 // https://stackoverflow.com/questions/34639583/how-can-i-create-responsive-joystick-layout-buttons-in-html
   return (<div className={className}> 

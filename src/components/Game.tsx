@@ -37,6 +37,10 @@ export const Game = () => {
       case 'KeyW':
         mySnake.direction = 270;
       break;
+
+      case 'ResetGame':
+        game.reset();
+      break;
     }
   }, []);
 
