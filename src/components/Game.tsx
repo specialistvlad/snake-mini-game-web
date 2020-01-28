@@ -8,6 +8,7 @@ import { ScoreBoard } from './ScoreBoard';
 import { Controls } from './Controls';
 
 export const Game = () => {
+  const [gameOver, setGameOver] = useState(game.gameOver);
   const [rows, setRows] = useState(game.cells);
   const [score, setScore] = useState(game.score);
 
@@ -57,14 +58,20 @@ export const Game = () => {
   // syncronization signal for the game
   useEffect(() => {
     setInterval(() => {
-      setRows(game.tick());
+      setGameOver(game.gameOver);
+
+      if (!game.gameOver) {
+        setRows(game.tick());
+      }
       setScore(game.score);
     }, 175);
   }, []);
 
   return (
   <div className="game" {...handlers}>
-    <Table className="column left-column" rows={rows}/>
+    <div className="column left-column" >
+      <Table rows={rows} gameOver={gameOver} />
+    </div>
     <div className="column right-column">
       <ScoreBoard className="column score" score={score} />
       <Controls className="column controls" callback={controlsCallback}/>

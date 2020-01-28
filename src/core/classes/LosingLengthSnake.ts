@@ -57,7 +57,7 @@ export class LosingLengthSnake extends Snake {
         const nextCell = this.nextCell(gameCells);
  
         if (nextCell?.type === CellType.food) {
-            this._stepsLeft += this.stepsForEachFood;
+            this._stepsLeft = this.stepsForEachFood;
             this.snake = [nextCoord, ...this.snake];
             return true;
         }

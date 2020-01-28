@@ -72,3 +72,10 @@ th {
 .died {
   text-decoration: line-through;
 }
+
+.game-over {
+  top: 0px;
+  left: 0px;
+  font-size: xx-large;
+  background-color: red;
+}
