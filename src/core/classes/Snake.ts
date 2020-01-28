@@ -34,20 +34,11 @@ export class Snake extends GameObject {
     constructor(params: TSnakeConstructorParams) {
         super();
         this._name = params.name || 'Unknown snake';
-        this.color = params.color || 'pink';
+        this.color = params.color || chroma.random().hex();
         this.snake = params.snake;
         this.currentDegree = params.direction || 0;
         this.nextDegree = this.currentDegree;
         this.tableSize = params.tableSize || 100;
-    }
-
-    public static make(tableSize: number): Array<Snake> {
-        return [new Snake({
-            name: 'My smart snake',
-            snake: [[Math.trunc(tableSize / 2), Math.trunc(tableSize / 2)]],
-            tableSize: tableSize,
-            color: chroma.random().hex(),
-          })];
     }
 
     public set direction(nextDegree: TDegree) {
@@ -74,7 +65,7 @@ export class Snake extends GameObject {
             .slice(0, this.length >= previewLength ? previewLength : this.length) as TSnakePreview);
     }
 
-    protected logic(currentState: TGameState, dryRun: boolean = false): TGameState {
+    protected reduceForward(currentState: TGameState, dryRun: boolean = false): TGameState {
         if (!dryRun) {
             if (!this._died) {
                 if (this.steps >= 0) {

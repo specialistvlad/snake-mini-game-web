@@ -23,8 +23,16 @@ export class Game implements IGame {
     }
 
     public reset(): void {
-        this.snakes = LosingLengthSnake.make(this.size);
-        this.food = Food.make(this.size);
+        this.snakes = [new LosingLengthSnake({
+            name: 'My smart snake',
+            snake: [[Math.trunc(this.size / 2), Math.trunc(this.size / 2)]],
+            tableSize: this.size,
+          })];
+        this.food = [
+            new Food(this.size),
+            new Food(this.size),
+            new Food(this.size),
+          ];
     }
 
     public tick(): TColorTable {

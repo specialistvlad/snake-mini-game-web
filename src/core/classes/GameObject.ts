@@ -1,28 +1,24 @@
 import { TGameState, TCoordinate, TCells } from '../types';
 
-interface IGameObject {
-  reducer(currentState: TGameState, forward: boolean, dryRun: boolean): TGameState;
-};
-
-export abstract class GameObject implements IGameObject {
+export abstract class GameObject {
   protected defaultState: TGameState = { cells: [] };
   protected localState: TGameState = this.defaultState;
 
-  protected logic(currentState: TGameState): TGameState {
+  protected reduceForward(currentState: TGameState): TGameState {
     throw new Error('Must be implemented!');
   }
 
-  protected backwardLogic(currentState: TGameState): TGameState {
+  protected reduceBackward(currentState: TGameState): TGameState {
     return currentState;
   }
 
   public reducer(currentState: TGameState = this.defaultState, forward: boolean = true, dryRun: boolean = false): TGameState {
     if (!dryRun && forward) {
-      this.localState = this.logic(currentState);
+      this.localState = this.reduceForward(currentState);
     }
 
     if (!dryRun && !forward) {
-      return this.backwardLogic(currentState);
+      return this.reduceBackward(currentState);
     }
 
     return {

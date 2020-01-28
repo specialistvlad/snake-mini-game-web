@@ -1,20 +1,9 @@
-import chroma from 'chroma-js';
-
 import { CellType, TCells } from '../types';
 import { Snake } from './Snake';
 
 export class LosingLengthSnake extends Snake {
     protected _stepsLeft: number = 30;
     protected stepsForEachFood: number = 15;
-
-    public static make(tableSize: number): Array<LosingLengthSnake> {
-        return [new LosingLengthSnake({
-            name: 'My smart snake',
-            snake: [[Math.trunc(tableSize / 2), Math.trunc(tableSize / 2)]],
-            tableSize: tableSize,
-            color: chroma.random().hex(),
-          })];
-    }
     
     get stepsLeft(): number {
         return this._stepsLeft;
@@ -37,7 +26,7 @@ export class LosingLengthSnake extends Snake {
             return;
         }
 
-        if (this.usualStepForward(gameCells)) { // find food
+        if (this.usualStepForward(gameCells)) {
             return;
         }
     }
@@ -52,12 +41,6 @@ export class LosingLengthSnake extends Snake {
             }
             return this._died = true;
         }
-
-        // if (this.snake.length >= 2) {
-        //     return true;
-        // }
-        //     this.snake = [this.getNextCoord(), ...this.snake.slice(0, this.snake.length - 2)];
-        //     return true;
         return false;
     }
 
@@ -65,7 +48,7 @@ export class LosingLengthSnake extends Snake {
      * Detect food in next cell
      * If food found we have to return next coord for snake's head plus current snake
      * 
-     * Extended logic is: add extra steps left on new cell with food
+     * Extended logic is: add extra steps on new cell with food
      * 
      * @returns Return true if we need to stop step managing
      */

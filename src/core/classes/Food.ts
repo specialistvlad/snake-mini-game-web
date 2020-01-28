@@ -12,15 +12,7 @@ export class Food extends GameObject {
     this.lastDinnerTime = lastDinnerTime;
   }
 
-  public static make(tableSize: number): Array<Food> {
-    return [
-      new Food(tableSize),
-      new Food(tableSize),
-      new Food(tableSize),
-    ];
-  }
-
-  protected logic(currentState: TGameState): TGameState {
+  protected reduceForward(currentState: TGameState): TGameState {
     if (this.secondsFromLastDinner() > this.dinnerRefreshSeconds) {
       this.dinnerTime();
       return this.localState = {
@@ -35,7 +27,7 @@ export class Food extends GameObject {
     return this.localState;
   }
 
-  protected backwardLogic(currentState: TGameState): TGameState {
+  protected reduceBackward(currentState: TGameState): TGameState {
     if (this.findCellsByCoord(currentState.cells, this.localState.cells[0].coordinate).length === 2) {
         this.moreFoooood()
     }

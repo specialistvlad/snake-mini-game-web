@@ -1,12 +1,10 @@
 import { Food } from './Food';
-
 import { CellPalette, CellType } from '../types';
-
 
 describe('Food', () => {
     test('default params, should return dinner', () => {
         expect.assertions(1);
-        const [food] = Food.make(1);
+        const food = new Food(1);
         expect(food.reducer()).toMatchObject({
             cells: [{
                 color: CellPalette.food,
