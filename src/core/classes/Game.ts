@@ -1,14 +1,15 @@
 import { LosingLengthSnake } from './LosingLengthSnake';
 import { Food } from './Food';
 import { GameObject } from './GameObject';
-import { TCell, TColorTable, TGameState, TScoreTable } from '../types';
+import { TCell, TColorTable, TGameState, TScoreTable, TDegree } from '../types';
 
 interface IGame {
     reset(): void;
     tick(): TColorTable;
-    cellsToColorTable(): TColorTable;
-    getSnake(): LosingLengthSnake;
-    score(): TScoreTable;
+    cells: TColorTable;
+    score: TScoreTable;
+    direction: number;
+    gameOver: boolean;
 };
 
 export class Game implements IGame {
@@ -47,17 +48,25 @@ export class Game implements IGame {
         return array[methodName]((accumulator: TGameState, item: GameObject) => item.reducer(accumulator, forward), state);
     }
 
-    public cellsToColorTable(): TColorTable {
+    protected cellsToColorTable(): TColorTable {
         const table = Array<Array<string>>(this.size).fill([]).map(() => Array<string>(this.size).fill(''));
         this.state.cells.forEach(({ coordinate: [x, y], color}: TCell) => table[x][y] = color);
         return table;
     }
 
-    public getSnake(): LosingLengthSnake {
-        return this.snakes[0];
+    public get cells(): TColorTable {
+        return this.cellsToColorTable();
     }
 
-    public score(): TScoreTable {
+    public set direction(angle: TDegree) {
+        this.snakes[0].direction = angle;
+    }
+
+    public get gameOver(): boolean {
+        return this.snakes.length === 0 || this.snakes.filter(({ died }) => died).length === this.snakes.length;
+    }
+
+    public get score(): TScoreTable {
         return this.snakes.map(item => ({
             name: item.name,
             died: item.died,

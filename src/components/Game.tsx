@@ -8,36 +8,36 @@ import { ScoreBoard } from './ScoreBoard';
 import { Controls } from './Controls';
 
 export const Game = () => {
-  const [rows, setRows] = useState(game.cellsToColorTable());
-  const [score, setScore] = useState(game.score());
+  const [rows, setRows] = useState(game.cells);
+  const [score, setScore] = useState(game.score);
 
   const controlsCallback = useCallback(event => {
-    const mySnake = game.getSnake();
     switch (event?.dir || event?.code) {
       case 'Right':
       case 'ArrowRight':
       case 'KeyD':
-        mySnake.direction = 0;
+        game.direction = 0;
       break;
   
       case 'Down':
       case 'ArrowDown':
       case 'KeyS':
-          mySnake.direction = 90;
+        game.direction = 90;
       break;
   
       case 'Left':
       case 'ArrowLeft':
       case 'KeyA':
-          mySnake.direction = 180;
+        game.direction = 180;
       break;
   
       case 'Up':
       case 'ArrowUp':
       case 'KeyW':
-        mySnake.direction = 270;
+        game.direction = 270;
       break;
 
+      case 'KeyR':
       case 'ResetGame':
         game.reset();
       break;
@@ -58,7 +58,7 @@ export const Game = () => {
   useEffect(() => {
     setInterval(() => {
       setRows(game.tick());
-      setScore(game.score());
+      setScore(game.score);
     }, 175);
   }, []);
 
