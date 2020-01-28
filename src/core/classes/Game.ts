@@ -1,4 +1,4 @@
-import { Snake } from './Snake';
+import { LosingLengthSnake } from './LosingLengthSnake';
 import { Food } from './Food';
 import { GameObject } from './GameObject';
 import { TCell, TColorTable, TGameState, TScoreTable } from '../types';
@@ -7,16 +7,15 @@ interface IGame {
     reset(): void;
     tick(): TColorTable;
     cellsToColorTable(): TColorTable;
-    getSnake(): Snake;
+    getSnake(): LosingLengthSnake;
     score(): TScoreTable;
-    // food(): TFoodScore;
 };
 
 export class Game implements IGame {
     private defaultState = { cells: [] };
     private size: number = 20;
     private state: TGameState = this.defaultState;
-    private snakes: Array<Snake> = [];
+    private snakes: Array<LosingLengthSnake> = [];
     private food: Array<Food> = [];
 
     constructor() {
@@ -24,7 +23,7 @@ export class Game implements IGame {
     }
 
     public reset(): void {
-        this.snakes = Snake.make(this.size);
+        this.snakes = LosingLengthSnake.make(this.size);
         this.food = Food.make(this.size);
     }
 
@@ -45,7 +44,7 @@ export class Game implements IGame {
         return table;
     }
 
-    public getSnake(): Snake {
+    public getSnake(): LosingLengthSnake {
         return this.snakes[0];
     }
 
@@ -55,6 +54,7 @@ export class Game implements IGame {
             died: item.died,
             length: item.length,
             preview: item.preview,
+            stepsLeft: item.stepsLeft,
         }));
     }
 };

@@ -1,4 +1,4 @@
-import { Snake, TSnakeConstructorParams } from './Snake';
+import { Snake } from './Snake';
 import { TGameState, TDegree, Directions, TCoordinates, CellType } from '../types';
 
 type optionalDegree = TDegree | null;

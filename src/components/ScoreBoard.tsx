@@ -16,14 +16,16 @@ export const ScoreBoard: FC<{
     <thead>
       <tr>
         <th>Name</th>
-        <th>Energy</th>
+        <th>Length</th>
+        <th>Steps left</th>
       </tr>
     </thead>
     <tbody>
-    {score.map(({ name, died, preview }, index) => (
+    {score.map(({ name, died, preview, length, stepsLeft }, index) => (
       <tr key={`row-id-${name}`}>
-        <td className={died ? 'died' : ''}>{index + 1}. {name}</td>
-        <td><Table rows={[preview]}/> </td>
+        <td className={died ? 'died' : ''}>{index + 1}. {name} <Table rows={[preview]}/></td>
+        <td>{length}</td>
+        <td>{stepsLeft}</td>
       </tr>
     ))}
     </tbody>

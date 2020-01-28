@@ -47,5 +47,6 @@ export type TScore = {
     died: boolean;
     length: number,
     preview: TSnakePreview,
+    stepsLeft?: number,
 };
 export type TScoreTable = Array<TScore>;
