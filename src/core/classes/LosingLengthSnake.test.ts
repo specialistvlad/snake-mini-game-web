@@ -1,4 +1,4 @@
-import { Snake } from './Snake';
+import { LosingLengthSnake } from './LosingLengthSnake';
 import { TGameState, TDegree, Directions, TCoordinates, CellType } from '../types';
 
 type optionalDegree = TDegree | null;
@@ -9,7 +9,7 @@ const snakeTest = (
     snakeAdditionalParams?: any,
     gameState: TGameState = { cells: [] },
     ) => {
-        const snake = new Snake({
+        const snake = new LosingLengthSnake({
             name: '',
             snake: snakeCoordinates,
             ...snakeAdditionalParams,
