@@ -17,6 +17,7 @@ const styles = {
     backgroundColor: 'rgba(255,125,35,0.5)',
     ['position' as any]: 'absolute',
     width: '100%',
+    borderRadius: 10,
     ['textAlign' as any]: 'center',
   },
   gameOverText: {
@@ -53,7 +54,7 @@ const Table: FC<IProps> = ({ classes, rows, gameOver }) =>
     ))}
     </tbody>
   </table>
-  {gameOver ? (<div className={classes.gameOver}><span className={classes.gameOverText}>Game Over</span></div>) : null}
+  {/* {gameOver ? (<div className={classes.gameOver}><span className={classes.gameOverText}>Game Over</span></div>) : null} */}
   </>
 
 export default withStyles(styles)(Table);

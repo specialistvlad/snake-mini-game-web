@@ -4,6 +4,22 @@ import withStyles, { WithStylesProps } from 'react-jss'
 const size = 75;
 const padding = 30;
 
+const getRandomColor = () => {
+  const colors = [
+    '#e47763',
+    '#ef857c',
+    '#e8e277',
+    '#9ee0a1',
+    '#90d8af',
+    '#9ED9EB',
+    '#9EB3EB',
+    '#C49EEB',
+    '#DB9EEB',
+  ];
+  return colors[6];
+  // return colors[Math.floor((Math.random() * colors.length))]
+};
+  
 const styles = {
   paper: {
     '@media (orientation: landscape)': {
@@ -14,36 +30,31 @@ const styles = {
       width: size+'vw',
       height: size+'vw',
     },
-    backgroundColor: 'tomato',
+    backgroundColor: getRandomColor(),
     borderRadius: 12,
     ['position' as any]: 'relative',
     ['boxShadow' as any]: '0 1px 4px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 0, 0, 0.1) inset',
     '&::before': {
       ['position' as any]: 'absolute',
       content: 'open-quote',
-      bottom: 12,
-      left: 15,
-      top: '75%',
-      width: '55%',
-      background: '#9B7468',
+      top: 100,
+      bottom: 5,
+      left: 30,
+      right: 30,
       zIndex: -1,
-      boxShadow: '0 20px 15px #9B7468',
-      transform: 'rotate(-6deg)',
+      boxShadow: '0 0 40px 13px #848484;',
+      borderRadius: '100px/20px',
     },
     '&::after': {
       ['position' as any]: 'absolute',
       content: 'open-quote',
-      bottom: 12,
-      top: '75%',
-      width: '55%',
-      background: '#9B7468',
+      top: 100,
+      bottom: 5,
+      left: 30,
+      right: 30,
       zIndex: -1,
-      boxShadow: '0 20px 15px #9B7468',
-      right: 15,
-      left: 'auto',
-      transform: 'rotate(6deg)',
-      WebkitTransform: 'rotate(6deg)',
-      MozTransform: 'rotate(6deg)',
+      boxShadow: '0 0 40px 13px #848484;',
+      borderRadius: '100px/20px',
     }
   },
   content: {

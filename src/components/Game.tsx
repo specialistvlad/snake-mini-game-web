@@ -66,7 +66,7 @@ export default () => {
         setRows(game.tick());
       }
       setScore(game.score);
-    }, 125);
+    }, 150);
   }, []);
 
   return (
