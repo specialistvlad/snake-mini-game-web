@@ -82,7 +82,7 @@ export class Snake extends GameObject {
                 color: this.colorful(index),
             })),
         };
-      }
+    }
 
     protected colorful(index: number): string {
         return index === 0
@@ -131,7 +131,7 @@ export class Snake extends GameObject {
         return false;
     }
 
-     /**
+    /**
      * Handle here usual step forward minus one tail block
      */
     protected usualStepForward(gameCells: TCells): boolean {
@@ -154,7 +154,7 @@ export class Snake extends GameObject {
         return false;
     }
 
-     /**
+    /**
      * Handle here collision with another objects in cells
      */
     protected collisionOthers(gameCells: TCells): boolean {

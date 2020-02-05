@@ -3,14 +3,16 @@ import useEventListener from '@use-it/event-listener';
 import { useSwipeable } from 'react-swipeable'
 
 import game from '../core/game';
-import { Table } from './Table';
-import { ScoreBoard } from './ScoreBoard';
-import { Controls } from './Controls';
+import Table from './Table';
+// import { ScoreBoard } from './ScoreBoard';
+// import { Controls } from './Controls';
 
-export const Game = () => {
+export default () => {
   const [gameOver, setGameOver] = useState(game.gameOver);
   const [rows, setRows] = useState(game.cells);
-  const [score, setScore] = useState(game.score);
+  const [
+    // score
+    , setScore] = useState(game.score);
 
   const controlsCallback = useCallback(event => {
     switch (event?.dir || event?.code) {
@@ -64,20 +66,14 @@ export const Game = () => {
         setRows(game.tick());
       }
       setScore(game.score);
-    }, 175);
+    }, 125);
   }, []);
 
   return (
-  <div className="game" {...handlers}>
-    <div className="column left-column" >
-      <div className="table-container">
-        <Table rows={rows} gameOver={gameOver} />
-      </div>
+    <div style={{ height: '100%' }} {...handlers}>
+      <Table rows={rows} gameOver={gameOver} />
+      {/* <ScoreBoard className="column score" score={score} />
+      <Controls className="column controls" callback={controlsCallback}/> */}
     </div>
-    <div className="column right-column">
-      <ScoreBoard className="column score" score={score} />
-      <Controls className="column controls" callback={controlsCallback}/>
-    </div>
-  </div>
   );
 };
