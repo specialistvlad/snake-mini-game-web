@@ -4,7 +4,7 @@ import { GameObject } from './GameObject';
 export class Food extends GameObject {
   private lastDinnerTime: number;
   public tableSize: number;
-  private dinnerRefreshSeconds: number = 4;
+  private dinnerRefreshSeconds: number = 7;
 
   constructor(tableSize: number, lastDinnerTime: number = 0) {
     super();

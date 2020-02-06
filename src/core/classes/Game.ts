@@ -33,8 +33,6 @@ export class Game implements IGame {
 
         this.food = [
             new Food(this.size),
-            new Food(this.size),
-            new Food(this.size),
         ];
     }
 
