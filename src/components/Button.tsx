@@ -12,13 +12,13 @@ const styles = {
     padding: '0.7em 3em',
     fontWeight: 400,
     fontSize: 30,
-    ['textAlign' as any]: 'center',
     backgroundColor: 'transparent',
     border: '4px solid transparent',
     borderImage: 'linear-gradient(to right, #add356 0%, #00dfa6 100%)',
     borderImageSlice: 1,
     backgroundClip: 'border-box',
     cursor: 'pointer',
+    ['textAlign' as any]: 'center',
   },
   green: {
     borderImageSlice: 1,
@@ -49,7 +49,6 @@ const styles = {
   },
 };
 
-// @ts-ignore
 interface IProps extends WithStylesProps<typeof styles> {
   color: TRainbowButtonColor,
   onClick: Function,
@@ -62,5 +61,4 @@ const RainbowButton: FC<IProps> = ({ children, classes, color, onClick }) => {
 
   return <button className={containerClasses} onClick={_onClick}><p className={textClasses}>{children}</p></button>;
 }
-// @ts-ignore
 export default withStyles(styles)(RainbowButton);

@@ -47,13 +47,3 @@ export type TCell = {
 export type TCells = Array<TCell>;
 export type TColorTableRow = Array<string>;
 export type TColorTable = Array<TColorTableRow>;
-
-export type TSnakePreview = [TCellColor, TCellColor, TCellColor, TCellColor, TCellColor];
-export type TScore = {
-    name: string;
-    died: boolean;
-    length: number,
-    preview: TSnakePreview,
-    stepsLeft?: number,
-};
-export type TScoreTable = Array<TScore>;

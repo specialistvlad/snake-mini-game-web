@@ -6,11 +6,15 @@ import { GameState } from '../core/types';
 import game from '../core/game';
 import Table from './Table';
 import Menu from './Menu';
+import AlignCenter from './AlignCenter';
+import Paper from './Paper';
+import Score from './Score';
 
 export default () => {
   const [state, setState] = useState<GameState>(GameState.ready);
   const [rows, setRows] = useState(game.cells);
   const [score, setScore] = useState<number>(game.score);
+  const [stepsLeft, setStepsLeft] = useState<number>(game.stepsLeft);
 
   const controlsCallback = useCallback(event => {
     switch (event?.dir || event?.code) {
@@ -82,6 +86,7 @@ export default () => {
       }
 
       setScore(game.score);
+      setStepsLeft(game.stepsLeft);
     }, 150);
 
     return () => clearTimeout(tmp);
@@ -92,16 +97,21 @@ export default () => {
 
   return (
     <div style={{ height: '100%' }} {...handlers}>
-      <Table rows={rows} />
-      {state === GameState.running
-        ? null
-        : <Menu
-            state={state}
-            score={score}
-            start={start}
-            reset={reset}
-          />
-      }
+      <AlignCenter>
+        <Score score={score} stepsLeft={stepsLeft}/>
+        <Paper>
+        <Table rows={rows} />
+        {state === GameState.running
+          ? null
+          : <Menu
+              state={state}
+              score={score}
+              start={start}
+              reset={reset}
+            />
+        }
+        </Paper>
+      </AlignCenter>
     </div>
   );
 };

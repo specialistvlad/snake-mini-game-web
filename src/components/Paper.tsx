@@ -63,7 +63,6 @@ const styles = {
     height: `calc(100% - 4px - ${padding}px - ${padding}px)`,
     width: `calc(100% - 4px - ${padding}px - ${padding}px)`,
     margin: padding,
-    // backgroundColor: 'red',
     display: 'inline-block',
   },
 };

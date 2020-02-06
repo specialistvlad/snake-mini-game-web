@@ -68,4 +68,8 @@ export class Game implements IGame {
     public get score(): number {
         return this.snakes[0].score;
     }
+
+    public get stepsLeft(): number {
+        return this.snakes[0].stepsLeft;
+    }
 };

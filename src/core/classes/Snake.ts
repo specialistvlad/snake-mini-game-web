@@ -9,8 +9,6 @@ import {
     CellType,
     TCells,
     TCell,
-    TSnakePreview,
-    TCellColor
 } from '../types';
 
 export type TSnakeConstructorParams = {
@@ -58,15 +56,7 @@ export class Snake extends GameObject {
     }
 
     get score(): number {
-        return this.steps;
-    }
-
-    public get preview(): TSnakePreview {
-        const previewLength = 5;
-        return (Array<TCellColor>(previewLength)
-            .fill('')
-            .map((item, index) => this.colorful(index))
-            .slice(0, this.length >= previewLength ? previewLength : this.length) as TSnakePreview);
+        return this.steps > 0 ? this.steps : 0;
     }
 
     protected reduceForward(currentState: TGameState, dryRun: boolean = false): TGameState {
@@ -107,7 +97,7 @@ export class Snake extends GameObject {
             return;
         }
 
-        if (this.usualStepForward(gameCells)) { // find food
+        if (this.usualStepForward(gameCells)) { // just move to next cell
             return;
         }
     }

@@ -3,7 +3,7 @@ import withStyles, { WithStylesProps } from 'react-jss'
 
 import { GameState } from '../core/types';
 import AlignCenter from './AlignCenter';
-import RainbowButton from './RainbowButton';
+import RainbowButton from './Button';
 
 const styles = {
   container: {
@@ -12,21 +12,19 @@ const styles = {
     left: 0,
     fontSize: 'xx-large',
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    ['position' as any]: 'fixed',
     width: '100%',
-    ['textAlign' as any]: 'center',
     cursor: 'default',
+    ['textAlign' as any]: 'center',
+    ['position' as any]: 'fixed',
   },
   article: {
     marginTop: '1em',
   },
   text: {
     top: '47%',
-    ['position' as any]: 'relative',
-    fontFamily: "'Didact Gothic', sans-serif",
-    ['fontWeight' as any]: 'normal',
-    ['textAlign' as any]: 'center',
     color: 'white',
+    ['position' as any]: 'relative',
+    ['textAlign' as any]: 'center',
   },
   title: {
     fontSize: 70,
