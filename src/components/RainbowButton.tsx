@@ -7,31 +7,31 @@ export type TRainbowButtonTextColor = 'greenButtonText' | 'orangeButtonText' | '
 const styles = {
   btn: {
     display: 'inline-block',
-    margin: '0.5em 0',
+    minWidth: 270,
+    margin: '0.4em',
     padding: '0.7em 3em',
-    borderRadius: 6,
     fontWeight: 400,
+    fontSize: 30,
     ['textAlign' as any]: 'center',
-    backgroundSize: '100% 2px',
-    backgroundPosition: '0 100%, 0 0',
-    backgroundRepeat: 'no-repeat',
+    backgroundColor: 'transparent',
+    border: '4px solid transparent',
+    borderImage: 'linear-gradient(to right, #add356 0%, #00dfa6 100%)',
+    borderImageSlice: 1,
     backgroundClip: 'border-box',
     cursor: 'pointer',
   },
   green: {
-    borderLeft: '2px solid #add356',
-    borderRight: '2px solid #00dfa6',
-    backgroundImage: '-webkit-linear-gradient(left, #add356, #00dfa6), -webkit-linear-gradient(left, #add356, #00dfa6)',
+    borderImageSlice: 1,
+    borderImage: 'linear-gradient(to right, #add356 0%, #00dfa6 100%)',
   },
   greenButtonText: {
     background: '-webkit-linear-gradient(left, #add356, #00dfa6)',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
-  },
+    },
   orange: {
-    borderLeft: '2px solid #ffcb52',
-    borderRight: '2px solid #ff451f',
-    backgroundImage: '-webkit-linear-gradient(left, #ffcb52, #ff451f), -webkit-linear-gradient(left, #ffcb52, #ff451f)',
+    borderImageSlice: 1,
+    borderImage: 'linear-gradient(to right, #ffcb52 0%, #ff451f 100%)',
   },
   orangeButtonText: {
     background: '-webkit-linear-gradient(left, #ffcb52, #ff451f)',
@@ -39,9 +39,8 @@ const styles = {
     WebkitTextFillColor: 'transparent',
   },
   blue: {
-    borderLeft: '2px solid #3dade9',
-    borderRight: '2px solid #bf2fcb',
-    backgroundImage: '-webkit-linear-gradient(left, #3dade9, #bf2fcb), -webkit-linear-gradient(left, #3dade9, #bf2fcb)',
+    borderImageSlice: 1,
+    borderImage: 'linear-gradient(to right, #3dade9 0%, #bf2fcb 100%)',
   },
   blueButtonText: {
     background: '-webkit-linear-gradient(left, #3dade9, #bf2fcb)',
@@ -50,6 +49,7 @@ const styles = {
   },
 };
 
+// @ts-ignore
 interface IProps extends WithStylesProps<typeof styles> {
   color: TRainbowButtonColor,
   onClick: Function,
@@ -60,7 +60,7 @@ const RainbowButton: FC<IProps> = ({ children, classes, color, onClick }) => {
   const containerClasses = `${classes.btn} ${classes[color]}`;
   const textClasses = classes[`${color}ButtonText` as TRainbowButtonTextColor];
 
-  return <a className={containerClasses} onClick={_onClick}><span className={textClasses}>{children}</span></a>;
+  return <button className={containerClasses} onClick={_onClick}><p className={textClasses}>{children}</p></button>;
 }
-
+// @ts-ignore
 export default withStyles(styles)(RainbowButton);

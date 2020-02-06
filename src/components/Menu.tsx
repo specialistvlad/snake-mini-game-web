@@ -17,6 +17,9 @@ const styles = {
     ['textAlign' as any]: 'center',
     cursor: 'default',
   },
+  article: {
+    marginTop: '1em',
+  },
   text: {
     top: '47%',
     ['position' as any]: 'relative',
@@ -27,11 +30,13 @@ const styles = {
   },
   title: {
     fontSize: 70,
+    marginBottom: '0.2em',
   },
   score: {
     fontSize: 40,
   },
   description: {
+    marginTop: '1.5em',
     fontSize: 25,
   },
 };
@@ -60,7 +65,7 @@ const Menu: FC<IProps> = ({ classes, score, state, start, reset }) => {
           : null
         }
 
-          <article className="border">
+          <article className={classes.article}>
             { state === GameState.ready || state === GameState.pause
               ? (
                 <RainbowButton onClick={_start} color="green">
