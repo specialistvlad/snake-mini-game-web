@@ -87,8 +87,8 @@ export default () => {
     return () => clearTimeout(tmp);
   }, [state]);
 
-  const start = useCallback(() => controlsCallback({ code: 'StartGame' }), []);
-  const reset = useCallback(() => controlsCallback({ code: 'ResetGame' }), []);
+  const start = useCallback(() => controlsCallback({ code: 'StartGame' }), [controlsCallback]);
+  const reset = useCallback(() => controlsCallback({ code: 'ResetGame' }), [controlsCallback]);
 
   return (
     <div style={{ height: '100%' }} {...handlers}>

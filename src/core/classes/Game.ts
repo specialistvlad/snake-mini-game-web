@@ -1,7 +1,7 @@
 import { LosingLengthSnake } from './LosingLengthSnake';
 import { Food } from './Food';
 import { GameObject } from './GameObject';
-import { TCell, TColorTable, TGameState, TScoreTable, TDegree } from '../types';
+import { TCell, TColorTable, TGameState, TDegree } from '../types';
 
 interface IGame {
     reset(): void;
