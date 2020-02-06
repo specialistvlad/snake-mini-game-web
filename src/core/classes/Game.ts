@@ -14,12 +14,13 @@ interface IGame {
 
 export class Game implements IGame {
     private defaultState = { cells: [] };
-    private size: number = 20;
+    private size: number;
     private state: TGameState = this.defaultState;
     private snakes: Array<LosingLengthSnake> = [];
     private food: Array<Food> = [];
 
-    constructor() {
+    constructor(size: number = 10) {
+        this.size = size;
         this.reset();
     }
 
