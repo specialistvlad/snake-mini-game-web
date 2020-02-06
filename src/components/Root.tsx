@@ -7,5 +7,6 @@ export const Root = () =>
   <AlignCenter>
     <Paper>
       <Game/>
+      {/* <Buttons></Buttons> */}
     </Paper>
   </AlignCenter>;

@@ -34,7 +34,7 @@ export class Snake extends GameObject {
     constructor(params: TSnakeConstructorParams) {
         super();
         this._name = params.name || 'Unknown snake';
-        this.color = params.color || chroma.random().hex();
+        this.color = params.color || 'rgb(239, 27, 232)' || chroma.random().hex();
         this.snake = params.snake;
         this.currentDegree = params.direction || 0;
         this.nextDegree = this.currentDegree;
@@ -55,6 +55,10 @@ export class Snake extends GameObject {
 
     get died(): boolean {
         return this._died;
+    }
+
+    get score(): number {
+        return this.steps;
     }
 
     public get preview(): TSnakePreview {

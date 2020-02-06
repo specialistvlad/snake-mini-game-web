@@ -7,3 +7,133 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Mixins */
+.btn {
+  display: inline-block;
+  margin: 0.5em 0;
+  padding: 1em 2em;
+  background: transparent;
+  border-radius: 6px;
+  font-weight: 400;
+  text-align: center;
+}
+.green span {
+  background: -webkit-linear-gradient(left, #add356, #00dfa6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.orange span {
+  background: -webkit-linear-gradient(left, #ffcb52, #ff451f);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.blue span {
+  background: -webkit-linear-gradient(left, #3dade9, #bf2fcb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.blue {
+  padding: 0.75em;
+  font-size: 3em;
+  font-weight: 100;
+  line-height: 1;
+  letter-spacing: 1px;
+}
+/* Box-Shadow Technique */
+.box .green {
+  box-shadow: -1px 0 0 1px rgba(173, 211, 86, .75), -1px -1px 0 1px rgba(130, 214, 106, .25), -1px 1px 0 1px rgba(130, 214, 106, .25), 0 -1px 0 1px rgba(87, 217, 126, .5), 0 1px 0 1px rgba(87, 217, 126, .5), 1px -1px 0 1px rgba(43, 220, 146, .25), 1px 1px 0 1px rgba(43, 220, 146, .25), 1px 0 0 1px rgba(0, 223, 166, .75);
+}
+.box .orange {
+  box-shadow: -1px 0 0 1px rgba(255, 203, 82, .75), -1px -1px 0 1px rgba(255, 170, 69, .25), -1px 1px 0 1px rgba(255, 170, 69, .25), 0 -1px 0 1px rgba(255, 136, 57, .5), 0 1px 0 1px rgba(255, 136, 57, .5), 1px -1px 0 1px rgba(255, 103, 44, .25), 1px 1px 0 1px rgba(255, 103, 44, .25), 1px 0 0 1px rgba(255, 69, 31, .75);
+}
+.box .blue {
+  box-shadow: -1px 0 0 1px rgba(61, 173, 233, .75), -1px -1px 0 1px rgba(94, 142, 226, .25), -1px 1px 0 1px rgba(94, 142, 226, .25), 0 -1px 0 1px rgba(126, 110, 218, .5), 0 1px 0 1px rgba(126, 110, 218, .5), 1px -1px 0 1px rgba(159, 79, 211, .25), 1px 1px 0 1px rgba(159, 79, 211, .25), 1px 0 0 1px rgba(191, 47, 203, .75);
+}
+/* Gradient & Border Technique */
+.border .green {
+  border-left: 2px solid #add356;
+  border-right: 2px solid #00dfa6;
+  background-image: -webkit-linear-gradient(left, #add356, #00dfa6), -webkit-linear-gradient(left, #add356, #00dfa6);
+  background-size: 100% 2px;
+  background-position: 0 100%, 0 0;
+  background-repeat: no-repeat;
+  background-clip: border-box;
+}
+.border .orange {
+  border-left: 2px solid #ffcb52;
+  border-right: 2px solid #ff451f;
+  background-image: -webkit-linear-gradient(left, #ffcb52, #ff451f), -webkit-linear-gradient(left, #ffcb52, #ff451f);
+  background-size: 100% 2px;
+  background-position: 0 100%, 0 0;
+  background-repeat: no-repeat;
+  background-clip: border-box;
+}
+.border .blue {
+  border-left: 2px solid #3dade9;
+  border-right: 2px solid #bf2fcb;
+  background-image: -webkit-linear-gradient(left, #3dade9, #bf2fcb), -webkit-linear-gradient(left, #3dade9, #bf2fcb);
+  background-size: 100% 2px;
+  background-position: 0 100%, 0 0;
+  background-repeat: no-repeat;
+  background-clip: border-box;
+}
+/* Border Image Gradient Technique */
+.border-image .green {
+  border-image: linear-gradient(left, #add356, #00dfa6);
+  border-image-slice: 1;
+  border-image-width: 2px;
+}
+.border-image .orange {
+  border-image: linear-gradient(left, #ffcb52, #ff451f);
+  border-image-slice: 1;
+  border-image-width: 2px;
+}
+.border-image .blue {
+  border-image: linear-gradient(left, #3dade9, #bf2fcb);
+  border-image-slice: 1;
+  border-image-width: 2px;
+}
+/* Stage Styles */
+/* body {
+  font: normal 1em 'Helvetica Neue', Roboto, 'Open Sans', Helvetica, Arial, sans-serif;
+  background: #1d2025;
+  margin-top: 2em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+} */
+.container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+}
+.buttons {
+  display: flex;
+  flex: 1 0 1;
+  flex-wrap: wrap;
+  flex-direction: column;
+  padding: 1em;
+}
+p {
+  color: white;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(61, 173, 233, .5);
+}
+.btn {
+  align-self: center;
+}
+.btn.blue {
+  align-self: stretch;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+html {
+  box-sizing: border-box;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}

@@ -4,9 +4,9 @@ import withStyles, { WithStylesProps } from 'react-jss'
 const size = 75;
 const padding = 30;
 
-const getRandomColor = () => {
+const getColor = () => {
   const colors = [
-    '#e47763',
+    '#fd9170',
     '#ef857c',
     '#e8e277',
     '#9ee0a1',
@@ -16,7 +16,7 @@ const getRandomColor = () => {
     '#C49EEB',
     '#DB9EEB',
   ];
-  return colors[6];
+  return colors[0];
   // return colors[Math.floor((Math.random() * colors.length))]
 };
   
@@ -30,7 +30,7 @@ const styles = {
       width: size+'vw',
       height: size+'vw',
     },
-    backgroundColor: getRandomColor(),
+    backgroundColor: getColor(),
     borderRadius: 12,
     ['position' as any]: 'relative',
     ['boxShadow' as any]: '0 1px 4px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 0, 0, 0.1) inset',

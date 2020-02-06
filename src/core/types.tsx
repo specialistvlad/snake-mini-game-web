@@ -1,8 +1,15 @@
+export enum GameState {
+    ready = 0,
+    running = 1,
+    pause = 2,
+    gameOver = 3,
+};
+
 export const CellPalette = {
     empty: 'black',
     wall: 'white',
     mirror: 'gray',
-    food: 'green',
+    food: 'rgb(10, 232, 10)',
 };
 
 export enum CellType {

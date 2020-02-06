@@ -7,7 +7,7 @@ interface IGame {
     reset(): void;
     tick(): TColorTable;
     cells: TColorTable;
-    score: TScoreTable;
+    score: number;
     direction: number;
     gameOver: boolean;
 };
@@ -28,13 +28,13 @@ export class Game implements IGame {
             name: 'My smart snake',
             snake: [[Math.trunc(this.size / 2), Math.trunc(this.size / 2)]],
             tableSize: this.size,
-          })];
-          
+        })];
+
         this.food = [
             new Food(this.size),
             new Food(this.size),
             new Food(this.size),
-          ];
+        ];
     }
 
     public tick(): TColorTable {
@@ -66,13 +66,7 @@ export class Game implements IGame {
         return this.snakes.length === 0 || this.snakes.filter(({ died }) => died).length === this.snakes.length;
     }
 
-    public get score(): TScoreTable {
-        return this.snakes.map(item => ({
-            name: item.name,
-            died: item.died,
-            length: item.length,
-            preview: item.preview,
-            stepsLeft: item.stepsLeft,
-        }));
+    public get score(): number {
+        return this.snakes[0].score;
     }
 };

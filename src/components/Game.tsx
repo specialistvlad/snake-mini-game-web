@@ -2,17 +2,15 @@ import React, { useState, useEffect, useCallback } from 'react';
 import useEventListener from '@use-it/event-listener';
 import { useSwipeable } from 'react-swipeable'
 
+import { GameState } from '../core/types';
 import game from '../core/game';
 import Table from './Table';
-// import { ScoreBoard } from './ScoreBoard';
-// import { Controls } from './Controls';
+import Menu from './Menu';
 
 export default () => {
-  const [gameOver, setGameOver] = useState(game.gameOver);
+  const [state, setState] = useState<GameState>(GameState.ready);
   const [rows, setRows] = useState(game.cells);
-  const [
-    // score
-    , setScore] = useState(game.score);
+  const [score, setScore] = useState<number>(game.score);
 
   const controlsCallback = useCallback(event => {
     switch (event?.dir || event?.code) {
@@ -20,32 +18,47 @@ export default () => {
       case 'ArrowRight':
       case 'KeyD':
         game.direction = 0;
-      break;
+        break;
   
       case 'Down':
       case 'ArrowDown':
       case 'KeyS':
         game.direction = 90;
-      break;
+        break;
   
       case 'Left':
       case 'ArrowLeft':
       case 'KeyA':
         game.direction = 180;
-      break;
+        break;
   
       case 'Up':
       case 'ArrowUp':
       case 'KeyW':
         game.direction = 270;
-      break;
+        break;
 
+      case 'Space':
+      case 'Escape':
+      case 'Enter':
+      case 'StartGame':
+        if (game.gameOver) {
+          game.reset();
+        }
+        if (state === GameState.running) {
+          setState(GameState.pause);
+        } else {
+          setState(GameState.running);
+        }
+        break;
+          
       case 'KeyR':
       case 'ResetGame':
         game.reset();
-      break;
+        setState(GameState.running);
+        break;
     }
-  }, []);
+  }, [state]);
 
   // reactions on button press
   useEventListener('keydown', controlsCallback);
@@ -59,21 +72,36 @@ export default () => {
 
   // syncronization signal for the game
   useEffect(() => {
-    setInterval(() => {
-      setGameOver(game.gameOver);
-
-      if (!game.gameOver) {
+    const tmp = setInterval(() => {
+      if (state === GameState.running) {
         setRows(game.tick());
       }
+
+      if (game.gameOver) {
+        setState(GameState.gameOver);
+      }
+
       setScore(game.score);
     }, 150);
-  }, []);
+
+    return () => clearTimeout(tmp);
+  }, [state]);
+
+  const start = useCallback(() => controlsCallback({ code: 'StartGame' }), []);
+  const reset = useCallback(() => controlsCallback({ code: 'ResetGame' }), []);
 
   return (
     <div style={{ height: '100%' }} {...handlers}>
-      <Table rows={rows} gameOver={gameOver} />
-      {/* <ScoreBoard className="column score" score={score} />
-      <Controls className="column controls" callback={controlsCallback}/> */}
+      <Table rows={rows} />
+      {state === GameState.running
+        ? null
+        : <Menu
+            state={state}
+            score={score}
+            start={start}
+            reset={reset}
+          />
+      }
     </div>
   );
 };
