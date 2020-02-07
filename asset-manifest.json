@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/snake-mini-game-web/static/css/main.2dac49bb.chunk.css",
-    "main.js": "/snake-mini-game-web/static/js/main.52645625.chunk.js",
-    "main.js.map": "/snake-mini-game-web/static/js/main.52645625.chunk.js.map",
+    "main.css": "/snake-mini-game-web/static/css/main.a7281aa7.chunk.css",
+    "main.js": "/snake-mini-game-web/static/js/main.627bffd1.chunk.js",
+    "main.js.map": "/snake-mini-game-web/static/js/main.627bffd1.chunk.js.map",
     "runtime-main.js": "/snake-mini-game-web/static/js/runtime-main.49fdc8c9.js",
     "runtime-main.js.map": "/snake-mini-game-web/static/js/runtime-main.49fdc8c9.js.map",
     "static/js/2.3741fa16.chunk.js": "/snake-mini-game-web/static/js/2.3741fa16.chunk.js",
     "static/js/2.3741fa16.chunk.js.map": "/snake-mini-game-web/static/js/2.3741fa16.chunk.js.map",
     "index.html": "/snake-mini-game-web/index.html",
-    "precache-manifest.49d7cbccf35a0d4969c63a8176003a48.js": "/snake-mini-game-web/precache-manifest.49d7cbccf35a0d4969c63a8176003a48.js",
+    "precache-manifest.8bfb5b01fa64624ee8ab84da6d735a0a.js": "/snake-mini-game-web/precache-manifest.8bfb5b01fa64624ee8ab84da6d735a0a.js",
     "service-worker.js": "/snake-mini-game-web/service-worker.js",
-    "static/css/main.2dac49bb.chunk.css.map": "/snake-mini-game-web/static/css/main.2dac49bb.chunk.css.map",
+    "static/css/main.a7281aa7.chunk.css.map": "/snake-mini-game-web/static/css/main.a7281aa7.chunk.css.map",
     "static/js/2.3741fa16.chunk.js.LICENSE": "/snake-mini-game-web/static/js/2.3741fa16.chunk.js.LICENSE"
   },
   "entrypoints": [
     "static/js/runtime-main.49fdc8c9.js",
     "static/js/2.3741fa16.chunk.js",
-    "static/css/main.2dac49bb.chunk.css",
-    "static/js/main.52645625.chunk.js"
+    "static/css/main.a7281aa7.chunk.css",
+    "static/js/main.627bffd1.chunk.js"
   ]
 }
