@@ -100,16 +100,16 @@ export default () => {
       <AlignCenter>
         <Score score={score} stepsLeft={stepsLeft}/>
         <Paper>
-        <Table rows={rows} />
-        {state === GameState.running
-          ? null
-          : <Menu
-              state={state}
-              score={score}
-              start={start}
-              reset={reset}
-            />
-        }
+          <Table rows={rows} />
+          {state === GameState.running
+            ? null
+            : <Menu
+                state={state}
+                score={score}
+                start={start}
+                reset={reset}
+              />
+          }
         </Paper>
       </AlignCenter>
     </div>

@@ -9,7 +9,7 @@ const styles = {
   },
   text: {
     padding: 6,
-    font: "900 20px/1 'Source Sans Pro', Arial, sans-serif",
+    font: "900 25px/1 'Source Sans Pro', Arial, sans-serif",
     ['textTransform' as any]: 'uppercase',
     color: '#fff',
     backgroundColor: '#fb8f6e',
