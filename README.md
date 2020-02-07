@@ -1,3 +1,9 @@
+## Demo
+Demo available [here](https://specialistvlad.github.io/snake-mini-game-web/).
+### Screenshot
+![Screenshot of game menu](./public/start-screen.png)
+![Screenshot of main game screen](./public/main-screen.png)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
@@ -26,6 +32,10 @@ The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `yarn deploy`
+
+Builds app using `yarn build` command, then pushes to git hub pages
 
 ### `yarn eject`
 
