@@ -8,6 +8,8 @@ const styles = {
     width: '100%',
     height: '100%',
     ['borderCollapse' as any]: 'inherit',
+    border: '2px dashed #F7EEEE',
+    borderRadius: 5,
   },
 };
 

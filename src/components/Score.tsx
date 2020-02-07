@@ -4,8 +4,9 @@ import withStyles, { WithStylesProps } from 'react-jss'
 const styles = {
   container: {
     display: 'flex',
-    margin: '0px 30px 10px',
-    justifyContent: 'space-between',
+    marginTop: 5,
+    justifyContent: 'space-evenly',
+    width: '100%',
   },
   text: {
     padding: 6,

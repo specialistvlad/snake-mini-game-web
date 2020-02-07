@@ -10,7 +10,6 @@ import Table from './Table';
 import Menu from './Menu';
 import Paper from './Paper';
 import Score from './Score';
-import Controls from './Controls';
 import Copyright from './Copyright';
 
 const styles = {
@@ -23,13 +22,6 @@ const styles = {
     margin: 'auto',
     ['flexDirection' as any]: 'column',
   },
-  controls: {
-    display: 'none',
-    // '@media only screen and (max-device-width: 480px)': {
-    '@media (hover: none) and (pointer: coarse)': {
-      display: 'block',
-    },
-  }
 };
 
 const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
@@ -109,7 +101,7 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
 
       setScore(game.score);
       setStepsLeft(game.stepsLeft);
-    }, 150);
+    }, isMobile ? 250 : 150);
 
     return () => clearTimeout(tmp);
   }, [state]);
@@ -118,19 +110,11 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
   const reset = useCallback(() => callback({ code: 'ResetGame' }), [callback]);
 
   return (
-    <>
-      <div className={classes.container} {...handlers}>
-        <div>
-          <Score score={score} stepsLeft={stepsLeft}/>
-        </div>
-        <div>
-          <Paper>
-            <Table rows={rows} />
-          </Paper>
-        </div>
-        {isMobile ? <div className={classes.controls}><Controls callback={callback}/></div> : null}
-      </div>
-      {state === GameState.running
+    <div className={classes.container} {...handlers}>
+      <Score score={score} stepsLeft={stepsLeft}/>
+      <div style={{ height: 25 }}></div>
+      <Paper><Table rows={rows}/></Paper>
+      {/* {state === GameState.running
         ? null
         : <Menu
         state={state}
@@ -138,9 +122,9 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
         start={start}
         reset={reset}
         />
-      }
+      } */}
       <Copyright/>
-    </>
+    </div>
   );
 };
 

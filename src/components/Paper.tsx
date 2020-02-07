@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import withStyles, { WithStylesProps } from 'react-jss'
 
 const size = 75;
-const padding = 30;
+const padding = 20;
 
 const getColor = () => {
   const colors = [
@@ -30,7 +30,7 @@ const styles = {
       width: size+'vw',
       height: size+'vw',
     },
-    '@media only screen and (max-device-width: 480px)': {
+    '@media only screen and (max-device-width: 720px)': {
       width: '100vw',
       height: '100vw',
     },
@@ -62,11 +62,9 @@ const styles = {
     }
   },
   content: {
-    border: '2px dashed #F7EEEE',
-    borderRadius: 5,
     height: `calc(100% - 4px - ${padding}px - ${padding}px)`,
     width: `calc(100% - 4px - ${padding}px - ${padding}px)`,
-    margin: padding,
+    margin: `${padding}px`,
     display: 'inline-block',
   },
 };
