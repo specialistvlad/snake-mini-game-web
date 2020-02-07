@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import withStyles, { WithStylesProps } from 'react-jss'
 
 const size = 75;
-const padding = 20;
+const padding = 30;
 
 const getColor = () => {
   const colors = [

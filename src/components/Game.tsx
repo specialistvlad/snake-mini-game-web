@@ -7,9 +7,9 @@ import { isMobile } from 'react-device-detect';
 import { GameState } from '../core/types';
 import game from '../core/game';
 import Table from './Table';
-import Menu from './Menu';
+import Popup from './Popup';
 import Paper from './Paper';
-import Score from './Score';
+import MenuBar from './MenuBar';
 import Copyright from './Copyright';
 
 const styles = {
@@ -22,6 +22,7 @@ const styles = {
     margin: 'auto',
     ['flexDirection' as any]: 'column',
   },
+  spacer: { height: 25 },
 };
 
 const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
@@ -59,6 +60,7 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
       case 'Space':
       case 'Escape':
       case 'Enter':
+      case 'Menu':
       case 'StartGame':
         if (game.gameOver) {
           game.reset();
@@ -108,21 +110,22 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
 
   const start = useCallback(() => callback({ code: 'StartGame' }), [callback]);
   const reset = useCallback(() => callback({ code: 'ResetGame' }), [callback]);
+  const pause = useCallback(() => callback({ code: 'Menu' }), [callback]);
 
   return (
     <div className={classes.container} {...handlers}>
-      <Score score={score} stepsLeft={stepsLeft}/>
-      <div style={{ height: 25 }}></div>
+      <MenuBar score={score} stepsLeft={stepsLeft} pause={pause}/>
+      <div className={classes.spacer}/>
       <Paper><Table rows={rows}/></Paper>
-      {/* {state === GameState.running
+      {state === GameState.running
         ? null
-        : <Menu
+        : <Popup
         state={state}
         score={score}
         start={start}
         reset={reset}
         />
-      } */}
+      }
       <Copyright/>
     </div>
   );

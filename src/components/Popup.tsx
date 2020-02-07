@@ -46,7 +46,7 @@ interface IProps extends WithStylesProps<typeof styles> {
   reset: Function,
 }
 
-const Menu: FC<IProps> = ({ classes, score, state, start, reset }) => {
+const Popup: FC<IProps> = ({ classes, score, state, start, reset }) => {
   const _start = useCallback(() => start(), [start]);
   const _reset = useCallback(() => reset(), [reset]);
 
@@ -92,4 +92,4 @@ const Menu: FC<IProps> = ({ classes, score, state, start, reset }) => {
   );
 }
 
-export default withStyles(styles)(Menu);
+export default withStyles(styles)(Popup);
