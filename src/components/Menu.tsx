@@ -3,7 +3,7 @@ import withStyles, { WithStylesProps } from 'react-jss'
 
 import { GameState } from '../core/types';
 import AlignCenter from './AlignCenter';
-import RainbowButton from './Button';
+import RainbowButton from './RainbowButton';
 
 const styles = {
   container: {

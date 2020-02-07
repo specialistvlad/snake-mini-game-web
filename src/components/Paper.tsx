@@ -30,6 +30,10 @@ const styles = {
       width: size+'vw',
       height: size+'vw',
     },
+    '@media only screen and (max-device-width: 480px)': {
+      width: '100vw',
+      height: '100vw',
+    },
     backgroundColor: getColor(),
     borderRadius: 12,
     ['position' as any]: 'relative',

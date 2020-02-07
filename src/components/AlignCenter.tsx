@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import withStyles, { WithStylesProps } from 'react-jss'
+import classNames from "classnames";
 
 const styles = {
   wrapper: {
@@ -10,17 +11,24 @@ const styles = {
     height: '100vh',
     margin: 'auto',
   },
+  wrappedMobile: {
+    display: 'inherit',
+  },
   container: {
     margin: '0 auto',
   },
 };
 
 interface IProps extends WithStylesProps<typeof styles> {
-  children: React.ReactNode
+  children: React.ReactNode,
+  isMobile?: boolean,
 }
 
-const FlexAlignCenter: FC<IProps> = ({ classes, children }) =>
-  <div className={classes.wrapper}>
+const FlexAlignCenter: FC<IProps> = ({ classes, children, isMobile }) =>
+  <div className={classNames(
+    classes.wrapper, 
+    {[classes.wrappedMobile]: isMobile}, 
+  )}>
     <div className={classes.container}>{children}</div>
   </div>;
 

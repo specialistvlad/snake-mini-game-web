@@ -1,22 +1,44 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { FC, useState, useEffect, useCallback } from 'react';
+import withStyles, { WithStylesProps } from 'react-jss'
 import useEventListener from '@use-it/event-listener';
 import { useSwipeable } from 'react-swipeable'
+import { isMobile } from 'react-device-detect';
 
 import { GameState } from '../core/types';
 import game from '../core/game';
 import Table from './Table';
 import Menu from './Menu';
-import AlignCenter from './AlignCenter';
 import Paper from './Paper';
 import Score from './Score';
+import Controls from './Controls';
+import Copyright from './Copyright';
 
-export default () => {
+const styles = {
+  container: {
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 'auto',
+    ['flexDirection' as any]: 'column',
+  },
+  controls: {
+    display: 'none',
+    // '@media only screen and (max-device-width: 480px)': {
+    '@media (hover: none) and (pointer: coarse)': {
+      display: 'block',
+    },
+  }
+};
+
+const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
   const [state, setState] = useState<GameState>(GameState.ready);
   const [rows, setRows] = useState(game.cells);
   const [score, setScore] = useState<number>(game.score);
   const [stepsLeft, setStepsLeft] = useState<number>(game.stepsLeft);
 
-  const controlsCallback = useCallback(event => {
+  const callback = useCallback(event => {
     switch (event?.dir || event?.code) {
       case 'Right':
       case 'ArrowRight':
@@ -65,11 +87,11 @@ export default () => {
   }, [state]);
 
   // reactions on button press
-  useEventListener('keydown', controlsCallback);
+  useEventListener('keydown', callback);
 
   // reactions on swipes
   const handlers = useSwipeable({
-    onSwiped: controlsCallback,
+    onSwiped: callback,
     preventDefaultTouchmoveEvent: true,
     trackMouse: true
   });
@@ -92,26 +114,34 @@ export default () => {
     return () => clearTimeout(tmp);
   }, [state]);
 
-  const start = useCallback(() => controlsCallback({ code: 'StartGame' }), [controlsCallback]);
-  const reset = useCallback(() => controlsCallback({ code: 'ResetGame' }), [controlsCallback]);
+  const start = useCallback(() => callback({ code: 'StartGame' }), [callback]);
+  const reset = useCallback(() => callback({ code: 'ResetGame' }), [callback]);
 
   return (
-    <div style={{ height: '100%' }} {...handlers}>
-      <AlignCenter>
-        <Score score={score} stepsLeft={stepsLeft}/>
-        <Paper>
-          <Table rows={rows} />
-          {state === GameState.running
-            ? null
-            : <Menu
-                state={state}
-                score={score}
-                start={start}
-                reset={reset}
-              />
-          }
-        </Paper>
-      </AlignCenter>
-    </div>
+    <>
+      <div className={classes.container} {...handlers}>
+        <div>
+          <Score score={score} stepsLeft={stepsLeft}/>
+        </div>
+        <div>
+          <Paper>
+            <Table rows={rows} />
+          </Paper>
+        </div>
+        {isMobile ? <div className={classes.controls}><Controls callback={callback}/></div> : null}
+      </div>
+      {state === GameState.running
+        ? null
+        : <Menu
+        state={state}
+        score={score}
+        start={start}
+        reset={reset}
+        />
+      }
+      <Copyright/>
+    </>
   );
 };
+
+export default withStyles(styles)(Game);
