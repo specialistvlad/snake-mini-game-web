@@ -12,10 +12,20 @@ import Paper from './Paper';
 import MenuBar from './MenuBar';
 import Copyright from './Copyright';
 
+const size = 75;
+
 const styles = {
   container: {
     height: '100%',
-    width: '100%',
+    '@media (orientation: landscape)': {
+      width: size+'vh',
+    },
+    '@media (orientation: portrait)': {
+      width: size+'vw',
+    },
+    '@media only screen and (max-device-width: 720px)': {
+      width: '100vw',
+    },
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
