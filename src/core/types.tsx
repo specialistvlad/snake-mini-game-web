@@ -45,5 +45,5 @@ export type TCell = {
 };
 
 export type TCells = Array<TCell>;
-export type TColorTableRow = Array<string>;
+export type TColorTableRow = Array<CellType>;
 export type TColorTable = Array<TColorTableRow>;

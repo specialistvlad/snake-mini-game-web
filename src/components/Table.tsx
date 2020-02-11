@@ -1,7 +1,8 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import withStyles, { WithStylesProps } from 'react-jss'
 
 import { TColorTable, TColorTableRow } from '../core/types';
+import Row from './Row';
 
 const styles = {
   table: {
@@ -17,23 +18,19 @@ interface IProps extends WithStylesProps<typeof styles> {
   rows: TColorTable,
 }
 
-const Table: FC<IProps> = ({ classes, rows }) =>
-  <table className={classes.table}>
+const Table: FC<IProps> = ({ classes, rows }) => {
+  // console.time('render table');
+  const result = (
+    <table className={classes.table}>
     <tbody>
-    {rows.map((row: TColorTableRow, indY: number) => (
-      <tr key={`row-id-${indY}`}>
-        {row.map((backgroundColor: string, indX: number) =>
-        (<td
-          key={`cell-id-${indX}`}
-          className="cell"
-          style={{
-            backgroundColor,
-            border: '1px dashed #ffffff21',
-          }}
-        ></td>))}
-      </tr>
-    ))}
+    {rows.map((row: TColorTableRow, indY: number) => (<Row key={indY} row={row} index={indY}/>))}
     </tbody>
   </table>
+  );
+  // console.timeEnd('render table');
+  return result;
+}
 
-export default withStyles(styles)(Table);
+export default memo(withStyles(styles)(Table));
+// @ts-ignore
+Table.whyDidYouRender = true

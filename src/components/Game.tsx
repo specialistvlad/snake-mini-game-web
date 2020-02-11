@@ -14,6 +14,8 @@ import Copyright from './Copyright';
 
 const size = 75;
 
+let step = 0;
+
 const styles = {
   container: {
     height: '100%',
@@ -103,8 +105,11 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
   // syncronization signal for the game
   useEffect(() => {
     const tmp = setInterval(() => {
-      if (state === GameState.running) {
+      if (step < 1000 && state === GameState.running) {
+        step++;
+        // console.time('tick');
         setRows(game.tick());
+        // console.timeEnd('tick');
       }
 
       if (game.gameOver) {
@@ -113,7 +118,7 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
 
       setScore(game.score);
       setStepsLeft(game.stepsLeft);
-    }, isMobile ? 250 : 150);
+    }, isMobile ? 350 : 250);
 
     return () => clearTimeout(tmp);
   }, [state]);
@@ -126,7 +131,9 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
     <div className={classes.container} {...handlers}>
       <MenuBar score={score} stepsLeft={stepsLeft} pause={pause}/>
       <div className={classes.spacer}/>
-      <Paper><Table rows={rows}/></Paper>
+      <Paper>
+        <Table rows={rows}/>
+      </Paper>
       {state === GameState.running
         ? null
         : <Popup

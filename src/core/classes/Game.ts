@@ -1,7 +1,7 @@
 import { LosingLengthSnake } from './LosingLengthSnake';
 import { Food } from './Food';
 import { GameObject } from './GameObject';
-import { TCell, TColorTable, TGameState, TDegree } from '../types';
+import { TCell, TColorTable, TGameState, TDegree, CellType } from '../types';
 
 interface IGame {
     reset(): void;
@@ -18,10 +18,12 @@ export class Game implements IGame {
     private state: TGameState = this.defaultState;
     private snakes: Array<LosingLengthSnake> = [];
     private food: Array<Food> = [];
+    private tmp: TColorTable;
 
     constructor(size: number = 10) {
         this.size = size;
         this.reset();
+        this.tmp = this.cellsToColorTable();
     }
 
     public reset(): void {
@@ -42,9 +44,14 @@ export class Game implements IGame {
     }
 
     public tick(): TColorTable {
+        // console.time('reduce');
         const gameObjects = Array<GameObject>(...this.food, ...this.snakes);
         this.state = this.reduce(gameObjects, this.reduce(gameObjects, this.defaultState), false);
-        return this.cellsToColorTable();
+        // console.timeEnd('reduce');
+        // console.time('conversion');
+        this.tmp = this.cellsToColorTable();
+        // console.timeEnd('conversion');
+        return this.tmp;
     }
 
     public reduce(array: Array<GameObject>, state: TGameState, forward: boolean = true): TGameState {
@@ -53,13 +60,13 @@ export class Game implements IGame {
     }
 
     protected cellsToColorTable(): TColorTable {
-        const table = Array<Array<string>>(this.size).fill([]).map(() => Array<string>(this.size).fill(''));
-        this.state.cells.forEach(({ coordinate: [x, y], color}: TCell) => table[x][y] = color);
+        const table = Array<Array<CellType>>(this.size).fill([]).map(() => Array<CellType>(this.size).fill(CellType.empty));
+        this.state.cells.forEach(({ coordinate: [x, y], type}: TCell) => table[x][y] = type);
         return table;
     }
 
     public get cells(): TColorTable {
-        return this.cellsToColorTable();
+        return this.tmp;
     }
 
     public set direction(angle: TDegree) {
