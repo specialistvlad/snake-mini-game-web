@@ -23,7 +23,7 @@ const Table: FC<IProps> = ({ classes, rows }) => {
   const result = (
     <table className={classes.table}>
     <tbody>
-    {rows.map((row: TColorTableRow, indY: number) => (<Row key={indY} row={row} index={indY}/>))}
+      {rows.map((row: TColorTableRow, indY: number) => (<Row key={indY} indY={indY} row={row} />))}
     </tbody>
   </table>
   );
@@ -32,5 +32,6 @@ const Table: FC<IProps> = ({ classes, rows }) => {
 }
 
 export default memo(withStyles(styles)(Table));
+
 // @ts-ignore
 Table.whyDidYouRender = true
