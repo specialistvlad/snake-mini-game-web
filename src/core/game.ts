@@ -1,3 +1,3 @@
 import { Game } from './classes/Game';
 
-export default new Game(20);
+export default new Game(10);
