@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "e4d12ee3b8c7e0085927839756eddd9f",
+    "revision": "25b40e45b816fcacee389da0a1b4b2c4",
     "url": "/snake-mini-game-web/index.html"
   },
   {
-    "revision": "8b1a109c423bb4e70fd6",
+    "revision": "9aabce6da9b29d48e034",
     "url": "/snake-mini-game-web/static/css/main.fadfdb71.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/snake-mini-game-web/static/js/2.cd176cca.chunk.js.LICENSE"
   },
   {
-    "revision": "8b1a109c423bb4e70fd6",
-    "url": "/snake-mini-game-web/static/js/main.c208b212.chunk.js"
+    "revision": "9aabce6da9b29d48e034",
+    "url": "/snake-mini-game-web/static/js/main.fa637b7d.chunk.js"
   },
   {
     "revision": "4a59145dd9705f76a485",
