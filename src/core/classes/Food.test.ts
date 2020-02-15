@@ -1,5 +1,5 @@
 import { Food } from './Food';
-import { CellPalette, CellType } from '../types';
+import { CellType } from '../types';
 
 describe('Food', () => {
     test('default params, should return dinner', () => {
@@ -7,7 +7,6 @@ describe('Food', () => {
         const food = new Food(1);
         expect(food.reducer()).toMatchObject({
             cells: [{
-                color: CellPalette.food,
                 type: CellType.food,
                 coordinate: [0, 0]
             }],
@@ -26,7 +25,6 @@ describe('Food', () => {
 
         expect(food.reducer()).toEqual({
             cells: [{
-                color: CellPalette.food,
                 type: CellType.food,
                 coordinate: [-1, -1]
             }],
@@ -64,7 +62,6 @@ describe('Food', () => {
         a = b + food.dinnerEachSeconds + 1;
         expect(food.reducer()).toEqual({
             cells: [{
-                color: CellPalette.food,
                 type: CellType.food,
                 coordinate: [0, 0]
             }],

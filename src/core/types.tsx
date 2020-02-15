@@ -5,20 +5,12 @@ export enum GameState {
     gameOver = 3,
 };
 
-export const CellPalette = {
-    empty: 'black',
-    wall: 'white',
-    mirror: 'gray',
-    food: 'rgb(10, 232, 10)',
-};
-
 export enum CellType {
     empty = 'empty',
     wall = 'wall',
     food = 'food',
     snake = 'snake',
 };
-export type TCellColor = string;
 
 // *******************************************
 // Coordinates and direction on the table
@@ -41,9 +33,7 @@ export type TGameState = {
 export type TCell = {
     coordinate: TCoordinate,
     type: CellType,
-    color: TCellColor,
 };
 
 export type TCells = Array<TCell>;
-export type TColorTableRow = Array<CellType>;
-export type TColorTable = Array<TColorTableRow>;
+export type TCellTypes = Array<CellType>;

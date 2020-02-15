@@ -1,4 +1,4 @@
-import { TGameState, CellType, CellPalette } from '../types';
+import { TGameState, CellType } from '../types';
 import { GameObject } from './GameObject';
 
 export class Food extends GameObject {
@@ -19,7 +19,6 @@ export class Food extends GameObject {
         cells: [{
           coordinate: this.randomCoordinate(this.tableSize),
           type: CellType.food,
-          color: CellPalette.food,
         }],
       };
     }

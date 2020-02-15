@@ -1,12 +1,12 @@
 import { LosingLengthSnake } from './LosingLengthSnake';
 import { Food } from './Food';
 import { GameObject } from './GameObject';
-import { TCell, TColorTable, TGameState, TDegree, CellType } from '../types';
+import { TCellTypes, TCell, TGameState, TDegree, CellType, TCoordinate } from '../types';
 
 interface IGame {
     reset(): void;
-    tick(): TColorTable;
-    cells: TColorTable;
+    tick(): TCellTypes;
+    cells: TCellTypes;
     score: number;
     direction: number;
     gameOver: boolean;
@@ -15,15 +15,17 @@ interface IGame {
 export class Game implements IGame {
     private defaultState = { cells: [] };
     private size: number;
+    private fullSize: number;
     private state: TGameState = this.defaultState;
     private snakes: Array<LosingLengthSnake> = [];
     private food: Array<Food> = [];
-    private tmp: TColorTable;
+    private _cellsForView: TCellTypes = [];
 
     constructor(size: number = 10) {
         this.size = size;
+        this.fullSize = size * size;
         this.reset();
-        this.tmp = this.cellsToColorTable();
+        this._cellsForView = this.makeCellsForView();
     }
 
     public reset(): void {
@@ -43,15 +45,15 @@ export class Game implements IGame {
         ];
     }
 
-    public tick(): TColorTable {
+    public tick(): TCellTypes {
         // console.time('reduce');
         const gameObjects = Array<GameObject>(...this.food, ...this.snakes);
         this.state = this.reduce(gameObjects, this.reduce(gameObjects, this.defaultState), false);
         // console.timeEnd('reduce');
         // console.time('conversion');
-        this.tmp = this.cellsToColorTable();
+        this._cellsForView = this.makeCellsForView();
         // console.timeEnd('conversion');
-        return this.tmp;
+        return this._cellsForView;
     }
 
     public reduce(array: Array<GameObject>, state: TGameState, forward: boolean = true): TGameState {
@@ -59,14 +61,56 @@ export class Game implements IGame {
         return array[methodName]((accumulator: TGameState, item: GameObject) => item.reducer(accumulator, forward), state);
     }
 
-    protected cellsToColorTable(): TColorTable {
-        const table = Array<Array<CellType>>(this.size).fill([]).map(() => Array<CellType>(this.size).fill(CellType.empty));
-        this.state.cells.forEach(({ coordinate: [x, y], type}: TCell) => table[x][y] = type);
-        return table;
+    protected makeEmptyCellsForView(): TCellTypes {
+        return this._cellsForView = Array<CellType>(this.fullSize).fill(CellType.empty);
     }
 
-    public get cells(): TColorTable {
-        return this.tmp;
+    protected indexToCoordinate(index: number, max: number): TCoordinate {
+        return [Math.trunc(index / max), Math.trunc(index % max)];
+    }
+
+    protected coordinateToIndex([y, x]: TCoordinate): number {
+        return y * this.size + x;
+    }
+
+    protected makeCellsForView(): TCellTypes {
+        if (this._cellsForView.length === 0) {
+            return this._cellsForView = this.makeEmptyCellsForView();
+        }
+
+        const cellTypeIndex = (value: CellType) => Object.keys(CellType).indexOf(value);
+
+        const cellsSorted = this.state.cells.sort((a: TCell, b: TCell) => {
+            if (this.coordinateToIndex(a.coordinate) < this.coordinateToIndex(b.coordinate)) {
+                return 1;
+            }
+
+            if (this.coordinateToIndex(a.coordinate) > this.coordinateToIndex(b.coordinate)) {
+                return -1;
+            }
+
+            if (this.coordinateToIndex(a.coordinate) === this.coordinateToIndex(b.coordinate)) {
+                if (cellTypeIndex(a.type) < cellTypeIndex(b.type)) {
+                    return 1;
+                }
+
+                if (cellTypeIndex(a.type) > cellTypeIndex(b.type)) {
+                    return -1;
+                }
+                return 0;
+            }
+
+            throw new Error('Imposible');
+        });
+
+        return this._cellsForView = this.makeEmptyCellsForView().map((l, index) => {
+            const [y1, x1] = this.indexToCoordinate(index, this.size);
+            return cellsSorted.find(({ coordinate: [y, x] }: TCell) => x === x1 && y === y1)?.type || CellType.empty;
+        });
+    }
+
+    public get cells(): TCellTypes {
+        return this._cellsForView;
     }
 
     public set direction(angle: TDegree) {

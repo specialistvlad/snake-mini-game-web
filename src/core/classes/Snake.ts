@@ -1,4 +1,3 @@
-import chroma from 'chroma-js';
 import { GameObject } from './GameObject';
 import {
     TGameState,
@@ -14,7 +13,6 @@ import {
 export type TSnakeConstructorParams = {
     name: string;
     snake: TCoordinates;
-    color?: string;
     direction?: TDegree;
     tableSize?: number;
 };
@@ -22,7 +20,6 @@ export type TSnakeConstructorParams = {
 export class Snake extends GameObject {
     private _name: string;
     protected _died: boolean = false;
-    private color: string;
     protected snake: TCoordinates;
     private currentDegree: TDegree;
     private nextDegree: TDegree;
@@ -32,8 +29,6 @@ export class Snake extends GameObject {
     constructor(params: TSnakeConstructorParams) {
         super();
         this._name = params.name || 'Unknown snake';
-        // this.color = params.color || 'rgb(239, 27, 232)' || chroma.random().hex();
-        this.color = 'yellow';
         this.snake = params.snake;
         this.currentDegree = params.direction || 0;
         this.nextDegree = this.currentDegree;
@@ -70,27 +65,15 @@ export class Snake extends GameObject {
             }
         }
 
-        return {
-            cells: this.snake.map((item, index) => ({
-                coordinate: item,
-                type: CellType.snake,
-                color: this.colorful(index),
-            })),
-        };
-    }
-
-    protected colorful(index: number): string {
-        return index === 0
-            ? this.color
-            : chroma(this.color).saturate(index).darken((index / this.snake.length - 1) * 2).hex();
+        return { cells: this.snake.map((item, index) => ({ coordinate: item, type: CellType.snake }))};
     }
 
     protected step(gameCells: TCells): void {
-        if (this.collision(gameCells)) { // collision with tail check
+        if (this.collision(gameCells)) { // check collision with tail
             return;
         }
 
-        if (this.collisionOthers(gameCells)) { // collision in another cells check
+        if (this.collisionOthers(gameCells)) { // check collision in another cells
             return;
         }
 

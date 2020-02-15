@@ -1,24 +1,37 @@
 import React, { FC, memo } from 'react';
+import withStyles, { WithStylesProps } from 'react-jss'
 
-import { TColorTable, TColorTableRow } from '../core/types';
-import Row from './Row';
+import { TCellTypes, CellType } from '../core/types';
+import CellCssGrid from './Cell';
 
-interface IProps {
-  rows: TColorTable,
+const styles = {
+  container: {
+    width: '100%',
+    height: '100%',
+    border: '2px dashed #F7EEEE',
+    borderRadius: 5,
+    display: 'grid',
+    gridTemplateColumns: 'repeat(10, 1fr)',
+    gridTemplateRows: 'repeat(10, 1fr)',
+    gridColumnGap: 0,
+    gridRowGap: 0,
+  }
+};
+
+interface IProps extends WithStylesProps<typeof styles> {
+  cells: TCellTypes,
 }
 
-const Table: FC<IProps> = ({ rows }) => {
+const TableCssGrid: FC<IProps> = ({ classes, cells }) => {
   const result = (
-    <table className="table">
-    <tbody>
-      {rows.map((row: TColorTableRow, indY: number) => (<Row key={indY} indY={indY} row={row} />))}
-    </tbody>
-  </table>
+    <div className={`table-css-grid-container ${classes.container}`}>
+      {cells.map((cellType: CellType, index: number) => (<CellCssGrid key={index} cellType={cellType} />))}
+    </div>
   );
   return result;
 }
 
-export default memo(Table);
+export default memo(withStyles(styles)(TableCssGrid));
 
 // @ts-ignore
-Table.whyDidYouRender = true;
+TableCssGrid.whyDidYouRender = true;

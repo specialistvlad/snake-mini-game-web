@@ -39,7 +39,7 @@ const styles = {
 
 const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
   const [state, setState] = useState<GameState>(GameState.ready);
-  const [rows, setRows] = useState(game.cells);
+  const [cells, setCells] = useState(game.cells);
   const [score, setScore] = useState<number>(game.score);
   const [stepsLeft, setStepsLeft] = useState<number>(game.stepsLeft);
 
@@ -108,7 +108,7 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
       if (step < 1000 && state === GameState.running) {
         step++;
         // console.time('tick');
-        setRows(game.tick());
+        setCells(game.tick());
         // console.timeEnd('tick');
       }
 
@@ -132,7 +132,7 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
       <MenuBar score={score} stepsLeft={stepsLeft} pause={pause}/>
       <div className={classes.spacer}/>
       <Paper>
-        <Table rows={rows}/>
+        <Table cells={cells} />
       </Paper>
       {state === GameState.running
         ? null

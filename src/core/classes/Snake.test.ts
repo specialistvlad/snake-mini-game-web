@@ -1,4 +1,4 @@
-import { LosingLengthSnake } from './LosingLengthSnake';
+import { Snake } from './Snake';
 import { TGameState, TDegree, Directions, TCoordinates, CellType } from '../types';
 
 type optionalDegree = TDegree | null;
@@ -9,7 +9,7 @@ const snakeTest = (
     snakeAdditionalParams?: any,
     gameState: TGameState = { cells: [] },
     ) => {
-        const snake = new LosingLengthSnake({
+        const snake = new Snake({
             name: '',
             snake: snakeCoordinates,
             ...snakeAdditionalParams,
@@ -26,7 +26,7 @@ const snakeTest = (
 
 const match = (steps: Array<TCoordinates>) => steps.map(coordinates => ({ cells: coordinates.map(item => (expect.objectContaining({ coordinate: item })))})); 
 
-describe('LosingLengthSnake', () => {
+describe('Snake', () => {
     test('snake init step works correctly(without move forward, only rendering)', () =>
         expect(snakeTest([], [[0, 0]])).toMatchObject(match([[[0, 0]]])));
 

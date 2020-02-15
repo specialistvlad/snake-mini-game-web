@@ -6,9 +6,9 @@ interface IProps {
   cellType: CellType,
 }
 
-const Row: FC<IProps> = ({ cellType }) => <td className={`cell ${cellType}`}></td>;
+const CellCssGrid: FC<IProps> = ({ cellType }) => <div className={cellType}></div>;
 
-export default memo(Row);
+export default memo(CellCssGrid);
 
 // @ts-ignore
-Row.whyDidYouRender = true
+CellCssGrid.whyDidYouRender = true
