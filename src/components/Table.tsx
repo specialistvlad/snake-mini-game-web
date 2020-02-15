@@ -11,8 +11,6 @@ const styles = {
     border: '2px dashed #F7EEEE',
     borderRadius: 5,
     display: 'grid',
-    gridTemplateColumns: 'repeat(10, 1fr)',
-    gridTemplateRows: 'repeat(10, 1fr)',
     gridColumnGap: 0,
     gridRowGap: 0,
   }
@@ -24,7 +22,13 @@ interface IProps extends WithStylesProps<typeof styles> {
 
 const TableCssGrid: FC<IProps> = ({ classes, cells }) => {
   const result = (
-    <div className={`table-css-grid-container ${classes.container}`}>
+    <div
+      className={`table-css-grid-container ${classes.container}`}
+      style={{
+        gridTemplateColumns: `repeat(${Math.sqrt(cells.length)}, 1fr)`,
+        gridTemplateRows: `repeat(${Math.sqrt(cells.length)}, 1fr)`,
+      }}
+    >
       {cells.map((cellType: CellType, index: number) => (<CellCssGrid key={index} cellType={cellType} />))}
     </div>
   );
