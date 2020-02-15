@@ -14,8 +14,6 @@ import Copyright from './Copyright';
 
 const size = 75;
 
-let step = 0;
-
 const styles = {
   container: {
     height: '100%',
@@ -105,11 +103,8 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
   // syncronization signal for the game
   useEffect(() => {
     const tmp = setInterval(() => {
-      if (step < 1000 && state === GameState.running) {
-        step++;
-        // console.time('tick');
+      if (state === GameState.running) {
         setCells(game.tick());
-        // console.timeEnd('tick');
       }
 
       if (game.gameOver) {

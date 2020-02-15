@@ -56,7 +56,7 @@ const Popup: FC<IProps> = ({ classes, score, state, start, reset }) => {
         <div className={`${classes.text} ${classes.title}`}>
           { state === GameState.ready ? 'Hi there!' : null}
           { state === GameState.pause ? 'Pause' : null}
-          { state === GameState.gameOver ? 'You los\'' : null}
+          { state === GameState.gameOver ? 'You lose' : null}
         </div>
         { state === GameState.pause || state === GameState.gameOver
           ? (<div className={`${classes.text} ${classes.score}`}>Score: {score}</div>)

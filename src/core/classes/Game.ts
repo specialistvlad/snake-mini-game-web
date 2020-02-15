@@ -46,13 +46,9 @@ export class Game implements IGame {
     }
 
     public tick(): TCellTypes {
-        // console.time('reduce');
         const gameObjects = Array<GameObject>(...this.food, ...this.snakes);
         this.state = this.reduce(gameObjects, this.reduce(gameObjects, this.defaultState), false);
-        // console.timeEnd('reduce');
-        // console.time('conversion');
         this._cellsForView = this.makeCellsForView();
-        // console.timeEnd('conversion');
         return this._cellsForView;
     }
 
