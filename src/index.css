@@ -17,18 +17,18 @@ body {
   border: 1px dashed #ffffff21;
 }
 
-.table-css-grid-container .empty {
+.cell-type-0 {
   background-color: inherit;
 }
 
-.table-css-grid-container .wall {
+.cell-type-1 {
   background-color: orange;
 }
 
-.table-css-grid-container .food {
+.cell-type-2 {
   background-color: green;
 }
 
-.table-css-grid-container .snake {
+.cell-type-3 {
   background-color: red;
 }

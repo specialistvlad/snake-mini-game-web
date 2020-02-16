@@ -6,7 +6,7 @@ interface IProps {
   cellType: CellType,
 }
 
-const CellCssGrid: FC<IProps> = ({ cellType }) => <div className={cellType}></div>;
+const CellCssGrid: FC<IProps> = ({ cellType }) => <div className={`cell-type-${cellType.toString()}`}></div>;
 
 export default memo(CellCssGrid);
 

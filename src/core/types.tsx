@@ -6,10 +6,10 @@ export enum GameState {
 };
 
 export enum CellType {
-    empty = 'empty',
-    wall = 'wall',
-    food = 'food',
-    snake = 'snake',
+    empty = 0,
+    wall,
+    food,
+    snake,
 };
 
 // *******************************************

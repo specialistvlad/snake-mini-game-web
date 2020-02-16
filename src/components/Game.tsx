@@ -4,8 +4,10 @@ import useEventListener from '@use-it/event-listener';
 import { useSwipeable } from 'react-swipeable'
 import { isMobile } from 'react-device-detect';
 
-import { GameState } from '../core/types';
+import a from '../core/a';
+import { GameState, TCellTypes } from '../core/types';
 import game from '../core/game';
+
 import Table from './Table';
 import Popup from './Popup';
 import Paper from './Paper';
@@ -13,6 +15,7 @@ import MenuBar from './MenuBar';
 import Copyright from './Copyright';
 
 const size = 75;
+const b = a(game.fullSize);
 
 const styles = {
   container: {
@@ -37,7 +40,7 @@ const styles = {
 
 const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
   const [state, setState] = useState<GameState>(GameState.ready);
-  const [cells, setCells] = useState(game.cells);
+  const [cells, setCells] = useState<TCellTypes>(game.cells);
   const [score, setScore] = useState<number>(game.score);
   const [stepsLeft, setStepsLeft] = useState<number>(game.stepsLeft);
 
@@ -103,7 +106,9 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
   // syncronization signal for the game
   useEffect(() => {
     const tmp = setInterval(() => {
+
       if (state === GameState.running) {
+        game.direction = b(cells);
         setCells(game.tick());
       }
 
@@ -116,7 +121,7 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
     }, isMobile ? 350 : 250);
 
     return () => clearTimeout(tmp);
-  }, [state]);
+  }, [state, cells]);
 
   const start = useCallback(() => callback({ code: 'StartGame' }), [callback]);
   const reset = useCallback(() => callback({ code: 'ResetGame' }), [callback]);

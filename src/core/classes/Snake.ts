@@ -138,7 +138,8 @@ export class Snake extends GameObject {
     protected collisionOthers(gameCells: TCells): boolean {
         const nextCell = this.nextCell(gameCells);
         
-        if (nextCell?.type === CellType.snake || nextCell?.type === CellType.wall) {
+        // if (nextCell?.type === CellType.snake || nextCell?.type === CellType.wall) {
+        if (nextCell?.type === CellType.snake) {
             return this._died = true;
         }
         return false;

@@ -15,7 +15,7 @@ interface IGame {
 export class Game implements IGame {
     private defaultState = { cells: [] };
     private size: number;
-    private fullSize: number;
+    public fullSize: number;
     private state: TGameState = this.defaultState;
     private snakes: Array<LosingLengthSnake> = [];
     private food: Array<Food> = [];
@@ -74,7 +74,7 @@ export class Game implements IGame {
             return this._cellsForView = this.makeEmptyCellsForView();
         }
 
-        const cellTypeIndex = (value: CellType) => Object.keys(CellType).indexOf(value);
+        const cellTypeIndex = (value: CellType) => Object.keys(CellType).indexOf(value.toString());
 
         const cellsSorted = this.state.cells.sort((a: TCell, b: TCell) => {
             if (this.coordinateToIndex(a.coordinate) < this.coordinateToIndex(b.coordinate)) {

@@ -38,4 +38,4 @@ const TableCssGrid: FC<IProps> = ({ classes, cells }) => {
 export default memo(withStyles(styles)(TableCssGrid));
 
 // @ts-ignore
-TableCssGrid.whyDidYouRender = true;
+// TableCssGrid.whyDidYouRender = true;
