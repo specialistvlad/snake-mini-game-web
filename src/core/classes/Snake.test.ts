@@ -126,4 +126,12 @@ describe('Snake', () => {
             [[0, 1], [0, 1], [0, 0]],
         ])));
     });
+
+    // describe('Collision', () => {
+    //     const state: TGameState = { cells: [{ coordinate: [0, 1], type: CellType.food }] };
+    //     test('with tail', () =>
+    //     expect(snakeTest([null], [[0, 0]], {}, state)).toMatchObject(match([
+    //         [[0, 1], [0, 0]],
+    //     ])));
+    // });
 });

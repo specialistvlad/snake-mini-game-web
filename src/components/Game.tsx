@@ -4,9 +4,8 @@ import useEventListener from '@use-it/event-listener';
 import { useSwipeable } from 'react-swipeable'
 import { isMobile } from 'react-device-detect';
 
-import a from '../core/a';
 import { GameState, TCellTypes } from '../core/types';
-import game from '../core/game';
+import { game, agent } from '../core/instance';
 
 import Table from './Table';
 import Popup from './Popup';
@@ -14,8 +13,8 @@ import Paper from './Paper';
 import MenuBar from './MenuBar';
 import Copyright from './Copyright';
 
+let count = 0;
 const size = 75;
-const b = a(game.fullSize);
 
 const styles = {
   container: {
@@ -39,7 +38,7 @@ const styles = {
 };
 
 const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
-  const [state, setState] = useState<GameState>(GameState.ready);
+  const [state, setState] = useState<GameState>(GameState.running);
   const [cells, setCells] = useState<TCellTypes>(game.cells);
   const [score, setScore] = useState<number>(game.score);
   const [stepsLeft, setStepsLeft] = useState<number>(game.stepsLeft);
@@ -106,9 +105,12 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
   // syncronization signal for the game
   useEffect(() => {
     const tmp = setInterval(() => {
-
+      if (count > 1) {
+        return;
+      }
+      count++;
       if (state === GameState.running) {
-        game.direction = b(cells);
+        game.direction = agent.predict(game.state);
         setCells(game.tick());
       }
 

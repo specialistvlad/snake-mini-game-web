@@ -26,9 +26,13 @@ body {
 }
 
 .cell-type-2 {
-  background-color: green;
+  background-color: #39bb39;
 }
 
 .cell-type-3 {
-  background-color: red;
+  background-color: #f761d6;
+}
+
+.cell-type-4 {
+  background-color: #be5dfb;
 }

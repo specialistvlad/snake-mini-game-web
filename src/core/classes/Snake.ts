@@ -65,7 +65,12 @@ export class Snake extends GameObject {
             }
         }
 
-        return { cells: this.snake.map((item, index) => ({ coordinate: item, type: CellType.snake }))};
+        return {
+            cells: this.snake.map((item, index) => ({
+                coordinate: item,
+                type: index === 0 ? CellType.snakeHead : CellType.snake,
+            })),
+        };
     }
 
     protected step(gameCells: TCells): void {
@@ -138,8 +143,7 @@ export class Snake extends GameObject {
     protected collisionOthers(gameCells: TCells): boolean {
         const nextCell = this.nextCell(gameCells);
         
-        // if (nextCell?.type === CellType.snake || nextCell?.type === CellType.wall) {
-        if (nextCell?.type === CellType.snake) {
+        if (nextCell?.type === CellType.snake || nextCell?.type === CellType.snakeHead || nextCell?.type === CellType.wall) {
             return this._died = true;
         }
         return false;

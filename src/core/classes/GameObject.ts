@@ -12,7 +12,11 @@ export abstract class GameObject {
     return currentState;
   }
 
-  public reducer(currentState: TGameState = this.defaultState, forward: boolean = true, dryRun: boolean = false): TGameState {
+  public reducer(
+    currentState: TGameState = this.defaultState,
+    forward: boolean = true, 
+    dryRun: boolean = false,
+  ): TGameState {
     if (!dryRun && forward) {
       this.localState = this.reduceForward(currentState);
     }

@@ -7,6 +7,7 @@ interface IGame {
     reset(): void;
     tick(): TCellTypes;
     cells: TCellTypes;
+    state: TGameState;
     score: number;
     direction: number;
     gameOver: boolean;
@@ -14,11 +15,11 @@ interface IGame {
 
 export class Game implements IGame {
     private defaultState = { cells: [] };
-    private size: number;
+    public size: number;
     public fullSize: number;
-    private state: TGameState = this.defaultState;
     private snakes: Array<LosingLengthSnake> = [];
     private food: Array<Food> = [];
+    private _state: TGameState = this.defaultState;
     private _cellsForView: TCellTypes = [];
 
     constructor(size: number = 10) {
@@ -47,7 +48,7 @@ export class Game implements IGame {
 
     public tick(): TCellTypes {
         const gameObjects = Array<GameObject>(...this.food, ...this.snakes);
-        this.state = this.reduce(gameObjects, this.reduce(gameObjects, this.defaultState), false);
+        this._state = this.reduce(gameObjects, this.reduce(gameObjects, this.defaultState), false);
         this._cellsForView = this.makeCellsForView();
         return this._cellsForView;
     }
@@ -76,7 +77,7 @@ export class Game implements IGame {
 
         const cellTypeIndex = (value: CellType) => Object.keys(CellType).indexOf(value.toString());
 
-        const cellsSorted = this.state.cells.sort((a: TCell, b: TCell) => {
+        const cellsSorted = this._state.cells.sort((a: TCell, b: TCell) => {
             if (this.coordinateToIndex(a.coordinate) < this.coordinateToIndex(b.coordinate)) {
                 return 1;
             }
@@ -123,5 +124,9 @@ export class Game implements IGame {
 
     public get stepsLeft(): number {
         return this.snakes[0].stepsLeft;
+    }
+
+    public get state(): TGameState {
+        return this._state;
     }
 };

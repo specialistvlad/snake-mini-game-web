@@ -10,6 +10,7 @@ export enum CellType {
     wall,
     food,
     snake,
+    snakeHead,
 };
 
 // *******************************************
