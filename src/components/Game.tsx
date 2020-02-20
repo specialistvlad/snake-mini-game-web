@@ -12,8 +12,9 @@ import Popup from './Popup';
 import Paper from './Paper';
 import MenuBar from './MenuBar';
 import Copyright from './Copyright';
+import CheckBox from './CheckBox';
 
-let count = 0;
+// let count = 0;
 const size = 75;
 
 const styles = {
@@ -34,7 +35,6 @@ const styles = {
     margin: 'auto',
     ['flexDirection' as any]: 'column',
   },
-  spacer: { height: 25 },
 };
 
 const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
@@ -42,6 +42,7 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
   const [cells, setCells] = useState<TCellTypes>(game.cells);
   const [score, setScore] = useState<number>(game.score);
   const [stepsLeft, setStepsLeft] = useState<number>(game.stepsLeft);
+  const [autoPlay, setAutoPlay] = useState<boolean>(false);
 
   const callback = useCallback(event => {
     switch (event?.dir || event?.code) {
@@ -92,6 +93,14 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
     }
   }, [state]);
 
+  useEffect(() => {
+    if (!autoPlay) {
+      return;
+    }
+
+    agent.init();
+  }, [autoPlay]);
+
   // reactions on button press
   useEventListener('keydown', callback);
 
@@ -102,16 +111,22 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
     trackMouse: true
   });
 
-  // syncronization signal for the game
+  // main function aka loop
   useEffect(() => {
     const tmp = setInterval(() => {
-      if (count > 1) {
+      // if (count > 1) {
         // return;
-      }
-      count++;
+      // }
+      // count++;
       if (state === GameState.running) {
-        game.relativeDirection = agent.predict(game.state);
-        setCells(game.tick());
+        if (autoPlay) {
+          if (agent.agentReady) {
+            game.relativeDirection = agent.predict(game.state);
+            setCells(game.tick());
+          }
+        } else {
+          setCells(game.tick());
+        }
       }
 
       if (game.gameOver) {
@@ -123,16 +138,17 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
     }, isMobile ? 350 : 150);
 
     return () => clearTimeout(tmp);
-  }, [state, cells]);
+  }, [state, cells, autoPlay]);
 
   const start = useCallback(() => callback({ code: 'StartGame' }), [callback]);
   const reset = useCallback(() => callback({ code: 'ResetGame' }), [callback]);
   const pause = useCallback(() => callback({ code: 'Menu' }), [callback]);
+  const autoPlayCallback = useCallback((value) => setAutoPlay(value), []);
 
   return (
     <div className={classes.container} {...handlers}>
       <MenuBar score={score} stepsLeft={stepsLeft} pause={pause}/>
-      <div className={classes.spacer}/>
+      <CheckBox checked={autoPlay} onChange={autoPlayCallback} >Allow deep learned network to play automatically</CheckBox>
       <Paper>
         <Table cells={cells} />
       </Paper>

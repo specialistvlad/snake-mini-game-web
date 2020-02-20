@@ -12,6 +12,7 @@ logic
   input data > model > output data > apply to game > check game score
 
 Ways
+http://ai.lector.ru/?go=lection07
 1. SARSA
 2. Q-learning
 

@@ -10,23 +10,43 @@ export class Agent implements IAgent {
     public modelUrl: string = './model/model.json';
     public sideSize: number;
     private model: any | undefined;
+    private _agentReady: boolean = false;
 
     constructor(size: number) {
         this.sideSize = size;
-        this.loadModel();
+    }
+
+    async init(): Promise<undefined> {
+        await this.loadModel();
+        this._agentReady = true;
+        this.warm();
+        return;
+    }
+
+    public get agentReady(): boolean {
+        return this._agentReady;
     }
 
     public predict(state: TGameState): RelativeDirection {
+        if (!this._agentReady) {
+            throw new Error('Agent is not ready to predict yet');
+        }
+
         return tf.tidy(() => {
             const inputTensor = this.gameStateToTensor(state);
             const outTensor = this.model.predict(inputTensor);
-            console.log('Predicted!', outTensor.toString());
+            // console.log('Predicted!', outTensor.toString());
             return outTensor;
         }).argMax(-1).dataSync();
     };
 
-    async loadModel() {
+    private async loadModel(): Promise<undefined> {
         this.model = await tf.loadLayersModel(this.modelUrl);
+        return;
+    }
+
+    private async warm() {
+        this.predict({ cells: [] });
     }
 
     gameStateToTensor(state: TGameState): tf.Tensor {
