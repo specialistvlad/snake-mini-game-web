@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/snake-mini-game-web/static/css/main.fadfdb71.chunk.css",
-    "main.js": "/snake-mini-game-web/static/js/main.fa637b7d.chunk.js",
-    "main.js.map": "/snake-mini-game-web/static/js/main.fa637b7d.chunk.js.map",
+    "main.css": "/snake-mini-game-web/static/css/main.8b9351b2.chunk.css",
+    "main.js": "/snake-mini-game-web/static/js/main.1aaa61e2.chunk.js",
+    "main.js.map": "/snake-mini-game-web/static/js/main.1aaa61e2.chunk.js.map",
     "runtime-main.js": "/snake-mini-game-web/static/js/runtime-main.49fdc8c9.js",
     "runtime-main.js.map": "/snake-mini-game-web/static/js/runtime-main.49fdc8c9.js.map",
-    "static/js/2.cd176cca.chunk.js": "/snake-mini-game-web/static/js/2.cd176cca.chunk.js",
-    "static/js/2.cd176cca.chunk.js.map": "/snake-mini-game-web/static/js/2.cd176cca.chunk.js.map",
+    "static/js/2.13f49323.chunk.js": "/snake-mini-game-web/static/js/2.13f49323.chunk.js",
+    "static/js/2.13f49323.chunk.js.map": "/snake-mini-game-web/static/js/2.13f49323.chunk.js.map",
     "index.html": "/snake-mini-game-web/index.html",
-    "precache-manifest.f3fd7ff9441e44a0a4a681a72ec3c4b8.js": "/snake-mini-game-web/precache-manifest.f3fd7ff9441e44a0a4a681a72ec3c4b8.js",
+    "precache-manifest.f36b04225c1411d6a696a6ef004032c9.js": "/snake-mini-game-web/precache-manifest.f36b04225c1411d6a696a6ef004032c9.js",
     "service-worker.js": "/snake-mini-game-web/service-worker.js",
-    "static/css/main.fadfdb71.chunk.css.map": "/snake-mini-game-web/static/css/main.fadfdb71.chunk.css.map",
-    "static/js/2.cd176cca.chunk.js.LICENSE": "/snake-mini-game-web/static/js/2.cd176cca.chunk.js.LICENSE"
+    "static/css/main.8b9351b2.chunk.css.map": "/snake-mini-game-web/static/css/main.8b9351b2.chunk.css.map",
+    "static/js/2.13f49323.chunk.js.LICENSE": "/snake-mini-game-web/static/js/2.13f49323.chunk.js.LICENSE"
   },
   "entrypoints": [
     "static/js/runtime-main.49fdc8c9.js",
-    "static/js/2.cd176cca.chunk.js",
-    "static/css/main.fadfdb71.chunk.css",
-    "static/js/main.fa637b7d.chunk.js"
+    "static/js/2.13f49323.chunk.js",
+    "static/css/main.8b9351b2.chunk.css",
+    "static/js/main.1aaa61e2.chunk.js"
   ]
 }
