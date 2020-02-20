@@ -18,14 +18,19 @@ export enum CellType {
 // *******************************************
 export type TCoordinate = [number, number]; // y, x
 export type TCoordinates = Array<TCoordinate>;
-export enum Directions {
+
+export enum Direction {
     Right = 0,
     Down = 90,
     Left = 180,
     Up = 270,
 };
 
-export type TDegree = number;
+export enum RelativeDirection {
+    Straight = 0,
+    Left = 1,
+    Right = 2,
+};
 
 export type TGameState = {
     cells: TCells,

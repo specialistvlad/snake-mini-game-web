@@ -1,19 +1,19 @@
 import { GameObject } from './GameObject';
 import {
     TGameState,
-    TDegree,
     TCoordinate,
     TCoordinates,
-    Directions,
+    Direction,
     CellType,
     TCells,
     TCell,
+    RelativeDirection,
 } from '../types';
 
 export type TSnakeConstructorParams = {
-    name: string;
     snake: TCoordinates;
-    direction?: TDegree;
+    name?: string;
+    direction?: Direction;
     tableSize?: number;
 };
 
@@ -21,8 +21,8 @@ export class Snake extends GameObject {
     private _name: string;
     protected _died: boolean = false;
     protected snake: TCoordinates;
-    private currentDegree: TDegree;
-    private nextDegree: TDegree;
+    private currentDegree: Direction;
+    private nextDegree: Direction;
     protected steps: number = -1;
     private tableSize: number;
 
@@ -35,8 +35,12 @@ export class Snake extends GameObject {
         this.tableSize = params.tableSize || 100;
     }
 
-    public set direction(nextDegree: TDegree) {
+    public set direction(nextDegree: Direction) {
         this.nextDegree = nextDegree;
+    }
+
+    public set relativeDirection(nextDirection: RelativeDirection) {
+        this.nextDegree = this.relativeDirectionToAbsolute(nextDirection);
     }
 
     public get name(): string {
@@ -157,15 +161,26 @@ export class Snake extends GameObject {
         }
     
         switch (isNextDirectionCorrect ? this.nextDegree : this.currentDegree) {
-            case Directions.Left:
+            case Direction.Left:
                 return [y, x === 0 ? this.tableSize - 1 : x - 1];
-            case Directions.Right:
+            case Direction.Right:
                 return [y, x + 1 === this.tableSize ? 0 : x + 1];
-            case Directions.Down:
+            case Direction.Down:
                 return [y + 1 === this.tableSize ? 0 : y + 1, x];
-            case Directions.Up:
+            case Direction.Up:
                 return [y === 0 ? this.tableSize - 1 : y - 1, x];
         };
         throw new Error(`I have no idea how to move this degree o_O: ${this.nextDegree}`)
+    }
+
+    relativeDirectionToAbsolute(next: RelativeDirection, current = this.currentDegree): Direction {
+        const value = [0, -90, +90][next];
+        if (current + value < 0) {
+            return 360 + value;
+        } else if (current + value >= 360) {
+            return 90 - value;
+        }
+
+        return this.nextDegree = current + value;
     }
 };

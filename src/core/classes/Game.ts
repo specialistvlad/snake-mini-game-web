@@ -1,7 +1,7 @@
 import { LosingLengthSnake } from './LosingLengthSnake';
 import { Food } from './Food';
 import { GameObject } from './GameObject';
-import { TCellTypes, TCell, TGameState, TDegree, CellType, TCoordinate } from '../types';
+import { TCellTypes, TCell, TGameState, Direction, RelativeDirection, CellType, TCoordinate } from '../types';
 
 interface IGame {
     reset(): void;
@@ -110,7 +110,11 @@ export class Game implements IGame {
         return this._cellsForView;
     }
 
-    public set direction(angle: TDegree) {
+    public set relativeDirection(direction: RelativeDirection) {
+        this.snakes[0].relativeDirection = direction;
+    }
+
+    public set direction(angle: Direction) {
         this.snakes[0].direction = angle;
     }
 

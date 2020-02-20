@@ -1,7 +1,6 @@
 import * as tf from '@tensorflow/tfjs';
 
 import { Agent } from './Agent';
-import { TCellTypes } from '../types';
 
 describe('Agent', () => {
     tf.setBackend('cpu');
@@ -17,9 +16,9 @@ describe('Agent', () => {
             ],
         }).arraySync()).toMatchObject([
             [
-                [[0, 0], [0, 0], [3, 0], [4, 0]],
+                [[0, 0], [0, 0], [1, 0], [2, 0]],
                 [[0, 0], [0, 0], [0, 0], [0, 0]],
-                [[0, 0], [0, 2], [0, 0], [0, 0]],
+                [[0, 0], [0, 1], [0, 0], [0, 0]],
                 [[0, 0], [0, 0], [0, 0], [0, 0]],
             ]
         ]);

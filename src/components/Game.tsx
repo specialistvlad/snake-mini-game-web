@@ -38,7 +38,7 @@ const styles = {
 };
 
 const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
-  const [state, setState] = useState<GameState>(GameState.running);
+  const [state, setState] = useState<GameState>(GameState.ready);
   const [cells, setCells] = useState<TCellTypes>(game.cells);
   const [score, setScore] = useState<number>(game.score);
   const [stepsLeft, setStepsLeft] = useState<number>(game.stepsLeft);
@@ -106,11 +106,11 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
   useEffect(() => {
     const tmp = setInterval(() => {
       if (count > 1) {
-        return;
+        // return;
       }
       count++;
       if (state === GameState.running) {
-        game.direction = agent.predict(game.state);
+        game.relativeDirection = agent.predict(game.state);
         setCells(game.tick());
       }
 
@@ -120,7 +120,7 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
 
       setScore(game.score);
       setStepsLeft(game.stepsLeft);
-    }, isMobile ? 350 : 250);
+    }, isMobile ? 350 : 150);
 
     return () => clearTimeout(tmp);
   }, [state, cells]);

@@ -1,8 +1,9 @@
 import * as tf from '@tensorflow/tfjs';
-import { TCellTypes, Directions, TGameState, CellType } from '../types';
+import { RelativeDirection, TGameState, CellType } from '../types';
 
 interface IAgent {
-    predict (cells: TGameState): Directions
+    predict (state: TGameState): RelativeDirection;
+    gameStateToTensor(state: TGameState): tf.Tensor;
 };
 
 export class Agent implements IAgent {
@@ -15,34 +16,30 @@ export class Agent implements IAgent {
         this.loadModel();
     }
 
-    public predict(cells: TGameState): Directions {
-        console.log('Predict me');
-        
-        // Predict 3 random samples.
-        // const prediction = model.predict(inputTensor, { verbose: true });
-        // console.log('prediction', prediction.toString(true));
-        return Directions.Up;
+    public predict(state: TGameState): RelativeDirection {
+        return tf.tidy(() => {
+            const inputTensor = this.gameStateToTensor(state);
+            const outTensor = this.model.predict(inputTensor);
+            console.log('Predicted!', outTensor.toString());
+            return outTensor;
+        }).argMax(-1).dataSync();
     };
 
     async loadModel() {
         this.model = await tf.loadLayersModel(this.modelUrl);
     }
 
-    gameStateToTensor(state: TGameState) {
-        // const statesCount = state.length;
+    gameStateToTensor(state: TGameState): tf.Tensor {
         const n = 0;
         const statesCount = 1;
         const buffer = tf.buffer([statesCount, this.sideSize, this.sideSize, 2]);
-        // for (let n = 0; n < states.length; ++n) {
-            // const state = states[n];
-            // if (state == null) {
-            //     continue;
-            // }
-            state.cells.forEach(({ coordinate, type }) => buffer.set(
-                type, n, coordinate[0], coordinate[1],
-                type === CellType.snake || type === CellType.snakeHead ? 0 : 1,
-            ));
-        // }
+        state.cells.forEach(({ coordinate, type }) => buffer.set(
+            type === CellType.snake || type === CellType.snakeHead ? type - 2 : type - 1,
+            n,
+            coordinate[0],
+            coordinate[1],
+            type === CellType.snake || type === CellType.snakeHead ? 0 : 1,
+        ));
         return buffer.toTensor();
     }
 };
