@@ -42,7 +42,7 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
   const [cells, setCells] = useState<TCellTypes>(game.cells);
   const [score, setScore] = useState<number>(game.score);
   const [stepsLeft, setStepsLeft] = useState<number>(game.stepsLeft);
-  const [autoPlay, setAutoPlay] = useState<boolean>(false);
+  const [autoPlay, setAutoPlay] = useState<boolean>(true);
 
   const callback = useCallback(event => {
     switch (event?.dir || event?.code) {

@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, memo } from 'react';
 import withStyles, { WithStylesProps } from 'react-jss'
 
 const styles = {
@@ -20,20 +20,17 @@ interface IProps extends WithStylesProps<typeof styles> {
   onChange: Function,
 }
 
-const CheckBox: FC<IProps> = ({ classes, children, checked, onChange }) => {
-  const onChangeCallback = useCallback((event) => onChange(!Boolean(event.target.value)), [onChange]);
-  return (
-    <div className={classes.container}>
+const CheckBox: FC<IProps> = ({ classes, children, checked, onChange }) => 
+  <div className={classes.container}>
       <input
         className={classes.input}
         type="checkbox"
         name="autoPlay"
         value={checked ? 'true' : ''}
-        onClick={onChangeCallback}
+        defaultChecked={checked}
+        onClick={useCallback((event) => onChange(!Boolean(event.target.value)), [onChange])}
         ></input>
       <label className={classes.label} htmlFor="autoPlay">{children}</label>
-    </div>
-  );
-};
+    </div>;
 
-export default withStyles(styles)(CheckBox);
+export default memo(withStyles(styles)(CheckBox));
