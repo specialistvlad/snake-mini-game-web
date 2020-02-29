@@ -1,0 +1,10 @@
+{
+  "watch": ["./**/*"],
+  "ext": "ts",
+  "ignore": ["*.test.ts", "*.specs.ts"],
+  "delay": "1",
+  "verbose": false,
+  "execMap": {
+    "ts": "ts-node  --project tsconfig-trainer.json"
+  }
+}
