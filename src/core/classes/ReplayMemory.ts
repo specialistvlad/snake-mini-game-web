@@ -1,14 +1,19 @@
-// @ts-nocheck
 import * as tf from '@tensorflow/tfjs';
 
 /** Replay buffer for DQN training. */
-export class ReplayMemory {
+export class ReplayMemory<T> {
   /**
    * Constructor of ReplayMemory.
    *
    * @param {number} maxLen Maximal buffer length.
    */
-  constructor(maxLen) {
+  private maxLen: number;
+  private index: number;
+  private length: number;
+  private buffer: Array<any>;
+  private bufferIndices_: Array<any>;
+
+  constructor(maxLen: number) {
     this.maxLen = maxLen;
     this.buffer = [];
     for (let i = 0; i < maxLen; ++i) {
@@ -28,7 +33,7 @@ export class ReplayMemory {
    *
    * @param {any} item The item to append.
    */
-  append(item) {
+  append(item: any) {
     this.buffer[this.index] = item;
     this.length = Math.min(this.length + 1, this.maxLen);
     this.index = (this.index + 1) % this.maxLen;
@@ -42,10 +47,9 @@ export class ReplayMemory {
    * @param {number} batchSize Size of the batch.
    * @return {Array<any>} Sampled items.
    */
-  sample(batchSize) {
+  sample(batchSize: number) {
     if (batchSize > this.maxLen) {
-      throw new Error(
-          `batchSize (${batchSize}) exceeds buffer length (${this.maxLen})`);
+      throw new Error(`batchSize (${batchSize}) exceeds buffer length (${this.maxLen})`);
     }
     tf.util.shuffle(this.bufferIndices_);
 
