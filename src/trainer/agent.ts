@@ -1,29 +1,29 @@
-// @ts-nocheck
-import * as tf from '@tensorflow/tfjs';
+import * as tf from '@tensorflow/tfjs-node';
 
-import {createDeepQNetwork} from './dqn';
-import {getRandomAction, SnakeGame, NUM_ACTIONS, ALL_ACTIONS, getStateTensor} from './snake_game';
-import {ReplayMemory} from './replay_memory';
-import { assertPositiveInteger } from './utils';
+import { createDeepQNetwork } from '../core/classes/dqn';
+import {getRandomAction, NUM_ACTIONS, ALL_ACTIONS, getStateTensor, SnakeGame} from '../trainer copy/snake_game';
+import {ReplayMemory} from '../trainer copy/replay_memory';
+import { assertPositiveInteger } from '../trainer copy/utils';
 
 export class SnakeGameAgent {
-  /**
-   * Constructor of SnakeGameAgent.
-   *
-   * @param {SnakeGame} game A game object.
-   * @param {object} config The configuration object with the following keys:
-   *   - `replayBufferSize` {number} Size of the replay memory. Must be a
-   *     positive integer.
-   *   - `epsilonInit` {number} Initial value of epsilon (for the epsilon-
-   *     greedy algorithm). Must be >= 0 and <= 1.
-   *   - `epsilonFinal` {number} The final value of epsilon. Must be >= 0 and
-   *     <= 1.
-   *   - `epsilonDecayFrames` {number} The # of frames over which the value of
-   *     `epsilon` decreases from `episloInit` to `epsilonFinal`, via a linear
-   *     schedule.
-   */
-  constructor(game, config) {
-    assertPositiveInteger(config.epsilonDecayFrames);
+  public frameCount: number = 0;
+  public epsilon: number = 0;
+  private epsilonInit: number;
+  private epsilonFinal: number;
+  private epsilonDecayFrames: number;
+  private epsilonIncrement_: number;
+  public onlineNetwork: tf.Sequential;
+  public targetNetwork: tf.Sequential;
+  private optimizer: tf.Optimizer;
+  private replayBufferSize: number;
+  private cumulativeReward_: number = 0;
+  private fruitsEaten_: number = 0;
+
+  private game: SnakeGame;
+  private replayMemory: ReplayMemory;
+
+  constructor(game: SnakeGame, config: any) {
+    assertPositiveInteger(config.epsilonDecayFrames, 'epsilonDecayFrames');
 
     this.game = game;
 
@@ -33,10 +33,8 @@ export class SnakeGameAgent {
     this.epsilonIncrement_ = (this.epsilonFinal - this.epsilonInit) /
         this.epsilonDecayFrames;
 
-    this.onlineNetwork =
-        createDeepQNetwork(game.height,  game.width, NUM_ACTIONS);
-    this.targetNetwork =
-        createDeepQNetwork(game.height,  game.width, NUM_ACTIONS);
+    this.onlineNetwork = createDeepQNetwork(game.height, game.width, NUM_ACTIONS);
+    this.targetNetwork = createDeepQNetwork(game.height, game.width, NUM_ACTIONS);
     // Freeze taget network: it's weights are updated only through copying from
     // the online network.
     this.targetNetwork.trainable = false;
@@ -45,7 +43,6 @@ export class SnakeGameAgent {
 
     this.replayBufferSize = config.replayBufferSize;
     this.replayMemory = new ReplayMemory(config.replayBufferSize);
-    this.frameCount = 0;
     this.reset();
   }
 
@@ -79,6 +76,7 @@ export class SnakeGameAgent {
         const stateTensor =
             getStateTensor(state, this.game.height, this.game.width)
         action = ALL_ACTIONS[
+  // @ts-ignore
             this.onlineNetwork.predict(stateTensor).argMax(-1).dataSync()[0]];
       });
     }
@@ -111,6 +109,7 @@ export class SnakeGameAgent {
    * @param {tf.train.Optimizer} optimizer The optimizer object used to update
    *   the weights of the online network.
    */
+  // @ts-ignore
   trainOnReplayBatch(batchSize, gamma, optimizer) {
     // Get a batch of examples from the replay buffer.
     const batch = this.replayMemory.sample(batchSize);
@@ -120,12 +119,14 @@ export class SnakeGameAgent {
       const actionTensor = tf.tensor1d(
           batch.map(example => example[1]), 'int32');
       const qs = this.onlineNetwork.apply(stateTensor, {training: true})
+  // @ts-ignore
           .mul(tf.oneHot(actionTensor, NUM_ACTIONS)).sum(-1);
 
       const rewardTensor = tf.tensor1d(batch.map(example => example[2]));
       const nextStateTensor = getStateTensor(
           batch.map(example => example[4]), this.game.height, this.game.width);
       const nextMaxQTensor =
+  // @ts-ignore
           this.targetNetwork.predict(nextStateTensor).max(-1);
       const doneMask = tf.scalar(1).sub(
           tf.tensor1d(batch.map(example => example[3])).asType('float32'));
@@ -136,6 +137,7 @@ export class SnakeGameAgent {
 
     // Calculate the gradients of the loss function with repsect to the weights
     // of the online DQN.
+  // @ts-ignore
     const grads = tf.variableGrads(lossFunction);
     // Use the gradients to update the online DQN's weights.
     optimizer.applyGradients(grads.grads);

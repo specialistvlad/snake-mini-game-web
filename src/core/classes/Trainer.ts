@@ -2,7 +2,7 @@ import * as tf from '@tensorflow/tfjs-node';
 import shell from 'shelljs';
 
 import { SnakeGameAgent } from '../../trainer/agent';
-import { copyWeights } from '../../trainer/dqn';
+import { copyWeights } from './dqn';
 import { MovingAverager } from './MovingAverager';
 
 export class Trainer {
@@ -38,13 +38,12 @@ export class Trainer {
       agent.playStep();
     }
 
-    const optimizer = tf.train.adam(learningRate);
     let tPrev = new Date().getTime();
     // @ts-ignore
     let frameCountPrev = agent.frameCount;
     let averageReward100Best = -Infinity;
     while (true) {
-      agent.trainOnReplayBatch(batchSize, gamma, optimizer);
+      agent.trainOnReplayBatch(batchSize, gamma, this.optimizer);
       const {cumulativeReward, done, fruitsEaten} = agent.playStep();
       if (done) {
         const t = new Date().getTime();
