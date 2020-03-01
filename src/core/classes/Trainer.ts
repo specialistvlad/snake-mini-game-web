@@ -24,7 +24,7 @@ export class Trainer {
   }
 
   async loop() {
-    const { batchSize, gamma, learningRate, cumulativeRewardThreshold,
+    const { batchSize, gamma, cumulativeRewardThreshold,
       maxNumFrames, syncEveryFrames, savePath, logDir } = this.opts;
     const { agent } = this;
 
@@ -37,14 +37,15 @@ export class Trainer {
       agent.playStep();
     }
 
-    let tPrev = new Date().getTime();
+    let tPrev = this.time();
     let frameCountPrev = agent.frameCount;
     let averageReward100Best = -Infinity;
+
     while (true) {
       agent.trainOnReplayBatch(batchSize, gamma, this.optimizer);
       const {cumulativeReward, done, fruitsEaten} = agent.playStep();
       if (done) {
-        const t = new Date().getTime();
+        const t = this.time();
         const framesPerSecond = (agent.frameCount - frameCountPrev) / (t - tPrev) * 1e3;
         tPrev = t;
         frameCountPrev = agent.frameCount;
@@ -73,6 +74,7 @@ export class Trainer {
           // TODO(cais): Save online network.
           break;
         }
+
         if (averageReward100 > averageReward100Best) {
           averageReward100Best = averageReward100;
           if (savePath != null) {
@@ -84,10 +86,21 @@ export class Trainer {
           }
         }
       }
-      if (agent.frameCount % syncEveryFrames === 0) {
-        copyWeights(agent.targetNetwork, agent.onlineNetwork);
-        console.log('Sync\'ed weights from online network to target network');
-      }
+      this.sync();
     }
+  }
+
+  sync() {
+    const { syncEveryFrames } = this.opts;
+    const { agent } = this;
+
+    if (agent.frameCount % syncEveryFrames === 0) {
+      copyWeights(agent.targetNetwork, agent.onlineNetwork);
+      console.log('Sync\'ed weights from online network to target network');
+    }
+  }
+
+  time(): number {
+    return new Date().getTime();
   }
 }

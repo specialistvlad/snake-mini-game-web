@@ -1,6 +1,6 @@
-import { SnakeGameAgent } from '../core/classes/SnakeGameAgent';
-import { SnakeGame } from './snake_game';
-import { Trainer } from '../core/classes/Trainer';
+import { SnakeGameAgent } from './core/classes/SnakeGameAgent';
+import { SnakeGame } from './core/classes/snake_game';
+import { Trainer } from './core/classes/Trainer';
 
 (async function () {
   const opts = {

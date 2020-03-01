@@ -1,9 +1,19 @@
 import * as tf from '@tensorflow/tfjs-node';
 
 import { createDeepQNetwork } from './dqn';
-import {getRandomAction, NUM_ACTIONS, ALL_ACTIONS, getStateTensor, SnakeGame} from '../../trainer copy/snake_game';
-import {ReplayMemory} from '../../trainer copy/replay_memory';
-import { assertPositiveInteger } from '../../trainer copy/utils';
+import { getRandomAction, NUM_ACTIONS, ALL_ACTIONS, getStateTensor, SnakeGame } from './snake_game';
+import { ReplayMemory } from './ReplayMemory';
+
+function assertPositiveInteger(x: number, name: string) {
+  if (!Number.isInteger(x)) {
+    throw new Error(
+        `Expected ${name} to be an integer, but received ${x}`);
+  }
+  if (!(x > 0)) {
+    throw new Error(
+        `Expected ${name} to be a positive number, but received ${x}`);
+  }
+}
 
 export class SnakeGameAgent {
   public frameCount: number = 0;

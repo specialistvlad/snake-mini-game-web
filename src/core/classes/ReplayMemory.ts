@@ -1,7 +1,7 @@
 import * as tf from '@tensorflow/tfjs';
 
 /** Replay buffer for DQN training. */
-export class ReplayMemory<T> {
+export class ReplayMemory {
   /**
    * Constructor of ReplayMemory.
    *
