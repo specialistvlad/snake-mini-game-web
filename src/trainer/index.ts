@@ -1,4 +1,4 @@
-import { SnakeGameAgent } from './agent';
+import { SnakeGameAgent } from '../core/classes/SnakeGameAgent';
 import { SnakeGame } from './snake_game';
 import { Trainer } from '../core/classes/Trainer';
 

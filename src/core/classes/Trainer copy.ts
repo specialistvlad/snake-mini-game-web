@@ -2,7 +2,7 @@
 import * as tf from '@tensorflow/tfjs-node';
 import shell from 'shelljs';
 
-import {SnakeGameAgent} from '../../trainer/agent';
+import {SnakeGameAgent} from './SnakeGameAgent';
 import {copyWeights} from '../../trainer/dqn';
 import { MovingAverager } from '../../trainer/MovingAverager';
 

@@ -1,9 +1,9 @@
 import * as tf from '@tensorflow/tfjs-node';
 
-import { createDeepQNetwork } from '../core/classes/dqn';
-import {getRandomAction, NUM_ACTIONS, ALL_ACTIONS, getStateTensor, SnakeGame} from '../trainer copy/snake_game';
-import {ReplayMemory} from '../trainer copy/replay_memory';
-import { assertPositiveInteger } from '../trainer copy/utils';
+import { createDeepQNetwork } from './dqn';
+import {getRandomAction, NUM_ACTIONS, ALL_ACTIONS, getStateTensor, SnakeGame} from '../../trainer copy/snake_game';
+import {ReplayMemory} from '../../trainer copy/replay_memory';
+import { assertPositiveInteger } from '../../trainer copy/utils';
 
 export class SnakeGameAgent {
   public frameCount: number = 0;
@@ -15,7 +15,7 @@ export class SnakeGameAgent {
   public onlineNetwork: tf.Sequential;
   public targetNetwork: tf.Sequential;
   private optimizer: tf.Optimizer;
-  private replayBufferSize: number;
+  public replayBufferSize: number;
   private cumulativeReward_: number = 0;
   private fruitsEaten_: number = 0;
 

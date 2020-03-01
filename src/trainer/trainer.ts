@@ -25,7 +25,7 @@ import * as tf from '@tensorflow/tfjs-node';
 // The value of tf (TensorFlow.js-Node module) will be set dynamically
 // depending on the value of the --gpu flag below.
 
-import {SnakeGameAgent} from './agent';
+import {SnakeGameAgent} from '../core/classes/SnakeGameAgent';
 import {copyWeights} from './dqn';
 import {SnakeGame} from './snake_game';
 

@@ -1,7 +1,7 @@
 import * as tf from '@tensorflow/tfjs-node';
 import shell from 'shelljs';
 
-import { SnakeGameAgent } from '../../trainer/agent';
+import { SnakeGameAgent } from './SnakeGameAgent';
 import { copyWeights } from './dqn';
 import { MovingAverager } from './MovingAverager';
 
@@ -33,13 +33,11 @@ export class Trainer {
       summaryWriter = tf.node.summaryFileWriter(logDir);
     }
 
-    // @ts-ignore
     for (let i = 0; i < agent.replayBufferSize; ++i) {
       agent.playStep();
     }
 
     let tPrev = new Date().getTime();
-    // @ts-ignore
     let frameCountPrev = agent.frameCount;
     let averageReward100Best = -Infinity;
     while (true) {
@@ -47,10 +45,8 @@ export class Trainer {
       const {cumulativeReward, done, fruitsEaten} = agent.playStep();
       if (done) {
         const t = new Date().getTime();
-    // @ts-ignore
         const framesPerSecond = (agent.frameCount - frameCountPrev) / (t - tPrev) * 1e3;
         tPrev = t;
-    // @ts-ignore
         frameCountPrev = agent.frameCount;
 
         this.rewardAverager100.append(cumulativeReward);
@@ -59,27 +55,20 @@ export class Trainer {
         const averageEaten100 = this.eatenAverager100.average();
 
         console.log(
-    // @ts-ignore
             `Frame #${agent.frameCount}: ` +
             `cumulativeReward100=${averageReward100.toFixed(1)}; ` +
             `eaten100=${averageEaten100.toFixed(2)} ` +
-    // @ts-ignore
             `(epsilon=${agent.epsilon.toFixed(3)}) ` +
             `(${framesPerSecond.toFixed(1)} frames/s)`);
         if (summaryWriter != null) {
           summaryWriter.scalar(
-    // @ts-ignore
               'cumulativeReward100', averageReward100, agent.frameCount);
-    // @ts-ignore
           summaryWriter.scalar('eaten100', averageEaten100, agent.frameCount);
-    // @ts-ignore
           summaryWriter.scalar('epsilon', agent.epsilon, agent.frameCount);
           summaryWriter.scalar(
-    // @ts-ignore
               'framesPerSecond', framesPerSecond, agent.frameCount);
         }
         if (averageReward100 >= cumulativeRewardThreshold ||
-    // @ts-ignore
             agent.frameCount >= maxNumFrames) {
           // TODO(cais): Save online network.
           break;
@@ -95,9 +84,7 @@ export class Trainer {
           }
         }
       }
-    // @ts-ignore
       if (agent.frameCount % syncEveryFrames === 0) {
-    // @ts-ignore
         copyWeights(agent.targetNetwork, agent.onlineNetwork);
         console.log('Sync\'ed weights from online network to target network');
       }
