@@ -30,12 +30,10 @@ export class Trainer {
   }
 
   async loop() {
-    const { batchSize, gamma, cumulativeRewardThreshold, maxNumFrames, savePath, logDir } = this.opts;
+    const { batchSize, gamma } = this.opts;
     const { agent } = this;
 
-    for (let i = 0; i < agent.replayBufferSize; ++i) {
-      agent.playStep();
-    }
+    this.warm();
 
     this.tPrev = this.time();
     this.frameCountPrev = agent.frameCount;
@@ -48,23 +46,7 @@ export class Trainer {
         this.measureFPS(cumulativeReward, fruitsEaten);
         this.logToConsole();
         this.logTensorFlow();
-
-        if (this.averageReward100 >= cumulativeRewardThreshold ||
-            agent.frameCount >= maxNumFrames) {
-          // TODO(cais): Save online network.
-          break;
-        }
-
-        if (this.averageReward100 > this.averageReward100Best) {
-          this.averageReward100Best = this.averageReward100;
-          if (savePath != null) {
-            // if (!fs.existsSync(savePath)) {
-            //   mkdir('-p', savePath);
-            // }
-            // await agent.onlineNetwork.save(`file://${savePath}`);
-            console.log(`Saved DQN to ${savePath}`);
-          }
-        }
+        await this.saveModel();
       }
       this.sync();
     }
@@ -76,12 +58,18 @@ export class Trainer {
 
     if (agent.frameCount % syncEveryFrames === 0) {
       copyWeights(agent.targetNetwork, agent.onlineNetwork);
-      console.log('Sync\'ed weights from online network to target network');
+      // console.log('Sync\'ed weights from online network to target network');
     }
   }
 
   time(): number {
     return new Date().getTime();
+  }
+
+  warm() {
+    for (let i = 0; i < this.agent.replayBufferSize; ++i) {
+      this.agent.playStep();
+    }
   }
 
   measureFPS(cumulativeReward: number, fruitsEaten: number) {
@@ -115,5 +103,18 @@ export class Trainer {
     this.summaryFileWriter.scalar('eaten100', averageEaten100, agent.frameCount);
     this.summaryFileWriter.scalar('epsilon', agent.epsilon, agent.frameCount);
     this.summaryFileWriter.scalar('framesPerSecond', framesPerSecond, agent.frameCount);
+  }
+
+  async saveModel() {
+    const { agent } = this;
+    const { saveModelTo } = this.opts;
+    
+    if (saveModelTo != null && this.averageReward100 > this.averageReward100Best) {
+      this.averageReward100Best = this.averageReward100;
+      const fullPath = `${this.path}/frame=${agent.frameCount}-reward=${this.eatenAverager100.average().toFixed(2)}`;
+      shell.mkdir('-p', fullPath);
+      const result = await agent.onlineNetwork.save(`file://${fullPath}/`);
+      console.log(`Model saved to ${`file://${fullPath}`}`);
+    }
   }
 }
