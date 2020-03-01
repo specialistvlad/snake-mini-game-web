@@ -6,7 +6,7 @@ export class LosingLengthSnake extends Snake {
     protected stepsForEachFood: number = 10;
     
     get stepsLeft(): number {
-        return ((this.snake.length - 1) * this.stepsForEachFood) + this.stepsLeftToDecreaseLength;
+        return ((this._snake.length - 1) * this.stepsForEachFood) + this.stepsLeftToDecreaseLength;
     }
 
     protected step(gameCells: TCells): void {
@@ -26,6 +26,10 @@ export class LosingLengthSnake extends Snake {
             return;
         }
 
+        if (this.disgustingPoison(gameCells)) {
+            return;
+        }
+
         if (this.usualStepForward(gameCells)) {
             return;
         }
@@ -34,13 +38,16 @@ export class LosingLengthSnake extends Snake {
     protected looseLength(gameCells: TCells): boolean {
         this.stepsLeftToDecreaseLength--;
         if (this.stepsLeftToDecreaseLength === 0) {
-            if (this.snake.length >= 2) {
+            if (this._snake.length >= 2) {
                 this.stepsLeftToDecreaseLength = this.stepsForEachFood;
-                this.snake = [this.getNextCoord(), ...this.snake.slice(0, this.snake.length - 2)];
+                this._snake = [this.getNextCoord(), ...this._snake.slice(0, this._snake.length - 2)];
+                this._reward = this.rewards.step;
                 return true;
             }
-            return this._died = true;
+            this.die();
+            return true;
         }
+
         return false;
     }
 
@@ -53,12 +60,13 @@ export class LosingLengthSnake extends Snake {
      * @returns Return true if we need to stop step managing
      */
     protected tastyFood(gameCells: TCells): boolean {
-        const nextCoord = this.getNextCoord();
-        const nextCell = this.nextCell(gameCells);
-
-        if (nextCell?.type === CellType.food) {
+        if (this.nextCell(gameCells)?.type === CellType.food) {
             this.stepsLeftToDecreaseLength = this.stepsForEachFood;
-            this.snake = [nextCoord, ...this.snake];
+            this._snake = [this.getNextCoord(), ...this._snake];
+
+            this._foodEaten = 1;
+            this._reward = this.rewards.food;
+
             return true;
         }
 

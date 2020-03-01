@@ -98,7 +98,7 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
       return;
     }
 
-    agent.init();
+    agent.loadModel();
   }, [autoPlay]);
 
   // reactions on button press
@@ -114,14 +114,10 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
   // main function aka loop
   useEffect(() => {
     const tmp = setInterval(() => {
-      // if (count > 1) {
-        // return;
-      // }
-      // count++;
       if (state === GameState.running) {
         if (autoPlay) {
-          if (agent.agentReady) {
-            game.relativeDirection = agent.predict(game.state);
+          if (agent.ready) {
+            game.direction = agent.predict(game.state);
             setCells(game.tick());
           }
         } else {

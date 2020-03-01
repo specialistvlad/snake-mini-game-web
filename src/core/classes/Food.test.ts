@@ -3,13 +3,44 @@ import { CellType } from '../types';
 
 describe('Food', () => {
     test('default params, should return dinner', () => {
-        expect.assertions(1);
+        expect.assertions(2);
         const food = new Food(1);
-        expect(food.reducer()).toMatchObject({
+        const state = food.reducer();
+        expect(state).toMatchObject({
             cells: [{
                 type: CellType.food,
                 coordinate: [0, 0]
             }],
+            reward: 0,
+            fruitEaten: 0,
+            done: false,
+        });
+        expect(food.reducer(state, false)).toMatchObject({
+            cells: [{
+                type: CellType.food,
+                coordinate: [0, 0]
+            }],
+            reward: 0,
+            fruitEaten: 0,
+            done: false,
+        });
+    });
+
+    test('two params, should return dinner', () => {
+        expect.assertions(2);
+        const food = new Food(1, 100000000000);
+        const state = food.reducer();
+        expect(state).toMatchObject({
+            cells: [],
+            reward: 0,
+            fruitEaten: 0,
+            done: false,
+        });
+        expect(food.reducer(state, false)).toMatchObject({
+            cells: [],
+            reward: 0,
+            fruitEaten: 0,
+            done: false,
         });
     });
 
@@ -28,6 +59,9 @@ describe('Food', () => {
                 type: CellType.food,
                 coordinate: [-1, -1]
             }],
+            reward: 0,
+            fruitEaten: 0,
+            done: false,
         });
     });
 
@@ -44,7 +78,12 @@ describe('Food', () => {
         expect.assertions(1);
         const food = new Test(50, b);
         a = b + food.dinnerEachSeconds;
-        expect(food.reducer()).toEqual({ cells: [] });
+        expect(food.reducer()).toEqual({
+            cells: [],
+            reward: 0,
+            fruitEaten: 0,
+            done: false,
+        });
     });
 
     test('time condition works correct 2', () => {
@@ -65,6 +104,9 @@ describe('Food', () => {
                 type: CellType.food,
                 coordinate: [0, 0]
             }],
+            reward: 0,
+            fruitEaten: 0,
+            done: false,
         });
     });
 });

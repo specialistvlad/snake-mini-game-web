@@ -1,7 +1,14 @@
 import { LosingLengthSnake } from './LosingLengthSnake';
 import { Food } from './Food';
 import { GameObject } from './GameObject';
-import { TCellTypes, TCell, TGameState, Direction, RelativeDirection, CellType, TCoordinate } from '../types';
+import {
+    TCellTypes,
+    TCell,
+    TGameState,
+    TDirection,
+    CellType,
+    TCoordinate,
+} from '../types';
 
 interface IGame {
     reset(): void;
@@ -13,16 +20,29 @@ interface IGame {
     gameOver: boolean;
 };
 
-export class Game implements IGame {
-    private defaultState = { cells: [] };
-    public size: number;
-    public fullSize: number;
-    private snakes: Array<LosingLengthSnake> = [];
-    private food: Array<Food> = [];
-    private _state: TGameState = this.defaultState;
-    private _cellsForView: TCellTypes = [];
+export type TGameConstructorParams = {
+    snakes?: Array<LosingLengthSnake>;
+    food?: Array<Food>;
+};
 
-    constructor(size: number = 10) {
+export const defaultState = {
+    cells: [],
+    reward: 0,
+    fruitEaten: 0,
+    done: false,
+};
+
+export class Game implements IGame {
+    protected size: number;
+    protected fullSize: number;
+    protected snakes: Array<LosingLengthSnake> = [];
+    protected food: Array<Food> = [];
+    protected _state: TGameState = defaultState;
+    protected _cellsForView: TCellTypes = [];
+    protected opts: TGameConstructorParams;
+
+    constructor(size: number = 10, opts?: TGameConstructorParams) {
+        this.opts = opts || {};
         this.size = size;
         this.fullSize = size * size;
         this.reset();
@@ -31,26 +51,38 @@ export class Game implements IGame {
 
     public reset(): void {
         const center = [Math.trunc(this.size / 2), Math.trunc(this.size / 2)];
-        this.snakes = [new LosingLengthSnake({
+
+        this.snakes = this.opts.snakes ? this.opts.snakes : [new LosingLengthSnake({
             name: 'My smart snake',
             snake: [
-                [center[0], center[1]+1],
-                [center[0], center[1]],
-                [center[0], center[1]-1],
+                [center[0], 2],
+                [center[0], 1],
+                [center[0], 0],
             ],
             tableSize: this.size,
         })];
 
-        this.food = [
+        this.food = this.opts.food ? this.opts.food : [
             new Food(this.size),
         ];
     }
 
     public tick(): TCellTypes {
         const gameObjects = Array<GameObject>(...this.food, ...this.snakes);
-        this._state = this.reduce(gameObjects, this.reduce(gameObjects, this.defaultState), false);
+        this._state = this.reduce(gameObjects, this.reduce(gameObjects, defaultState), false);
         this._cellsForView = this.makeCellsForView();
         return this._cellsForView;
+    }
+
+    public step(direction: TDirection): TGameState {
+        this.direction = direction;
+        this.tick();
+        return {
+            cells: this._state.cells,
+            reward: this.snakes[0].reward || 0,
+            fruitEaten: this.snakes[0].foodEaten || 0,
+            done: this.gameOver,
+        };
     }
 
     public reduce(array: Array<GameObject>, state: TGameState, forward: boolean = true): TGameState {
@@ -110,12 +142,8 @@ export class Game implements IGame {
         return this._cellsForView;
     }
 
-    public set relativeDirection(direction: RelativeDirection) {
-        this.snakes[0].relativeDirection = direction;
-    }
-
-    public set direction(angle: Direction) {
-        this.snakes[0].direction = angle;
+    public set direction(direction: TDirection) {
+        this.snakes[0].direction = direction;
     }
 
     public get gameOver(): boolean {
@@ -132,5 +160,14 @@ export class Game implements IGame {
 
     public get state(): TGameState {
         return this._state;
+    }
+
+    public get getState(): TGameState {
+        return {
+            cells: this._state.cells,
+            reward: this.snakes[0].reward || 0,
+            fruitEaten: this.snakes[0].foodEaten || 0,
+            done: this.gameOver,
+        };
     }
 };
