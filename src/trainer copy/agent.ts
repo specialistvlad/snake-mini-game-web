@@ -1,7 +1,7 @@
 // @ts-nocheck
 import * as tf from '@tensorflow/tfjs-node';
 
-import {createDeepQNetwork} from './dqn';
+import {createDeepQNetwork} from '../core/classes/dqn';
 import {getRandomAction, NUM_ACTIONS, ALL_ACTIONS, getStateTensor, SnakeGame} from './snake_game';
 import {ReplayMemory} from './replay_memory';
 import { assertPositiveInteger } from './utils';
