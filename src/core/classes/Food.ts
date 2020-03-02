@@ -11,7 +11,7 @@ export class Food extends GameObject {
     super();
     this.tableSize = tableSize;
     this.lastDinnerTime = lastDinnerTime;
-    this.point = this.randomCoordinate(this.tableSize);
+    this.point = [Infinity, Infinity];
   }
 
   protected reduceForward(currentState: TGameState): TGameState {

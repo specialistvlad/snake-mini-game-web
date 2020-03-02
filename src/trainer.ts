@@ -1,6 +1,6 @@
 import { SnakeGameAgent } from './core/classes/SnakeGameAgent';
 import { SnakeGame } from './core/classes/SnakeGameGoogle';
-// import { SnakeGame } from './core/classes/SnakeGameGoogle';
+import { Game } from './core/classes/Game';
 import { Trainer } from './core/classes/Trainer';
 
 (async function () {
@@ -31,6 +31,8 @@ import { Trainer } from './core/classes/Trainer';
     numFruits: opts.numFruits,
     initLen: opts.initLen
   });
+
+  // const game = new Game(opts.height);
 
   const agent = new SnakeGameAgent(game, {
     replayBufferSize: opts.replayBufferSize,
