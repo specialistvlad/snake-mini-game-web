@@ -1,7 +1,7 @@
 import * as tf from '@tensorflow/tfjs-node';
 
 import { createDeepQNetwork } from './dqn';
-import { getRandomAction, NUM_ACTIONS, ALL_ACTIONS, getStateTensor, SnakeGame } from './snake_game';
+import { getRandomAction, NUM_ACTIONS, ALL_ACTIONS, getStateTensor, SnakeGame } from './SnakeGameGoogle';
 import { ReplayMemory } from './ReplayMemory';
 
 function assertPositiveInteger(x: number, name: string) {
