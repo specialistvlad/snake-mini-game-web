@@ -6,7 +6,7 @@ export class LosingLengthSnake extends Snake {
     protected stepsForEachFood: number = 10;
     
     get stepsLeft(): number {
-        return ((this.snake.length - 1) * this.stepsForEachFood) + this.stepsLeftToDecreaseLength;
+        return ((this._snake.length - 1) * this.stepsForEachFood) + this.stepsLeftToDecreaseLength;
     }
 
     protected step(gameCells: TCells): void {
@@ -34,9 +34,9 @@ export class LosingLengthSnake extends Snake {
     protected looseLength(gameCells: TCells): boolean {
         this.stepsLeftToDecreaseLength--;
         if (this.stepsLeftToDecreaseLength === 0) {
-            if (this.snake.length >= 2) {
+            if (this._snake.length >= 2) {
                 this.stepsLeftToDecreaseLength = this.stepsForEachFood;
-                this.snake = [this.getNextCoord(), ...this.snake.slice(0, this.snake.length - 2)];
+                this._snake = [this.getNextCoord(), ...this._snake.slice(0, this._snake.length - 2)];
                 return true;
             }
             return this._died = true;
@@ -58,7 +58,7 @@ export class LosingLengthSnake extends Snake {
 
         if (nextCell?.type === CellType.food) {
             this.stepsLeftToDecreaseLength = this.stepsForEachFood;
-            this.snake = [nextCoord, ...this.snake];
+            this._snake = [nextCoord, ...this._snake];
             return true;
         }
 

@@ -43,3 +43,8 @@ export type TCell = {
 
 export type TCells = Array<TCell>;
 export type TCellTypes = Array<CellType>;
+
+export type TGoogleGameState = {
+    s: Array<TCoordinate>,
+    f: Array<TCoordinate>,
+};

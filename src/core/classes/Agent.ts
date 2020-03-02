@@ -49,7 +49,7 @@ export class Agent implements IAgent {
         this.predict({ cells: [] });
     }
 
-    gameStateToTensor(state: TGameState): tf.Tensor {
+    public gameStateToTensor(state: TGameState): tf.Tensor {
         const n = 0;
         const statesCount = 1;
         const buffer = tf.buffer([statesCount, this.sideSize, this.sideSize, 2]);

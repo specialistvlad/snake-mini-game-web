@@ -20,7 +20,7 @@ export type TSnakeConstructorParams = {
 export class Snake extends GameObject {
     private _name: string;
     protected _died: boolean = false;
-    protected snake: TCoordinates;
+    protected _snake: TCoordinates;
     private currentDegree: Direction;
     private nextDegree: Direction;
     protected steps: number = -1;
@@ -29,7 +29,7 @@ export class Snake extends GameObject {
     constructor(params: TSnakeConstructorParams) {
         super();
         this._name = params.name || 'Unknown snake';
-        this.snake = params.snake;
+        this._snake = params.snake;
         this.currentDegree = params.direction || 0;
         this.nextDegree = this.currentDegree;
         this.tableSize = params.tableSize || 100;
@@ -48,7 +48,11 @@ export class Snake extends GameObject {
     }
 
     public get length(): number {
-        return this.snake.length;
+        return this._snake.length;
+    }
+
+    public get points(): TCoordinates {
+        return this._snake.slice();
     }
 
     get died(): boolean {
@@ -70,7 +74,7 @@ export class Snake extends GameObject {
         }
 
         return {
-            cells: this.snake.map((item, index) => ({
+            cells: this._snake.map((item, index) => ({
                 coordinate: item,
                 type: index === 0 ? CellType.snakeHead : CellType.snake,
             })),
@@ -112,7 +116,7 @@ export class Snake extends GameObject {
     protected collision(gameCells: TCells): boolean {
         const nextCoord = this.getNextCoord();
 
-        if (this.snake.find(([y, x]) => nextCoord[0] === y && nextCoord[1] === x)) {
+        if (this._snake.find(([y, x]) => nextCoord[0] === y && nextCoord[1] === x)) {
             return this._died = true;
         }
         return false;
@@ -122,7 +126,7 @@ export class Snake extends GameObject {
      * Handle here usual step forward minus one tail block
      */
     protected usualStepForward(gameCells: TCells): boolean {
-        this.snake = [this.getNextCoord(), ...this.snake.slice(0, this.snake.length - 1)];
+        this._snake = [this.getNextCoord(), ...this._snake.slice(0, this._snake.length - 1)];
         return true;
     }
 
@@ -134,7 +138,7 @@ export class Snake extends GameObject {
      */
     protected tastyFood(gameCells: TCells): boolean {
         if (this.nextCell(gameCells)?.type === CellType.food) {
-            this.snake = [this.getNextCoord(), ...this.snake];
+            this._snake = [this.getNextCoord(), ...this._snake];
             return true;
         }
 
@@ -154,7 +158,7 @@ export class Snake extends GameObject {
     }
 
     protected getNextCoord(): TCoordinate {
-        const [y, x] = this.snake.slice(0)[0];
+        const [y, x] = this._snake.slice(0)[0];
         const isNextDirectionCorrect = Math.abs(this.currentDegree - this.nextDegree) !== 180;
         if (isNextDirectionCorrect) {
             this.currentDegree = this.nextDegree;

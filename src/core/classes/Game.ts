@@ -1,7 +1,16 @@
 import { LosingLengthSnake } from './LosingLengthSnake';
 import { Food } from './Food';
 import { GameObject } from './GameObject';
-import { TCellTypes, TCell, TGameState, Direction, RelativeDirection, CellType, TCoordinate } from '../types';
+import {
+    TCellTypes,
+    TCell,
+    TGameState,
+    Direction,
+    RelativeDirection,
+    CellType,
+    TCoordinate,
+    TGoogleGameState,
+} from '../types';
 
 interface IGame {
     reset(): void;
@@ -132,5 +141,12 @@ export class Game implements IGame {
 
     public get state(): TGameState {
         return this._state;
+    }
+
+    public getState(): TGoogleGameState {
+        return {
+            s: this.snakes[0].points,
+            f: this.food.map((food) => food.points).flat(),
+        }
     }
 };

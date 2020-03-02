@@ -1,23 +1,26 @@
-import { TGameState, CellType } from '../types';
+import { TGameState, CellType, TCoordinate, TCoordinates } from '../types';
 import { GameObject } from './GameObject';
 
 export class Food extends GameObject {
   private lastDinnerTime: number;
   public tableSize: number;
   private dinnerRefreshSeconds: number = 7;
+  private point: TCoordinate;
 
   constructor(tableSize: number, lastDinnerTime: number = 0) {
     super();
     this.tableSize = tableSize;
     this.lastDinnerTime = lastDinnerTime;
+    this.point = this.randomCoordinate(this.tableSize);
   }
 
   protected reduceForward(currentState: TGameState): TGameState {
     if (this.secondsFromLastDinner() > this.dinnerRefreshSeconds) {
       this.dinnerTime();
+      this.point = this.randomCoordinate(this.tableSize);
       return this.localState = {
         cells: [{
-          coordinate: this.randomCoordinate(this.tableSize),
+          coordinate: this.point,
           type: CellType.food,
         }],
       };
@@ -47,5 +50,9 @@ export class Food extends GameObject {
 
   protected moreFoooood() {
     this.lastDinnerTime = 0;
+  }
+
+  get points(): TCoordinates {
+    return [this.point];
   }
 }
