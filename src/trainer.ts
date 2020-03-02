@@ -22,7 +22,7 @@ import { Trainer } from './core/classes/Trainer';
     "logDir": './logs',
   };
 
-  console.log(`opts: ${JSON.stringify(opts, null, 2)}`);
+  console.log(`Parameters: ${JSON.stringify(opts, null, 2)}`);
 
   const game = new SnakeGame({
     height: opts.height,
@@ -39,10 +39,5 @@ import { Trainer } from './core/classes/Trainer';
   });
 
   const trainer = new Trainer(agent, opts);
-  try {
-    await trainer.loop();
-  } catch(e) {
-    console.error(e);
-    process.exit(1);
-  }
-})();
+  await trainer.loop();
+})().catch(console.error);

@@ -40,8 +40,7 @@ export class SnakeGameAgent {
     this.epsilonInit = config.epsilonInit;
     this.epsilonFinal = config.epsilonFinal;
     this.epsilonDecayFrames = config.epsilonDecayFrames;
-    this.epsilonIncrement_ = (this.epsilonFinal - this.epsilonInit) /
-        this.epsilonDecayFrames;
+    this.epsilonIncrement_ = (this.epsilonFinal - this.epsilonInit) / this.epsilonDecayFrames;
 
     this.onlineNetwork = createDeepQNetwork(game.height, game.width, NUM_ACTIONS);
     this.targetNetwork = createDeepQNetwork(game.height, game.width, NUM_ACTIONS);
@@ -69,25 +68,22 @@ export class SnakeGameAgent {
    *   the total reward from the game as a plain number. Else, `null`.
    */
   playStep() {
-    this.epsilon = this.frameCount >= this.epsilonDecayFrames ?
-        this.epsilonFinal :
-        this.epsilonInit + this.epsilonIncrement_  * this.frameCount;
+    this.epsilon = this.frameCount >= this.epsilonDecayFrames
+      ? this.epsilonFinal
+      : this.epsilonInit + this.epsilonIncrement_  * this.frameCount;
     this.frameCount++;
 
     // The epsilon-greedy algorithm.
     let action;
     const state = this.game.getState();
     if (Math.random() < this.epsilon) {
-      // Pick an action at random.
-      action = getRandomAction();
+      action = getRandomAction();// Pick an action at random.
     } else {
       // Greedily pick an action based on online DQN output.
       tf.tidy(() => {
-        const stateTensor =
-            getStateTensor(state, this.game.height, this.game.width)
-        action = ALL_ACTIONS[
-  // @ts-ignore
-            this.onlineNetwork.predict(stateTensor).argMax(-1).dataSync()[0]];
+        const stateTensor = getStateTensor(state, this.game.height, this.game.width)
+        // @ts-ignore
+        action = ALL_ACTIONS[this.onlineNetwork.predict(stateTensor).argMax(-1).dataSync()[0]];
       });
     }
 
@@ -119,35 +115,26 @@ export class SnakeGameAgent {
    * @param {tf.train.Optimizer} optimizer The optimizer object used to update
    *   the weights of the online network.
    */
-  // @ts-ignore
-  trainOnReplayBatch(batchSize, gamma, optimizer) {
+  trainOnReplayBatch(batchSize: number, gamma: number, optimizer: tf.Optimizer) {
     // Get a batch of examples from the replay buffer.
     const batch = this.replayMemory.sample(batchSize);
     const lossFunction = () => tf.tidy(() => {
-      const stateTensor = getStateTensor(
-          batch.map(example => example[0]), this.game.height, this.game.width);
-      const actionTensor = tf.tensor1d(
-          batch.map(example => example[1]), 'int32');
-      const qs = this.onlineNetwork.apply(stateTensor, {training: true})
-  // @ts-ignore
-          .mul(tf.oneHot(actionTensor, NUM_ACTIONS)).sum(-1);
-
+      const stateTensor = getStateTensor(batch.map(example => example[0]), this.game.height, this.game.width);
+      const actionTensor = tf.tensor1d(batch.map(example => example[1]), 'int32');
+      // @ts-ignore
+      const qs = this.onlineNetwork.apply(stateTensor, {training: true}).mul(tf.oneHot(actionTensor, NUM_ACTIONS)).sum(-1);
       const rewardTensor = tf.tensor1d(batch.map(example => example[2]));
-      const nextStateTensor = getStateTensor(
-          batch.map(example => example[4]), this.game.height, this.game.width);
-      const nextMaxQTensor =
-  // @ts-ignore
-          this.targetNetwork.predict(nextStateTensor).max(-1);
-      const doneMask = tf.scalar(1).sub(
-          tf.tensor1d(batch.map(example => example[3])).asType('float32'));
-      const targetQs =
-          rewardTensor.add(nextMaxQTensor.mul(doneMask).mul(gamma));
+      const nextStateTensor = getStateTensor(batch.map(example => example[4]), this.game.height, this.game.width);
+      // @ts-ignore
+      const nextMaxQTensor = this.targetNetwork.predict(nextStateTensor).max(-1);
+      const doneMask = tf.scalar(1).sub(tf.tensor1d(batch.map(example => example[3])).asType('float32'));
+      const targetQs = rewardTensor.add(nextMaxQTensor.mul(doneMask).mul(gamma));
       return tf.losses.meanSquaredError(targetQs, qs);
     });
 
     // Calculate the gradients of the loss function with repsect to the weights
     // of the online DQN.
-  // @ts-ignore
+    // @ts-ignore
     const grads = tf.variableGrads(lossFunction);
     // Use the gradients to update the online DQN's weights.
     optimizer.applyGradients(grads.grads);

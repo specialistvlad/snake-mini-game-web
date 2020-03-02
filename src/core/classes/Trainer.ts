@@ -12,7 +12,7 @@ export class Trainer {
   private path: string = '';
   private tPrev: number = 0;
   private frameCountPrev: number = 0;
-  private averageReward100Best: number = -Infinity;
+  private averageReward100Best: number = 0;
   private framesPerSecond: number = 0;
   private averageReward100: number = 0;
   private averageEaten100: number = 0;
@@ -27,20 +27,15 @@ export class Trainer {
     this.optimizer = tf.train.adam(opts.earningRate);
     this.path = `${opts.saveModelTo}/${new Date().toISOString().replace(/\:/gi, '-')}`;
     this.summaryFileWriter = tf.node.summaryFileWriter(opts.logDir);
+    this.tPrev = this.time();
+    this.frameCountPrev = this.agent.frameCount;
   }
 
   async loop() {
-    const { batchSize, gamma } = this.opts;
-    const { agent } = this;
-
     this.warm();
-
-    this.tPrev = this.time();
-    this.frameCountPrev = agent.frameCount;
-
     while (true) {
-      agent.trainOnReplayBatch(batchSize, gamma, this.optimizer);
-      const {cumulativeReward, done, fruitsEaten} = agent.playStep();
+      this.agent.trainOnReplayBatch(this.opts.batchSize, this.opts.gamma, this.optimizer);
+      const {cumulativeReward, done, fruitsEaten} = this.agent.playStep();
 
       if (done) {
         this.measureFPS(cumulativeReward, fruitsEaten);
@@ -70,6 +65,8 @@ export class Trainer {
     for (let i = 0; i < this.agent.replayBufferSize; ++i) {
       this.agent.playStep();
     }
+    this.tPrev = this.time();
+    this.frameCountPrev = this.agent.frameCount;
   }
 
   measureFPS(cumulativeReward: number, fruitsEaten: number) {
@@ -111,9 +108,9 @@ export class Trainer {
     
     if (saveModelTo != null && this.averageReward100 > this.averageReward100Best) {
       this.averageReward100Best = this.averageReward100;
-      const fullPath = `${this.path}/frame=${agent.frameCount}-reward=${this.eatenAverager100.average().toFixed(2)}`;
+      const fullPath = `${this.path}/reward=${this.eatenAverager100.average().toFixed(2)}-frame=${agent.frameCount}`;
       shell.mkdir('-p', fullPath);
-      const result = await agent.onlineNetwork.save(`file://${fullPath}/`);
+      await agent.onlineNetwork.save(`file://${fullPath}/`);
       console.log(`Model saved to ${`file://${fullPath}`}`);
     }
   }
