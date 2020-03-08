@@ -120,6 +120,14 @@ export class Game implements IGame {
         return this._cellsForView;
     }
 
+    public get height(): number {
+        return this.size;
+    }
+
+    public get width(): number {
+        return this.size;
+    }
+
     public set relativeDirection(direction: RelativeDirection) {
         this.snakes[0].relativeDirection = direction;
     }

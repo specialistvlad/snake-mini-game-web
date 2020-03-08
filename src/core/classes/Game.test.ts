@@ -14,4 +14,26 @@ describe('Game', () => {
             s: [[2, 2], [2, 1], [2, 0]],
         });
     });
+
+    test('reset', () => {
+        expect.assertions(1);
+        expect(1).toBe(1);
+    });
+
+    test('step', () => {
+        expect.assertions(1);
+        expect(1).toBe(1);
+    });
+
+    test('height', () => {
+        expect.assertions(1);
+        const game = new Game(17);
+        expect(game.height).toBe(17);
+    });
+
+    test('width', () => {
+        expect.assertions(1);
+        const game = new Game(13);
+        expect(game.width).toBe(13);
+    });
 });
