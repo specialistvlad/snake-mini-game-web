@@ -3,13 +3,32 @@ import { CellType } from '../types';
 
 describe('Food', () => {
     test('default params, should return dinner', () => {
-        expect.assertions(1);
+        expect.assertions(2);
         const food = new Food(1);
-        expect(food.reducer()).toMatchObject({
+        const state = food.reducer();
+        expect(state).toMatchObject({
             cells: [{
                 type: CellType.food,
                 coordinate: [0, 0]
             }],
+        });
+        expect(food.reducer(state, false)).toMatchObject({
+            cells: [{
+                type: CellType.food,
+                coordinate: [0, 0]
+            }],
+        });
+    });
+
+    test('two params, should return dinner', () => {
+        // expect.assertions(2);
+        const food = new Food(1, 100000000000);
+        const state = food.reducer();
+        expect(state).toMatchObject({
+            cells: [],
+        });
+        expect(food.reducer(state, false)).toMatchObject({
+            cells: [],
         });
     });
 

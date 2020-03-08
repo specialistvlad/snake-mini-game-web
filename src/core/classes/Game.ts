@@ -10,6 +10,7 @@ import {
     CellType,
     TCoordinate,
     TGoogleGameState,
+    TSomeState,
 } from '../types';
 
 interface IGame {
@@ -22,16 +23,23 @@ interface IGame {
     gameOver: boolean;
 };
 
-export class Game implements IGame {
-    private defaultState = { cells: [] };
-    public size: number;
-    public fullSize: number;
-    private snakes: Array<LosingLengthSnake> = [];
-    private food: Array<Food> = [];
-    private _state: TGameState = this.defaultState;
-    private _cellsForView: TCellTypes = [];
+export type TGameConstructorParams = {
+    snakes?: Array<LosingLengthSnake>;
+    food?: Array<Food>;
+};
 
-    constructor(size: number = 10) {
+export class Game implements IGame {
+    protected defaultState = { cells: [] };
+    protected size: number;
+    protected fullSize: number;
+    protected snakes: Array<LosingLengthSnake> = [];
+    protected food: Array<Food> = [];
+    protected _state: TGameState = this.defaultState;
+    protected _cellsForView: TCellTypes = [];
+    protected opts: TGameConstructorParams;
+
+    constructor(size: number = 10, opts?: TGameConstructorParams) {
+        this.opts = opts || {};
         this.size = size;
         this.fullSize = size * size;
         this.reset();
@@ -40,7 +48,8 @@ export class Game implements IGame {
 
     public reset(): void {
         const center = [Math.trunc(this.size / 2), Math.trunc(this.size / 2)];
-        const snake = new LosingLengthSnake({
+
+        this.snakes = this.opts.snakes ? this.opts.snakes : [new LosingLengthSnake({
             name: 'My smart snake',
             snake: [
                 [center[0], 2],
@@ -48,10 +57,9 @@ export class Game implements IGame {
                 [center[0], 0],
             ],
             tableSize: this.size,
-        });
+        })];
 
-        this.snakes = [snake];
-        this.food = [
+        this.food = this.opts.food ? this.opts.food : [
             new Food(this.size),
         ];
     }
@@ -61,6 +69,17 @@ export class Game implements IGame {
         this._state = this.reduce(gameObjects, this.reduce(gameObjects, this.defaultState), false);
         this._cellsForView = this.makeCellsForView();
         return this._cellsForView;
+    }
+
+    public step(relativeDirection: RelativeDirection): TSomeState {
+        this.relativeDirection = relativeDirection;
+        this.tick();
+        return {
+            state: this.getState(),
+            reward: 0,
+            fruitEaten: 0,
+            done: false,
+        };
     }
 
     public reduce(array: Array<GameObject>, state: TGameState, forward: boolean = true): TGameState {

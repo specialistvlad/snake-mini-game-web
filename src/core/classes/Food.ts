@@ -7,11 +7,11 @@ export class Food extends GameObject {
   private dinnerRefreshSeconds: number = 7;
   private point: TCoordinate;
 
-  constructor(tableSize: number, lastDinnerTime: number = 0) {
+  constructor(tableSize: number, lastDinnerTime: number = 0, point: TCoordinate = [Infinity, Infinity]) {
     super();
     this.tableSize = tableSize;
     this.lastDinnerTime = lastDinnerTime;
-    this.point = [Infinity, Infinity];
+    this.point = point;
   }
 
   protected reduceForward(currentState: TGameState): TGameState {
@@ -30,6 +30,10 @@ export class Food extends GameObject {
   }
 
   protected reduceBackward(currentState: TGameState): TGameState {
+    if (!this.localState.cells[0]){
+      return currentState;
+    }
+
     if (this.findCellsByCoord(currentState.cells, this.localState.cells[0].coordinate).length === 2) {
         this.moreFoooood()
     }

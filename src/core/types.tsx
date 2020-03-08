@@ -48,3 +48,10 @@ export type TGoogleGameState = {
     s: Array<TCoordinate>,
     f: Array<TCoordinate>,
 };
+
+export type TSomeState = {
+    state: TGoogleGameState,
+    reward: number,
+    fruitEaten: number,
+    done: boolean,
+};
