@@ -11,7 +11,7 @@ describe('Game', () => {
 
         expect(game.getState()).toEqual({
             f: [[Infinity, Infinity]],
-            s: [[2, 3], [2, 2], [2, 1]],
+            s: [[2, 2], [2, 1], [2, 0]],
         });
     });
 });

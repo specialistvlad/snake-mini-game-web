@@ -40,16 +40,17 @@ export class Game implements IGame {
 
     public reset(): void {
         const center = [Math.trunc(this.size / 2), Math.trunc(this.size / 2)];
-        this.snakes = [new LosingLengthSnake({
+        const snake = new LosingLengthSnake({
             name: 'My smart snake',
             snake: [
-                [center[0], center[1]+1],
-                [center[0], center[1]],
-                [center[0], center[1]-1],
+                [center[0], 2],
+                [center[0], 1],
+                [center[0], 0],
             ],
             tableSize: this.size,
-        })];
+        });
 
+        this.snakes = [snake];
         this.food = [
             new Food(this.size),
         ];
