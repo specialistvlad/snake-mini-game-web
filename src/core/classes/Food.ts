@@ -34,7 +34,7 @@ export class Food extends GameObject {
       return currentState;
     }
 
-    if (this.findCellsByCoord(currentState.cells, this.localState.cells[0].coordinate).length === 2) {
+    if (this.foodEaten(currentState)) {
         this.moreFoooood()
     }
     return currentState;
@@ -42,6 +42,10 @@ export class Food extends GameObject {
 
   protected dinnerTime() {
     this.lastDinnerTime = new Date().getTime() / 1000;
+  }
+
+  protected foodEaten(currentState: TGameState) {
+    return this.findCellsByCoord(currentState.cells, this.localState.cells[0].coordinate).length === 2;
   }
 
   protected secondsFromLastDinner() {

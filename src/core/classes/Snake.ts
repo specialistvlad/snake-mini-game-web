@@ -74,6 +74,7 @@ export class Snake extends GameObject {
         }
 
         return {
+            ...currentState,
             cells: this._snake.map((item, index) => ({
                 coordinate: item,
                 type: index === 0 ? CellType.snakeHead : CellType.snake,

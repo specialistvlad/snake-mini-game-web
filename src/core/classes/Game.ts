@@ -76,9 +76,9 @@ export class Game implements IGame {
         this.tick();
         return {
             state: this.getState(),
-            reward: 0,
-            fruitEaten: 0,
-            done: false,
+            reward: this._state.reward || 0,
+            fruitEaten: this._state.fruitEaten || 0,
+            done: this.gameOver,
         };
     }
 

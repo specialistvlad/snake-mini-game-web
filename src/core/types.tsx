@@ -34,6 +34,8 @@ export enum RelativeDirection {
 
 export type TGameState = {
     cells: TCells,
+    reward?: number,
+    fruitEaten?: number,
 };
 
 export type TCell = {
