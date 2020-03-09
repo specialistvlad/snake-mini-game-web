@@ -5,6 +5,25 @@ import { SnakeGameAgent } from './GoogleAgent';
 import { copyWeights } from './dqn';
 import { MovingAverager } from './MovingAverager';
 
+type TTrainerOptions = {
+  height: number,
+  width: number,
+  numFruits: number,
+  initLen: number,
+  cumulativeRewardThreshold: number,
+  maxNumFrames: number,
+  replayBufferSize: number,
+  epsilonInit: number,
+  epsilonFinal: number,
+  epsilonDecayFrames: number,
+  batchSize: number,
+  gamma: number,
+  learningRate: number,
+  syncEveryFrames: number,
+  saveModelTo: string,
+  logDir: string,
+};
+
 export class Trainer {
   private agent: SnakeGameAgent;
   private opts: any;
@@ -21,12 +40,12 @@ export class Trainer {
   private eatenAverager100: MovingAverager = new MovingAverager(100);
   private summaryFileWriter: any;
 
-  constructor (agent: SnakeGameAgent, opts: any) {
+  constructor (agent: SnakeGameAgent, opts: TTrainerOptions) {
     this.agent = agent;
     this.opts = opts;
-    this.optimizer = tf.train.adam(opts.earningRate);
+    this.optimizer = tf.train.adam(opts.learningRate);
     this.path = `${opts.saveModelTo}/${new Date().toISOString().replace(/\:/gi, '-')}`;
-    this.summaryFileWriter = tf.node.summaryFileWriter(opts.logDir);
+    this.summaryFileWriter = tf.node.summaryFileWriter(opts.logDir || '');
     this.tPrev = this.time();
     this.frameCountPrev = this.agent.frameCount;
   }
@@ -42,6 +61,7 @@ export class Trainer {
         this.logToConsole();
         this.logTensorFlow();
         await this.saveModel();
+        this.maxFramesReached();
       }
       this.sync();
     }
@@ -81,14 +101,21 @@ export class Trainer {
     this.averageEaten100 = this.eatenAverager100.average();
   }
 
+  maxFramesReached() {
+    if (this.agent.frameCount >= this.opts.maxNumFrames) {
+      console.log(`Max frames(${this.opts.maxNumFrames}) count was reached(${this.agent.frameCount}). Exiting...`);
+      process.exit(0);
+    }
+  }
+
   logToConsole() {
     const { agent, averageReward100, averageEaten100, framesPerSecond } = this;
     console.log(
       `Frame #${agent.frameCount}: ` +
-      `cumulativeReward100=${averageReward100.toFixed(1)}; ` +
-      `eaten100=${averageEaten100.toFixed(2)} ` +
+      `reward=${averageReward100.toFixed(1)}; ` +
+      `eaten=${averageEaten100.toFixed(2)} ` +
       `(epsilon=${agent.epsilon.toFixed(3)}) ` +
-      `(${framesPerSecond.toFixed(1)} frames/s)`);
+      `${framesPerSecond.toFixed(1)}fps`);
   }
 
   logTensorFlow() {
@@ -99,7 +126,7 @@ export class Trainer {
     this.summaryFileWriter.scalar('cumulativeReward100', averageReward100, agent.frameCount);
     this.summaryFileWriter.scalar('eaten100', averageEaten100, agent.frameCount);
     this.summaryFileWriter.scalar('epsilon', agent.epsilon, agent.frameCount);
-    this.summaryFileWriter.scalar('framesPerSecond', framesPerSecond, agent.frameCount);
+    this.summaryFileWriter.scalar('fps', framesPerSecond, agent.frameCount);
   }
 
   async saveModel() {
