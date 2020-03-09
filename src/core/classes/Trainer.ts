@@ -33,11 +33,11 @@ export class Trainer {
   private frameCountPrev: number = 0;
   private averageReward100Best: number = 0;
   private framesPerSecond: number = 0;
-  private averageReward100: number = 0;
-  private averageEaten100: number = 0;
+  private averageReward: number = 0;
+  private averageEaten: number = 0;
   
-  private rewardAverager100: MovingAverager = new MovingAverager(100);
-  private eatenAverager100: MovingAverager = new MovingAverager(100);
+  private rewardAverager: MovingAverager = new MovingAverager(100);
+  private eatenAverager: MovingAverager = new MovingAverager(100);
   private summaryFileWriter: any;
 
   constructor (agent: SnakeGameAgent, opts: TTrainerOptions) {
@@ -95,10 +95,10 @@ export class Trainer {
     
     this.tPrev = t;
     this.frameCountPrev = this.agent.frameCount;
-    this.rewardAverager100.append(cumulativeReward);
-    this.eatenAverager100.append(fruitsEaten);
-    this.averageReward100 = this.rewardAverager100.average();
-    this.averageEaten100 = this.eatenAverager100.average();
+    this.rewardAverager.append(cumulativeReward);
+    this.eatenAverager.append(fruitsEaten);
+    this.averageReward = this.rewardAverager.average();
+    this.averageEaten = this.eatenAverager.average();
   }
 
   maxFramesReached() {
@@ -109,7 +109,7 @@ export class Trainer {
   }
 
   logToConsole() {
-    const { agent, averageReward100, averageEaten100, framesPerSecond } = this;
+    const { agent, averageReward: averageReward100, averageEaten: averageEaten100, framesPerSecond } = this;
     console.log(
       `Frame #${agent.frameCount}: ` +
       `reward=${averageReward100.toFixed(1)}; ` +
@@ -122,9 +122,9 @@ export class Trainer {
     if (!this.summaryFileWriter) {
       return;
     }
-    const { agent, averageReward100, averageEaten100, framesPerSecond } = this;
-    this.summaryFileWriter.scalar('cumulativeReward100', averageReward100, agent.frameCount);
-    this.summaryFileWriter.scalar('eaten100', averageEaten100, agent.frameCount);
+    const { agent, averageReward: averageReward100, averageEaten: averageEaten100, framesPerSecond } = this;
+    this.summaryFileWriter.scalar('cumulativeReward', averageReward100, agent.frameCount);
+    this.summaryFileWriter.scalar('eaten', averageEaten100, agent.frameCount);
     this.summaryFileWriter.scalar('epsilon', agent.epsilon, agent.frameCount);
     this.summaryFileWriter.scalar('fps', framesPerSecond, agent.frameCount);
   }
@@ -133,9 +133,9 @@ export class Trainer {
     const { agent } = this;
     const { saveModelTo } = this.opts;
     
-    if (saveModelTo != null && this.averageReward100 > this.averageReward100Best) {
-      this.averageReward100Best = this.averageReward100;
-      const fullPath = `${this.path}/reward=${this.eatenAverager100.average().toFixed(2)}-frame=${agent.frameCount}`;
+    if (saveModelTo != null && this.averageReward > this.averageReward100Best) {
+      this.averageReward100Best = this.averageReward;
+      const fullPath = `${this.path}/reward=${this.eatenAverager.average().toFixed(2)}-frame=${agent.frameCount}`;
       shell.mkdir('-p', fullPath);
       await agent.onlineNetwork.save(`file://${fullPath}/`);
       console.log(`Model saved to ${`file://${fullPath}`}`);
