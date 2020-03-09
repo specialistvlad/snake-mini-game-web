@@ -1,8 +1,31 @@
 import * as tf from '@tensorflow/tfjs-node';
 
 import { createDeepQNetwork } from './dqn';
-import { getRandomAction, NUM_ACTIONS, ALL_ACTIONS, getStateTensor, SnakeGame } from './SnakeGameGoogle';
+import { Game } from './Game';
 import { ReplayMemory } from './ReplayMemory';
+import { TGoogleGameObjects, RelativeDirection } from '../types';
+
+const ACTION_GO_STRAIGHT = 0;
+const ACTION_TURN_LEFT = 1;
+const ACTION_TURN_RIGHT = 2;
+
+const ALL_ACTIONS = [ACTION_GO_STRAIGHT, ACTION_TURN_LEFT, ACTION_TURN_RIGHT];
+const NUM_ACTIONS = ALL_ACTIONS.length;
+
+function getRandomInteger(min: number, max: number) {
+  // Note that we don't reuse the implementation in the more generic
+  // `getRandomIntegers()` (plural) below, for performance optimization.
+  return Math.floor((max - min) * Math.random()) + min;
+}
+
+/**
+ * Generate a random action among all possible actions.
+ *
+ * @return {0 | 1 | 2} Action represented as a number.
+ */
+function getRandomAction() {
+  return getRandomInteger(0, NUM_ACTIONS);
+}
 
 function assertPositiveInteger(x: number, name: string) {
   if (!Number.isInteger(x)) {
@@ -13,6 +36,28 @@ function assertPositiveInteger(x: number, name: string) {
     throw new Error(
         `Expected ${name} to be a positive number, but received ${x}`);
   }
+}
+
+function getStateTensor(state: Array<TGoogleGameObjects>, h: number, w: number) {
+  const numExamples = state.length;
+  // TODO(cais): Maintain only a single buffer for efficiency.
+  const buffer = tf.buffer([numExamples, h, w, 2]);
+
+  for (let n = 0; n < numExamples; ++n) {
+    if (state[n] == null) {
+      continue;
+    }
+    // Mark the snake.
+    state[n].s.forEach((yx, i) => {
+      buffer.set(i === 0 ? 2 : 1, n, yx[0], yx[1], 0);
+    });
+
+    // Mark the fruit(s).
+    state[n].f.forEach(yx => {
+      buffer.set(1, n, yx[0], yx[1], 1);
+    });
+  }
+  return buffer.toTensor();
 }
 
 export class SnakeGameAgent {
@@ -29,10 +74,10 @@ export class SnakeGameAgent {
   private cumulativeReward_: number = 0;
   private fruitsEaten_: number = 0;
 
-  private game: SnakeGame;
+  private game: Game;
   private replayMemory: ReplayMemory;
 
-  constructor(game: SnakeGame, config: any) {
+  constructor(game: Game, config: any) {
     assertPositiveInteger(config.epsilonDecayFrames, 'epsilonDecayFrames');
 
     this.game = game;
@@ -81,13 +126,13 @@ export class SnakeGameAgent {
     } else {
       // Greedily pick an action based on online DQN output.
       tf.tidy(() => {
-        const stateTensor = getStateTensor(state, this.game.height, this.game.width)
+        const stateTensor = getStateTensor([state], this.game.height, this.game.width)
         // @ts-ignore
         action = ALL_ACTIONS[this.onlineNetwork.predict(stateTensor).argMax(-1).dataSync()[0]];
       });
     }
 
-    const {state: nextState, reward, done, fruitEaten} = this.game.step(action);
+    const {state: nextState, reward, done, fruitEaten} = this.game.step(action as RelativeDirection);
 
     this.replayMemory.append([state, action, reward, done, nextState]);
 

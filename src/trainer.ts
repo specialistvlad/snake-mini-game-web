@@ -1,5 +1,4 @@
-import { SnakeGameAgent } from './core/classes/SnakeGameAgent';
-import { SnakeGame } from './core/classes/SnakeGameGoogle';
+import { SnakeGameAgent } from './core/classes/GoogleAgent';
 import { Game } from './core/classes/Game';
 import { Trainer } from './core/classes/Trainer';
 
@@ -25,20 +24,13 @@ import { Trainer } from './core/classes/Trainer';
 
   console.log(`Parameters: ${JSON.stringify(opts, null, 2)}`);
 
-  const game = new SnakeGame({
-    height: opts.height,
-    width: opts.width,
-    numFruits: opts.numFruits,
-    initLen: opts.initLen
-  });
-
-  // const game = new Game(opts.height);
+  const game = new Game(opts.height);
 
   const agent = new SnakeGameAgent(game, {
     replayBufferSize: opts.replayBufferSize,
     epsilonInit: opts.epsilonInit,
     epsilonFinal: opts.epsilonFinal,
-    epsilonDecayFrames: opts.epsilonDecayFrames
+    epsilonDecayFrames: opts.epsilonDecayFrames,
   });
 
   const trainer = new Trainer(agent, opts);

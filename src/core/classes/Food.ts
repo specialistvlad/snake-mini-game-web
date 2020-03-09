@@ -1,4 +1,4 @@
-import { TGameState, CellType, TCoordinate, TCoordinates } from '../types';
+import { TGameState, CellType, TCoordinate } from '../types';
 import { GameObject } from './GameObject';
 
 export class Food extends GameObject {
@@ -60,7 +60,7 @@ export class Food extends GameObject {
     this.lastDinnerTime = 0;
   }
 
-  get points(): TCoordinates {
-    return [this.point];
+  get points(): TCoordinate {
+    return this.point;
   }
 }

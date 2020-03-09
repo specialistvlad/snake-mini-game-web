@@ -21,7 +21,7 @@ describe('Food', () => {
     });
 
     test('two params, should return dinner', () => {
-        // expect.assertions(2);
+        expect.assertions(2);
         const food = new Food(1, 100000000000);
         const state = food.reducer();
         expect(state).toMatchObject({

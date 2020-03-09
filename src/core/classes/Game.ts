@@ -174,7 +174,7 @@ export class Game implements IGame {
     public getState(): TGoogleGameObjects {
         return {
             s: this.snakes[0].points,
-            f: this.food.map((food) => food.points).flat(),
+            f: this.food.map((food) => food.points),
         }
     }
 };
