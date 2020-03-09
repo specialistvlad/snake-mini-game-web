@@ -46,11 +46,7 @@ export class Agent implements IAgent {
     }
 
     private async warm() {
-        this.predict({
-            cells: [],
-            reward: 0,
-            fruitEaten: 0,
-        });
+        this.predict({ cells: [] });
     }
 
     public gameStateToTensor(state: TGameState): tf.Tensor {

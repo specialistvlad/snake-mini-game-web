@@ -10,37 +10,59 @@ import {
     RelativeDirection,
 } from '../types';
 
+export type TSnakeRewards = {
+    step: number,
+    food: number,
+    poison: number,
+    death: number,
+};
+
 export type TSnakeConstructorParams = {
     snake: TCoordinates;
     name?: string;
     direction?: Direction;
     tableSize?: number;
+    rewards?: {
+        step?: number,
+        food?: number,
+        poison?: number,
+        death?: number,
+    },
 };
 
 export class Snake extends GameObject {
-    private _name: string;
+    protected _name: string;
     protected _died: boolean = false;
     protected _snake: TCoordinates;
-    private currentDegree: Direction;
-    private nextDegree: Direction;
+    protected currentDirection: Direction;
+    protected nextDirection: Direction;
     protected steps: number = -1;
-    private tableSize: number;
+    protected tableSize: number;
+    protected _foodEaten: number = 0;
+    protected _reward: number = 0;
+    protected rewards: TSnakeRewards;
 
     constructor(params: TSnakeConstructorParams) {
         super();
         this._name = params.name || 'Unknown snake';
         this._snake = params.snake;
-        this.currentDegree = params.direction || 0;
-        this.nextDegree = this.currentDegree;
+        this.currentDirection = params.direction || Direction.Right;
+        this.nextDirection = this.currentDirection;
         this.tableSize = params.tableSize || 100;
+        this.rewards = {
+            step: params.rewards?.step || -20,
+            food: params.rewards?.food || 100,
+            poison: params.rewards?.poison || -40,
+            death: params.rewards?.death || -100,
+        };
     }
 
     public set direction(nextDegree: Direction) {
-        this.nextDegree = nextDegree;
+        this.nextDirection = nextDegree;
     }
 
     public set relativeDirection(nextDirection: RelativeDirection) {
-        this.nextDegree = this.relativeDirectionToAbsolute(nextDirection);
+        this.nextDirection = this.relativeDirectionToAbsolute(nextDirection);
     }
 
     public get name(): string {
@@ -55,12 +77,25 @@ export class Snake extends GameObject {
         return this._snake.slice();
     }
 
+    public get reward(): number {
+        return this._reward;
+    }
+
+    public get foodEaten(): number {
+        return this._foodEaten;
+    }
+
     get died(): boolean {
         return this._died;
     }
 
     get score(): number {
         return this.steps > 0 ? this.steps : 0;
+    }
+
+    protected die() {
+        this._died = true;
+        this._reward = this.rewards.death;
     }
 
     protected reduceForward(currentState: TGameState, dryRun: boolean = false): TGameState {
@@ -83,6 +118,9 @@ export class Snake extends GameObject {
     }
 
     protected step(gameCells: TCells): void {
+        this._foodEaten = 0;
+        this._reward = 0;
+
         if (this.collision(gameCells)) { // check collision with tail
             return;
         }
@@ -92,6 +130,10 @@ export class Snake extends GameObject {
         }
 
         if (this.tastyFood(gameCells)) { // find food
+            return;
+        }
+
+        if (this.disgustingPoison(gameCells)) {
             return;
         }
 
@@ -118,7 +160,8 @@ export class Snake extends GameObject {
         const nextCoord = this.getNextCoord();
 
         if (this._snake.find(([y, x]) => nextCoord[0] === y && nextCoord[1] === x)) {
-            return this._died = true;
+            this.die();
+            return true;
         }
         return false;
     }
@@ -128,18 +171,43 @@ export class Snake extends GameObject {
      */
     protected usualStepForward(gameCells: TCells): boolean {
         this._snake = [this.getNextCoord(), ...this._snake.slice(0, this._snake.length - 1)];
+        this._reward = this.rewards.step;
         return true;
     }
 
     /**
      * Detect food in next cell
-     * If food found we have to return next coord for snake's head plus current snake
+     * If food found we have to:
+     *  set flag "food eaten"
+     *  set reward
+     *  return next coord for snake's head plus current snake
      * 
      * @returns Return true if we need to stop step managing
      */
     protected tastyFood(gameCells: TCells): boolean {
         if (this.nextCell(gameCells)?.type === CellType.food) {
             this._snake = [this.getNextCoord(), ...this._snake];
+
+            this._foodEaten = 1;
+            this._reward = this.rewards.food;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Detect poison in next cell
+     * If poison found we have to:
+     *  set reward
+     * 
+     * @returns Return true if we need to stop step managing
+     */
+    protected disgustingPoison(gameCells: TCells): boolean {
+        if (this.nextCell(gameCells)?.type === CellType.poison) {
+            this._snake = [this.getNextCoord(), ...this._snake.slice(0, this._snake.length - 1)];
+            this._reward = this.rewards.poison;
             return true;
         }
 
@@ -153,19 +221,20 @@ export class Snake extends GameObject {
         const nextCell = this.nextCell(gameCells);
         
         if (nextCell?.type === CellType.snake || nextCell?.type === CellType.snakeHead || nextCell?.type === CellType.wall) {
-            return this._died = true;
+            this.die();
+            return true;
         }
         return false;
     }
 
     protected getNextCoord(): TCoordinate {
         const [y, x] = this._snake.slice(0)[0];
-        const isNextDirectionCorrect = Math.abs(this.currentDegree - this.nextDegree) !== 180;
+        const isNextDirectionCorrect = Math.abs(this.currentDirection - this.nextDirection) !== 180;
         if (isNextDirectionCorrect) {
-            this.currentDegree = this.nextDegree;
+            this.currentDirection = this.nextDirection;
         }
     
-        switch (isNextDirectionCorrect ? this.nextDegree : this.currentDegree) {
+        switch (isNextDirectionCorrect ? this.nextDirection : this.currentDirection) {
             case Direction.Left:
                 return [y, x === 0 ? this.tableSize - 1 : x - 1];
             case Direction.Right:
@@ -175,10 +244,10 @@ export class Snake extends GameObject {
             case Direction.Up:
                 return [y === 0 ? this.tableSize - 1 : y - 1, x];
         };
-        throw new Error(`I have no idea how to move this degree o_O: ${this.nextDegree}`)
+        throw new Error(`I have no idea how to move this angle o_O: ${this.nextDirection}`)
     }
 
-    relativeDirectionToAbsolute(next: RelativeDirection, current = this.currentDegree): Direction {
+    relativeDirectionToAbsolute(next: RelativeDirection, current = this.currentDirection): Direction {
         const value = [0, -90, +90][next];
         if (current + value < 0) {
             return 360 + value;
@@ -186,6 +255,6 @@ export class Snake extends GameObject {
             return 90 - value;
         }
 
-        return this.nextDegree = current + value;
+        return this.nextDirection = current + value;
     }
 };

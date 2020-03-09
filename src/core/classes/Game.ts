@@ -9,8 +9,8 @@ import {
     RelativeDirection,
     CellType,
     TCoordinate,
+    TGoogleGameObjects,
     TGoogleGameState,
-    TSomeState,
 } from '../types';
 
 interface IGame {
@@ -71,13 +71,13 @@ export class Game implements IGame {
         return this._cellsForView;
     }
 
-    public step(relativeDirection: RelativeDirection): TSomeState {
+    public step(relativeDirection: RelativeDirection): TGoogleGameState {
         this.relativeDirection = relativeDirection;
         this.tick();
         return {
             state: this.getState(),
-            reward: this._state.reward || 0,
-            fruitEaten: this._state.fruitEaten || 0,
+            reward: this.snakes[0].reward || 0,
+            fruitEaten: this.snakes[0].foodEaten || 0,
             done: this.gameOver,
         };
     }
@@ -171,7 +171,7 @@ export class Game implements IGame {
         return this._state;
     }
 
-    public getState(): TGoogleGameState {
+    public getState(): TGoogleGameObjects {
         return {
             s: this.snakes[0].points,
             f: this.food.map((food) => food.points).flat(),

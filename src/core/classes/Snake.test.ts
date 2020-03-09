@@ -10,10 +10,9 @@ const snakeTest = (
     gameState: TGameState = { cells: [] },
     ) => {
         const snake = new Snake({
-            name: '',
             snake: snakeCoordinates,
             ...snakeAdditionalParams,
-        })
+        });
 
         // @ts-ignore
         return [null, ...directionsList].reduce((accumulator: Array<TCoordinates>, currentValue: optionalDegree) => {
@@ -128,7 +127,7 @@ describe('Snake', () => {
     });
 
     test('relativeDirectionToAbsolute', () => {
-        // expect.assertions(12);
+        expect.assertions(12);
         const snake = new Snake({ name, snake: [[0, 0]] });
         expect(snake.relativeDirectionToAbsolute(RelativeDirection.Left, Direction.Down)).toEqual(Direction.Right);
         expect(snake.relativeDirectionToAbsolute(RelativeDirection.Straight, Direction.Down)).toEqual(Direction.Down);
@@ -154,4 +153,57 @@ describe('Snake', () => {
     //         [[0, 1], [0, 0]],
     //     ])));
     // });
+
+    describe('Reward results', () => {
+        test('food', () => {
+            const state: TGameState = { cells: [{ coordinate: [0, 1], type: CellType.food }] };
+            const snake = new Snake({
+                snake: [[0, 0]],
+                rewards: { food: 117 },
+            });
+
+            snake.reducer(snake.reducer(state));
+
+            expect(snake.foodEaten).toBe(1);
+            expect(snake.reward).toBe(117);
+        });
+
+        test('poison', () => {
+            const state: TGameState = { cells: [{ coordinate: [0, 1], type: CellType.poison }] };
+            const snake = new Snake({
+                snake: [[0, 0]],
+                rewards: { poison: -1283 },
+            });
+
+            snake.reducer(snake.reducer(state));
+
+            expect(snake.foodEaten).toBe(0);
+            expect(snake.reward).toBe(-1283);
+        });
+
+        test('usual step', () => {
+            const state: TGameState = { cells: [] };
+            const snake = new Snake({
+                snake: [[0, 0]],
+                rewards: { step: 637 },
+            });
+
+            snake.reducer(snake.reducer(state));
+
+            expect(snake.foodEaten).toBe(0);
+            expect(snake.reward).toBe(637);
+        });
+
+        test('death', () => {
+            const state: TGameState = { cells: [] };
+            const snake = new Snake({
+                snake: [[0, 0], [1, 0], [1, 1], [0, 1]],
+                rewards: { death: 1115 },
+            });
+
+            snake.reducer(snake.reducer(state));
+            expect(snake.foodEaten).toBe(0);
+            expect(snake.reward).toBe(1115);
+        });
+    });
 });

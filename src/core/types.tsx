@@ -11,6 +11,7 @@ export enum CellType {
     food,
     snake,
     snakeHead,
+    poison,
 };
 
 // *******************************************
@@ -34,8 +35,6 @@ export enum RelativeDirection {
 
 export type TGameState = {
     cells: TCells,
-    reward?: number,
-    fruitEaten?: number,
 };
 
 export type TCell = {
@@ -46,13 +45,13 @@ export type TCell = {
 export type TCells = Array<TCell>;
 export type TCellTypes = Array<CellType>;
 
-export type TGoogleGameState = {
+export type TGoogleGameObjects = {
     s: Array<TCoordinate>,
     f: Array<TCoordinate>,
 };
 
-export type TSomeState = {
-    state: TGoogleGameState,
+export type TGoogleGameState = {
+    state: TGoogleGameObjects,
     reward: number,
     fruitEaten: number,
     done: boolean,
