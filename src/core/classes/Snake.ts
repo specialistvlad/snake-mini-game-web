@@ -50,10 +50,10 @@ export class Snake extends GameObject {
         this.nextDirection = this.currentDirection;
         this.tableSize = params.tableSize || 100;
         this.rewards = {
-            step: params.rewards?.step || -20,
-            food: params.rewards?.food || 100,
-            poison: params.rewards?.poison || -40,
-            death: params.rewards?.death || -100,
+            step: params.rewards?.step || -0.2,
+            food: params.rewards?.food || 10,
+            poison: params.rewards?.poison || -2,
+            death: params.rewards?.death || -10,
         };
     }
 
