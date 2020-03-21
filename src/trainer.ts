@@ -1,4 +1,4 @@
-import { SnakeGameAgent } from './core/classes/GoogleAgent';
+import { TrainAgent } from './core/classes/TrainAgent';
 import { Game } from './core/classes/Game';
 import { Trainer } from './core/classes/Trainer';
 
@@ -26,7 +26,7 @@ import { Trainer } from './core/classes/Trainer';
 
   const game = new Game(opts.height);
 
-  const agent = new SnakeGameAgent(game, {
+  const agent = new TrainAgent(game, {
     replayBufferSize: opts.replayBufferSize,
     epsilonInit: opts.epsilonInit,
     epsilonFinal: opts.epsilonFinal,

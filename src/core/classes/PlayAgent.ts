@@ -1,12 +1,12 @@
 import * as tf from '@tensorflow/tfjs';
 import { RelativeDirection, TGameState, CellType } from '../types';
 
-interface IAgent {
+interface IPlayAgent {
     predict (state: TGameState): RelativeDirection;
     gameStateToTensor(state: TGameState): tf.Tensor;
 };
 
-export class Agent implements IAgent {
+export class PlayAgent implements IPlayAgent {
     public modelUrl: string = './model/model.json';
     public sideSize: number;
     private model: any | undefined;

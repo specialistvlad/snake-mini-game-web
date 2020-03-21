@@ -1,13 +1,13 @@
 import * as tf from '@tensorflow/tfjs';
 
-import { Agent } from './Agent';
+import { PlayAgent } from './PlayAgent';
 
 describe('Agent', () => {
     tf.setBackend('cpu');
 
     test('gameStateToTensor', () => {
         expect.assertions(1);
-        const agent = new Agent(4);
+        const agent = new PlayAgent(4);
         expect(agent.gameStateToTensor({
             "cells": [
                 { "coordinate": [2, 1], "type": 2 }, // food

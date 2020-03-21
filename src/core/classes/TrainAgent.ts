@@ -60,7 +60,7 @@ function getStateTensor(state: Array<TGoogleGameObjects>, h: number, w: number) 
   return buffer.toTensor();
 }
 
-export class SnakeGameAgent {
+export class TrainAgent {
   public frameCount: number = 0;
   public epsilon: number = 0;
   private epsilonInit: number;

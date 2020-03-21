@@ -1,7 +1,7 @@
 import * as tf from '@tensorflow/tfjs-node';
 import shell from 'shelljs';
 
-import { SnakeGameAgent } from './GoogleAgent';
+import { TrainAgent } from './TrainAgent';
 import { copyWeights } from './dqn';
 import { MovingAverager } from './MovingAverager';
 
@@ -25,7 +25,7 @@ type TTrainerOptions = {
 };
 
 export class Trainer {
-  private agent: SnakeGameAgent;
+  private agent: TrainAgent;
   private opts: any;
   private optimizer: any;
   private path: string = '';
@@ -40,7 +40,7 @@ export class Trainer {
   private eatenAverager: MovingAverager = new MovingAverager(100);
   private summaryFileWriter: any;
 
-  constructor (agent: SnakeGameAgent, opts: TTrainerOptions) {
+  constructor (agent: TrainAgent, opts: TTrainerOptions) {
     this.agent = agent;
     this.opts = opts;
     this.optimizer = tf.train.adam(opts.learningRate);
