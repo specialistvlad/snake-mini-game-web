@@ -5,7 +5,7 @@ import { Game } from './Game';
 import { ReplayMemory } from './ReplayMemory';
 import { TGoogleGameObjects, RelativeDirection } from '../types';
 
-const NUM_ACTIONS = Object.keys(RelativeDirection).length;
+const NUM_ACTIONS = 3;
 
 export class TrainAgent {
   public frameCount: number = 0;
@@ -74,8 +74,9 @@ export class TrainAgent {
       // Greedily pick an action based on online DQN output.
       tf.tidy(() => {
         const stateTensor = this.getStateTensor([state], this.game.height, this.game.width)
+        action = [RelativeDirection.Straight, RelativeDirection.Left, RelativeDirection.Right]
         // @ts-ignore
-        action = ALL_ACTIONS[this.onlineNetwork.predict(stateTensor).argMax(-1).dataSync()[0]];
+          [this.onlineNetwork.predict(stateTensor).argMax(-1).dataSync()[0]];
       });
     }
 
