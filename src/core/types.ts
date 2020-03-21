@@ -51,7 +51,7 @@ export type TGoogleGameObjects = {
 };
 
 export type TGoogleGameState = {
-    state: TGoogleGameObjects,
+    gameObjects: TGoogleGameObjects,
     reward: number,
     fruitEaten: number,
     done: boolean,

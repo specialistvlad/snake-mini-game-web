@@ -75,7 +75,7 @@ export class Game implements IGame {
         this.relativeDirection = relativeDirection;
         this.tick();
         return {
-            state: this.getState(),
+            gameObjects: this.getState(),
             reward: this.snakes[0].reward || 0,
             fruitEaten: this.snakes[0].foodEaten || 0,
             done: this.gameOver,

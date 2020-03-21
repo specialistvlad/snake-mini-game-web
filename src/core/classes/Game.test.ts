@@ -35,7 +35,7 @@ describe('Game', () => {
         const game = new Game(5, { food: [food] });
 
         expect(game.step(RelativeDirection.Right)).toEqual({
-            state: {
+            gameObjects: {
                 f: [[4, 1]],
                 s: [[2, 2], [2, 1], [2, 0]],
             },
