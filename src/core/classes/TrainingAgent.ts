@@ -4,7 +4,7 @@ import { BaseAgent } from './BaseAgent';
 import { DeepLearningNetwork } from './DeepLearningNetwork';
 import { Game } from './Game';
 import { ReplayBuffer } from './ReplayBuffer';
-import { RelativeDirection } from '../types';
+import { RelativeDirection, TOptimizedState } from '../types';
 
 const NUM_ACTIONS = 3;
 
@@ -32,7 +32,7 @@ export class TrainingAgent extends BaseAgent {
   protected foodEaten: number = 0;
 
   protected game: Game;
-  protected replayMemory: ReplayBuffer;
+  protected replayMemory: ReplayBuffer<TOptimizedState>;
 
   constructor(config: TTrainAgentOptions, game: Game) {
     super(config.sideSize);
@@ -48,7 +48,14 @@ export class TrainingAgent extends BaseAgent {
     this.optimizer = tf.train.adam(config.learningRate);
 
     this.replayBufferSize = config.replayBufferSize;
-    this.replayMemory = new ReplayBuffer(config.replayBufferSize);
+    this.replayMemory = new ReplayBuffer(config.replayBufferSize, [
+      {
+        cells: [],
+        reward: 0,
+        fruitEaten: 0,
+        done: false,
+      }, RelativeDirection.Straight, 0, false, []
+    ]);
     this.reset();
   }
 
@@ -69,26 +76,29 @@ export class TrainingAgent extends BaseAgent {
   playStep() {
     this.epsilon = this.frameCount >= this.epsilonDecayFrames
       ? this.epsilonFinal
-      : this.epsilonInit + this._epsilonStep  * this.frameCount;
+      : this.epsilonInit + this._epsilonStep * this.frameCount;
     this.frameCount++;
 
     // The epsilon-greedy algorithm.
-    let action;
-    const state = this.game.getState();
+    let action = RelativeDirection.Straight;
+    const state = this.game.getState;
+    // console.log('frameCount', this.frameCount, state);
+    
     if (Math.random() < this.epsilon) {
       action = this.getRandomAction();// Pick an action at random.
     } else {
       // Greedily pick an action based on online DQN output.
       tf.tidy(() => {
-        const stateTensor = this.getStateTensor([state], this.sideSize)
-        action = [RelativeDirection.Straight, RelativeDirection.Left, RelativeDirection.Right]
+        const stateTensor = this.gameStatesToTensor([state]);
+        // console.log('gameStatesToTensor', stateTensor.toString());
+        
+        const actions = [RelativeDirection.Straight, RelativeDirection.Left, RelativeDirection.Right];
         // @ts-ignore
-          [this.model.predict(stateTensor).argMax(-1).dataSync()[0]];
+        action = actions[this.model.predict(stateTensor).argMax(-1).dataSync()[0]];
       });
     }
 
-    const {gameObjects: nextState, reward, done, fruitEaten} = this.game.step(action as RelativeDirection);
-
+    const {cells: nextState, reward, done, fruitEaten} = this.game.step(action as RelativeDirection);
     this.replayMemory.append([state, action, reward, done, nextState]);
 
     this.totalReward += reward;
@@ -111,12 +121,14 @@ export class TrainingAgent extends BaseAgent {
     // Get a batch of examples from the replay buffer.
     const batch = this.replayMemory.sample(batchSize);
     const lossFunction = () => tf.tidy(() => {
-      const stateTensor = this.getStateTensor(batch.map(example => example[0]), this.sideSize);
+      const stateTensor = this.gameStatesToTensor(batch.map(example => example[0]));
       const actionTensor = tf.tensor1d(batch.map(example => example[1]), 'int32');
       // @ts-ignore
       const qs = this.model.apply(stateTensor, {training: true}).mul(tf.oneHot(actionTensor, NUM_ACTIONS)).sum(-1);
       const rewardTensor = tf.tensor1d(batch.map(example => example[2]));
-      const nextStateTensor = this.getStateTensor(batch.map(example => example[4]), this.sideSize);
+      const nextStateTensor = this.gameStatesToTensor(batch.map(example => ({
+        cells: example[4],
+      })));
       // @ts-ignore
       const nextMaxQTensor = this.trainingModel.predict(nextStateTensor).max(-1);
       const doneMask = tf.scalar(1).sub(tf.tensor1d(batch.map(example => example[3])).asType('float32'));

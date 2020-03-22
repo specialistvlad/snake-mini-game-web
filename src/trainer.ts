@@ -9,7 +9,7 @@ import { TrainingManager } from './core/classes/TrainingManager';
     initLen: 2,
     cumulativeRewardThreshold: 100,
     // maxNumFrames: 500000,
-    maxNumFrames: 11500,
+    maxNumFrames: 10500,
     replayBufferSize: 10000,
     epsilonInit: 0.5,
     epsilonFinal: 0.01,

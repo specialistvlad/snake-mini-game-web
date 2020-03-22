@@ -51,8 +51,10 @@ export type TGoogleGameObjects = {
 };
 
 export type TGoogleGameState = {
-    gameObjects: TGoogleGameObjects,
+    cells: TCells,
     reward: number,
     fruitEaten: number,
     done: boolean,
 };
+
+export type TOptimizedState = [TGoogleGameState, RelativeDirection, number, boolean, TCells];

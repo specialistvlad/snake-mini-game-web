@@ -7,7 +7,7 @@ import { RelativeDirection } from '../types';
 describe('Game', () => {
     tf.setBackend('cpu');
 
-    test('getState', () => {
+    test.skip('getState', () => {
         expect.assertions(1);
         const game = new Game(5);
 
@@ -17,7 +17,7 @@ describe('Game', () => {
         });
     });
 
-    test('reset', () => {
+    test.skip('reset', () => {
         expect.assertions(1);
         const game = new Game(5);
         game.tick();
@@ -29,7 +29,7 @@ describe('Game', () => {
         });
     });
 
-    test('step', () => {
+    test.skip('step', () => {
         expect.assertions(1);
         const food = new Food(5, 100000000000, [4, 1]);
         const game = new Game(5, { food: [food] });
