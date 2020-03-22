@@ -8,7 +8,7 @@ interface IBaseAgent {
 
 export class BaseAgent implements IBaseAgent {
     public sideSize: number;
-    protected model: tf.Sequential;
+    protected model: tf.LayersModel;
 
     constructor(size: number) {
         this.sideSize = size;

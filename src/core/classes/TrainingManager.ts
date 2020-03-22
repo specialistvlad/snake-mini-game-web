@@ -80,6 +80,7 @@ export class TrainingManager {
   }
 
   warm() {
+    console.log('Warming up to step: %d, Please wait...', this.opts.replayBufferSize);
     for (let i = 0; i < this.opts.replayBufferSize; ++i) {
       this.agent.playStep();
     }
@@ -109,7 +110,7 @@ export class TrainingManager {
   logToConsole() {
     const { agent, averageReward: averageReward100, averageEaten: averageEaten100, framesPerSecond } = this;
     console.log(
-      `Frame #${agent.currentStep}: ` +
+      `Step #${agent.currentStep}: ` +
       `reward=${averageReward100.toFixed(1)}; ` +
       `eaten=${averageEaten100.toFixed(2)} ` +
       `(currentEpsilon=${agent.currentEpsilon.toFixed(3)}) ` +
