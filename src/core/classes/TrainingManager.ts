@@ -1,7 +1,7 @@
 import * as tf from '@tensorflow/tfjs-node';
 import shell from 'shelljs';
 
-import { TrainAgent } from './TrainingAgent';
+import { TrainingAgent } from './TrainingAgent';
 import { MovingAverager } from './MovingAverager';
 
 type TTrainerOptions = {
@@ -23,7 +23,7 @@ type TTrainerOptions = {
 };
 
 export class TrainingManager {
-  protected agent: TrainAgent;
+  protected agent: TrainingAgent;
   protected opts: any;
   protected optimizer: any;
   protected path: string = '';
@@ -38,7 +38,7 @@ export class TrainingManager {
   protected eatenAverager: MovingAverager = new MovingAverager(100);
   protected summaryFileWriter: any;
 
-  constructor (agent: TrainAgent, opts: TTrainerOptions) {
+  constructor (agent: TrainingAgent, opts: TTrainerOptions) {
     this.agent = agent;
     this.opts = opts;
     this.optimizer = tf.train.adam(opts.learningRate);

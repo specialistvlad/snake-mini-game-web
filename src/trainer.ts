@@ -1,4 +1,4 @@
-import { TrainAgent } from './core/classes/TrainingAgent';
+import { TrainingAgent } from './core/classes/TrainingAgent';
 import { Game } from './core/classes/Game';
 import { TrainingManager } from './core/classes/TrainingManager';
 
@@ -26,7 +26,7 @@ import { TrainingManager } from './core/classes/TrainingManager';
 
   const game = new Game(opts.sideSize);
 
-  const agent = new TrainAgent({
+  const agent = new TrainingAgent({
     sideSize: opts.sideSize,
     replayBufferSize: opts.replayBufferSize,
     epsilonInit: opts.epsilonInit,

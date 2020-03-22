@@ -17,7 +17,7 @@ type TTrainAgentOptions = {
   learningRate: number,
 };
 
-export class TrainAgent extends BaseAgent {
+export class TrainingAgent extends BaseAgent {
   protected frameCount: number = 0;
   protected epsilon: number = 0;
   protected epsilonInit: number;
