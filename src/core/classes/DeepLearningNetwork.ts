@@ -15,7 +15,7 @@ export class DeepLearningNetwork {
       tf.layers.flatten(),
       tf.layers.dense({ units: 100, activation: 'relu' }),
       tf.layers.dropout({ rate: 0.25 }),
-      tf.layers.dense({ units: 3 }),
+      tf.layers.dense({ units: 4 }),
     ];
 
     this.model = tf.sequential({ layers }); 

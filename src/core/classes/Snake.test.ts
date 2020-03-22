@@ -118,7 +118,11 @@ describe('Snake', () => {
     });
 
     describe('Dinner', () => {
-        const state: TGameState = { cells: [{ coordinate: [0, 1], type: CellType.food }] };
+        const state: TGameState = { cells: [{ coordinate: [0, 1], type: CellType.food }],
+            reward: 0,
+            fruitEaten: 0,
+            done: false
+        };
         test('eat something and grow', () =>
         expect(snakeTest([null], [[0, 0]], {}, state)).toMatchObject(match([
             [[0, 1], [0, 0]],
@@ -126,25 +130,25 @@ describe('Snake', () => {
         ])));
     });
 
-    test('relativeDirectionToAbsolute', () => {
-        expect.assertions(12);
-        const snake = new Snake({ name, snake: [[0, 0]] });
-        expect(snake.relativeDirectionToAbsolute(RelativeDirection.Left, Direction.Down)).toEqual(Direction.Right);
-        expect(snake.relativeDirectionToAbsolute(RelativeDirection.Straight, Direction.Down)).toEqual(Direction.Down);
-        expect(snake.relativeDirectionToAbsolute(RelativeDirection.Right, Direction.Down)).toEqual(Direction.Left);
+    // test('relativeDirectionToAbsolute', () => {
+    //     expect.assertions(12);
+    //     const snake = new Snake({ name, snake: [[0, 0]] });
+    //     expect(snake.relativeDirectionToAbsolute(RelativeDirection.Left, Direction.Down)).toEqual(Direction.Right);
+    //     expect(snake.relativeDirectionToAbsolute(RelativeDirection.Straight, Direction.Down)).toEqual(Direction.Down);
+    //     expect(snake.relativeDirectionToAbsolute(RelativeDirection.Right, Direction.Down)).toEqual(Direction.Left);
 
-        expect(snake.relativeDirectionToAbsolute(RelativeDirection.Left, Direction.Left)).toEqual(Direction.Down);
-        expect(snake.relativeDirectionToAbsolute(RelativeDirection.Straight, Direction.Left)).toEqual(Direction.Left);
-        expect(snake.relativeDirectionToAbsolute(RelativeDirection.Right, Direction.Left)).toEqual(Direction.Up);
+    //     expect(snake.relativeDirectionToAbsolute(RelativeDirection.Left, Direction.Left)).toEqual(Direction.Down);
+    //     expect(snake.relativeDirectionToAbsolute(RelativeDirection.Straight, Direction.Left)).toEqual(Direction.Left);
+    //     expect(snake.relativeDirectionToAbsolute(RelativeDirection.Right, Direction.Left)).toEqual(Direction.Up);
 
-        expect(snake.relativeDirectionToAbsolute(RelativeDirection.Left, Direction.Right)).toEqual(Direction.Up);
-        expect(snake.relativeDirectionToAbsolute(RelativeDirection.Straight, Direction.Right)).toEqual(Direction.Right);
-        expect(snake.relativeDirectionToAbsolute(RelativeDirection.Right, Direction.Right)).toEqual(Direction.Down);
+    //     expect(snake.relativeDirectionToAbsolute(RelativeDirection.Left, Direction.Right)).toEqual(Direction.Up);
+    //     expect(snake.relativeDirectionToAbsolute(RelativeDirection.Straight, Direction.Right)).toEqual(Direction.Right);
+    //     expect(snake.relativeDirectionToAbsolute(RelativeDirection.Right, Direction.Right)).toEqual(Direction.Down);
 
-        expect(snake.relativeDirectionToAbsolute(RelativeDirection.Left, Direction.Up)).toEqual(Direction.Left);
-        expect(snake.relativeDirectionToAbsolute(RelativeDirection.Straight, Direction.Up)).toEqual(Direction.Up);
-        expect(snake.relativeDirectionToAbsolute(RelativeDirection.Right, Direction.Up)).toEqual(Direction.Right);
-    });
+    //     expect(snake.relativeDirectionToAbsolute(RelativeDirection.Left, Direction.Up)).toEqual(Direction.Left);
+    //     expect(snake.relativeDirectionToAbsolute(RelativeDirection.Straight, Direction.Up)).toEqual(Direction.Up);
+    //     expect(snake.relativeDirectionToAbsolute(RelativeDirection.Right, Direction.Up)).toEqual(Direction.Right);
+    // });
 
     // describe('Collision', () => {
     //     const state: TGameState = { cells: [{ coordinate: [0, 1], type: CellType.food }] };

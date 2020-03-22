@@ -5,8 +5,7 @@ import {
     TCellTypes,
     TCell,
     TGameState,
-    Direction,
-    RelativeDirection,
+    TDirection,
     CellType,
     TCoordinate,
 } from '../types';
@@ -75,8 +74,8 @@ export class Game implements IGame {
         return this._cellsForView;
     }
 
-    public step(relativeDirection: RelativeDirection): TGameState {
-        this.relativeDirection = relativeDirection;
+    public step(direction: TDirection): TGameState {
+        this.direction = direction;
         this.tick();
         return {
             cells: this._state.cells,
@@ -143,12 +142,8 @@ export class Game implements IGame {
         return this._cellsForView;
     }
 
-    public set relativeDirection(direction: RelativeDirection) {
-        this.snakes[0].relativeDirection = direction;
-    }
-
-    public set direction(angle: Direction) {
-        this.snakes[0].direction = angle;
+    public set direction(direction: TDirection) {
+        this.snakes[0].direction = direction;
     }
 
     public get gameOver(): boolean {

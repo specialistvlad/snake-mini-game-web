@@ -114,14 +114,10 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
   // main function aka loop
   useEffect(() => {
     const tmp = setInterval(() => {
-      // if (count > 1) {
-        // return;
-      // }
-      // count++;
       if (state === GameState.running) {
         if (autoPlay) {
           if (agent.ready) {
-            game.relativeDirection = agent.predict(game.state);
+            game.direction = agent.predict(game.state);
             setCells(game.tick());
           }
         } else {

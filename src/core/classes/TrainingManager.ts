@@ -108,11 +108,11 @@ export class TrainingManager {
   }
 
   logToConsole() {
-    const { agent, averageReward: averageReward100, averageEaten: averageEaten100, framesPerSecond } = this;
+    const { agent, averageReward, averageEaten, framesPerSecond } = this;
     console.log(
       `Step #${agent.currentStep}: ` +
-      `reward=${averageReward100.toFixed(1)}; ` +
-      `eaten=${averageEaten100.toFixed(2)} ` +
+      `reward=${averageReward.toFixed(1)}; ` +
+      `eaten=${averageEaten.toFixed(2)} ` +
       `(currentEpsilon=${agent.currentEpsilon.toFixed(3)}) ` +
       `${framesPerSecond.toFixed(1)}fps`);
   }
@@ -134,7 +134,7 @@ export class TrainingManager {
     
     if (saveModelTo != null && this.averageReward > this.averageReward100Best) {
       this.averageReward100Best = this.averageReward;
-      const fullPath = `${this.path}/reward=${this.eatenAverager.average().toFixed(2)}-frame=${agent.currentStep}`;
+      const fullPath = `${this.path}/reward=${this.averageReward.toFixed(2)}-frame=${agent.currentStep}`;
       shell.mkdir('-p', fullPath);
       await agent.saveToFile(`file://${fullPath}/`);
       console.log(`Model saved to ${`file://${fullPath}`}`);

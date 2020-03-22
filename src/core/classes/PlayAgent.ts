@@ -1,5 +1,5 @@
 import * as tf from '@tensorflow/tfjs';
-import { RelativeDirection, TGameState } from '../types';
+import { TDirection, TGameState } from '../types';
 import { BaseAgent } from './BaseAgent';
 
 export class PlayAgent extends BaseAgent {
@@ -24,7 +24,7 @@ export class PlayAgent extends BaseAgent {
         return this._ready;
     }
 
-    public predict(state: TGameState): RelativeDirection {
+    public predict(state: TGameState): TDirection {
         if (!this._ready) {
             throw new Error('Agent is not ready to predict yet');
         }

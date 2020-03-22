@@ -4,10 +4,10 @@ import {
     TCoordinate,
     TCoordinates,
     Direction,
+    TDirection,
     CellType,
     TCells,
     TCell,
-    RelativeDirection,
 } from '../types';
 
 export type TSnakeRewards = {
@@ -20,7 +20,7 @@ export type TSnakeRewards = {
 export type TSnakeConstructorParams = {
     snake: TCoordinates;
     name?: string;
-    direction?: Direction;
+    direction?: TDirection;
     tableSize?: number;
     rewards?: {
         step?: number,
@@ -34,8 +34,8 @@ export class Snake extends GameObject {
     protected _name: string;
     protected _died: boolean = false;
     protected _snake: TCoordinates;
-    protected currentDirection: Direction;
-    protected nextDirection: Direction;
+    protected currentDirection: TDirection;
+    protected nextDirection: TDirection;
     protected steps: number = -1;
     protected tableSize: number;
     protected _foodEaten: number = 0;
@@ -44,7 +44,7 @@ export class Snake extends GameObject {
 
     constructor(params: TSnakeConstructorParams) {
         super();
-        this._name = params.name || 'Unknown snake';
+        this._name = params.name || 'My hero snake';
         this._snake = params.snake;
         this.currentDirection = params.direction || Direction.Right;
         this.nextDirection = this.currentDirection;
@@ -57,12 +57,8 @@ export class Snake extends GameObject {
         };
     }
 
-    public set direction(nextDegree: Direction) {
+    public set direction(nextDegree: TDirection) {
         this.nextDirection = nextDegree;
-    }
-
-    public set relativeDirection(nextDirection: RelativeDirection) {
-        this.nextDirection = this.relativeDirectionToAbsolute(nextDirection);
     }
 
     public get name(): string {
@@ -245,16 +241,5 @@ export class Snake extends GameObject {
                 return [y === 0 ? this.tableSize - 1 : y - 1, x];
         };
         throw new Error(`I have no idea how to move this angle o_O: ${this.nextDirection}`)
-    }
-
-    relativeDirectionToAbsolute(next: RelativeDirection, current = this.currentDirection): Direction {
-        const value = [0, -90, +90][next];
-        if (current + value < 0) {
-            return 360 + value;
-        } else if (current + value >= 360) {
-            return 90 - value;
-        }
-
-        return this.nextDirection = current + value;
     }
 };

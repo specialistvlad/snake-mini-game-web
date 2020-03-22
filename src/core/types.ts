@@ -14,9 +14,6 @@ export enum CellType {
     poison,
 };
 
-// *******************************************
-// Coordinates and direction on the table
-// *******************************************
 export type TCoordinate = [number, number]; // y, x
 export type TCoordinates = Array<TCoordinate>;
 
@@ -27,11 +24,7 @@ export enum Direction {
     Up = 270,
 };
 
-export enum RelativeDirection {
-    Straight = 0,
-    Left = 1,
-    Right = 2,
-};
+export type TDirection = Direction.Right | Direction.Down | Direction.Left | Direction.Up;
 
 export type TGameState = {
     cells: TCells,
@@ -48,4 +41,4 @@ export type TCell = {
 export type TCells = Array<TCell>;
 export type TCellTypes = Array<CellType>;
 
-export type TOptimizedState = [TGameState, RelativeDirection, number, boolean, TCells];
+export type TOptimizedState = [TGameState, Direction, number, boolean, TCells];

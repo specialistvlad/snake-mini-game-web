@@ -1,29 +1,26 @@
 import * as tf from '@tensorflow/tfjs';
 import { defaultState } from './Game';
-import { RelativeDirection, TGameState, CellType } from '../types';
+import { TGameState, CellType, TDirection, Direction } from '../types';
 
 interface IBaseAgent {
-    predict (state: TGameState): RelativeDirection;
+    predict (state: TGameState): TDirection;
     gameStatesToTensor(state: Array<TGameState>): tf.Tensor;
 };
 
 export class BaseAgent implements IBaseAgent {
     public sideSize: number;
     protected model: tf.LayersModel;
+    protected actions: Array<Direction> = [Direction.Right, Direction.Down, Direction.Left, Direction.Up];
 
     constructor(size: number) {
         this.sideSize = size;
         this.model = new tf.Sequential();
     }
 
-    public predict(state: TGameState): RelativeDirection {
-        return tf.tidy(() => {
-            const inputTensor = this.gameStatesToTensor([state]);
-            const outTensor = this.model.predict(inputTensor);
-            return outTensor;
-        })
-        // @ts-ignore
-        .argMax(-1).dataSync();
+    public predict(state: TGameState): TDirection {
+        const prediction = tf.tidy(() => this.model.predict(this.gameStatesToTensor([state]))) as tf.Tensor;
+        const topMostValue = prediction.argMax(-1).dataSync()[0];
+        return this.directionByIndex(topMostValue);
     };
 
     protected async warm() {
@@ -43,5 +40,9 @@ export class BaseAgent implements IBaseAgent {
           ));
         });
         return buffer.toTensor();
+    }
+
+    protected directionByIndex(value: TDirection) {
+        return this.actions[value];
     }
 };
