@@ -158,4 +158,8 @@ export class TrainAgent extends BaseAgent {
   getRandomAction() {
     return this.getRandomInteger(0, NUM_ACTIONS);
   }
+
+  saveToFile(filepath: string) {
+    return this.model.save(filepath);
+  }
 }

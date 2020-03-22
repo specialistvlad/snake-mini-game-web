@@ -1,7 +1,7 @@
 import * as tf from '@tensorflow/tfjs-node';
 import shell from 'shelljs';
 
-import { TrainAgent } from './TrainAgent';
+import { TrainAgent } from './TrainingAgent';
 import { copyWeights } from './dqn';
 import { MovingAverager } from './MovingAverager';
 
@@ -136,7 +136,7 @@ export class TrainingManager {
       this.averageReward100Best = this.averageReward;
       const fullPath = `${this.path}/reward=${this.eatenAverager.average().toFixed(2)}-frame=${agent.frameCount}`;
       shell.mkdir('-p', fullPath);
-      await agent.model.save(`file://${fullPath}/`);
+      await agent.saveToFile(`file://${fullPath}/`);
       console.log(`Model saved to ${`file://${fullPath}`}`);
     }
   }

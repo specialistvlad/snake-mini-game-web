@@ -1,4 +1,4 @@
-import { TrainAgent } from './core/classes/TrainAgent';
+import { TrainAgent } from './core/classes/TrainingAgent';
 import { Game } from './core/classes/Game';
 import { TrainingManager } from './core/classes/TrainingManager';
 
@@ -8,8 +8,8 @@ import { TrainingManager } from './core/classes/TrainingManager';
     numFruits: 1,
     initLen: 2,
     cumulativeRewardThreshold: 100,
-    maxNumFrames: 500000,
-    // maxNumFrames: 500,
+    // maxNumFrames: 500000,
+    maxNumFrames: 500,
     replayBufferSize: 10000,
     epsilonInit: 0.5,
     epsilonFinal: 0.01,
