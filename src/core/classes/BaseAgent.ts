@@ -8,10 +8,11 @@ interface IBaseAgent {
 
 export class BaseAgent implements IBaseAgent {
     public sideSize: number;
-    protected model: any | undefined;
+    protected model: tf.Sequential;
 
     constructor(size: number) {
         this.sideSize = size;
+        this.model = new tf.Sequential();
     }
 
     public predict(state: TGameState): RelativeDirection {
@@ -19,7 +20,9 @@ export class BaseAgent implements IBaseAgent {
             const inputTensor = this.gameStatesToTensor([state]);
             const outTensor = this.model.predict(inputTensor);
             return outTensor;
-        }).argMax(-1).dataSync();
+        })
+        // @ts-ignore
+        .argMax(-1).dataSync();
     };
 
     protected async warm() {
