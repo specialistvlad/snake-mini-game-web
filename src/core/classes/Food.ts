@@ -2,10 +2,10 @@ import { TGameState, CellType, TCoordinate } from '../types';
 import { GameObject } from './GameObject';
 
 export class Food extends GameObject {
-  private lastDinnerTime: number;
   public tableSize: number;
-  private dinnerRefreshSeconds: number = 7;
-  private point: TCoordinate;
+  protected lastDinnerTime: number;
+  protected dinnerRefreshSeconds: number = 7;
+  protected point: TCoordinate;
 
   constructor(tableSize: number, lastDinnerTime: number = 0, point: TCoordinate = [Infinity, Infinity]) {
     super();

@@ -3,7 +3,7 @@ import * as tf from '@tensorflow/tfjs-node';
 import { BaseAgent } from './BaseAgent';
 import { DeepLearningNetwork } from './DeepLearningNetwork';
 import { Game } from './Game';
-import { ReplayMemory } from './ReplayMemory';
+import { ReplayBuffer } from './ReplayBuffer';
 import { RelativeDirection } from '../types';
 
 const NUM_ACTIONS = 3;
@@ -20,19 +20,19 @@ type TTrainAgentOptions = {
 export class TrainAgent extends BaseAgent {
   protected frameCount: number = 0;
   protected epsilon: number = 0;
-  private epsilonInit: number;
-  private epsilonFinal: number;
-  private epsilonDecayFrames: number;
-  private epsilonIncrement_: number;
+  protected epsilonInit: number;
+  protected epsilonFinal: number;
+  protected epsilonDecayFrames: number;
+  protected epsilonIncrement_: number;
   protected model: tf.Sequential;
   protected trainingModel: tf.Sequential;
-  private optimizer: tf.Optimizer;
+  protected optimizer: tf.Optimizer;
   protected replayBufferSize: number;
-  private cumulativeReward_: number = 0;
-  private fruitsEaten_: number = 0;
+  protected cumulativeReward_: number = 0;
+  protected fruitsEaten_: number = 0;
 
-  private game: Game;
-  private replayMemory: ReplayMemory;
+  protected game: Game;
+  protected replayMemory: ReplayBuffer;
 
   constructor(config: TTrainAgentOptions, game: Game) {
     super(config.sideSize);
@@ -48,7 +48,7 @@ export class TrainAgent extends BaseAgent {
     this.optimizer = tf.train.adam(config.learningRate);
 
     this.replayBufferSize = config.replayBufferSize;
-    this.replayMemory = new ReplayMemory(config.replayBufferSize);
+    this.replayMemory = new ReplayBuffer(config.replayBufferSize);
     this.reset();
   }
 

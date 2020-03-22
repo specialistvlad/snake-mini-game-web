@@ -23,20 +23,20 @@ type TTrainerOptions = {
 };
 
 export class TrainingManager {
-  private agent: TrainAgent;
-  private opts: any;
-  private optimizer: any;
-  private path: string = '';
-  private tPrev: number = 0;
-  private frameCountPrev: number = 0;
-  private averageReward100Best: number = 0;
-  private framesPerSecond: number = 0;
-  private averageReward: number = 0;
-  private averageEaten: number = 0;
+  protected agent: TrainAgent;
+  protected opts: any;
+  protected optimizer: any;
+  protected path: string = '';
+  protected tPrev: number = 0;
+  protected frameCountPrev: number = 0;
+  protected averageReward100Best: number = 0;
+  protected framesPerSecond: number = 0;
+  protected averageReward: number = 0;
+  protected averageEaten: number = 0;
   
-  private rewardAverager: MovingAverager = new MovingAverager(100);
-  private eatenAverager: MovingAverager = new MovingAverager(100);
-  private summaryFileWriter: any;
+  protected rewardAverager: MovingAverager = new MovingAverager(100);
+  protected eatenAverager: MovingAverager = new MovingAverager(100);
+  protected summaryFileWriter: any;
 
   constructor (agent: TrainAgent, opts: TTrainerOptions) {
     this.agent = agent;
