@@ -3,13 +3,14 @@ import { RelativeDirection, TGameState } from '../types';
 import { BaseAgent } from './BaseAgent';
 
 export class PlayAgent extends BaseAgent {
-    public modelUrl: string = './model/model.json';
+    public modelUrl: string;
     public sideSize: number;
     private _ready: boolean = false;
 
-    constructor(size: number) {
+    constructor(size: number, url: string) {
         super(size);
         this.sideSize = size;
+        this.modelUrl = url;
     }
 
     public async loadModel(): Promise<undefined> {
