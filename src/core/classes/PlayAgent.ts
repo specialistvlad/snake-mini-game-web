@@ -2,12 +2,7 @@ import * as tf from '@tensorflow/tfjs';
 import { RelativeDirection, TGameState } from '../types';
 import { BaseAgent } from './BaseAgent';
 
-interface IPlayAgent {
-    predict (state: TGameState): RelativeDirection;
-    gameStateToTensor(state: TGameState): tf.Tensor;
-};
-
-export class PlayAgent extends BaseAgent implements IPlayAgent {
+export class PlayAgent extends BaseAgent {
     public modelUrl: string = './model/model.json';
     public sideSize: number;
     private _ready: boolean = false;

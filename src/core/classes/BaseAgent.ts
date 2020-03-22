@@ -3,7 +3,7 @@ import { RelativeDirection, TGameState, CellType, TGoogleGameObjects } from '../
 
 interface IBaseAgent {
     predict (state: TGameState): RelativeDirection;
-    gameStateToTensor(state: TGameState): tf.Tensor;
+    gameStatesToTensor(state: Array<TGameState>): tf.Tensor;
 };
 
 export class BaseAgent implements IBaseAgent {
@@ -16,7 +16,7 @@ export class BaseAgent implements IBaseAgent {
 
     public predict(state: TGameState): RelativeDirection {
         return tf.tidy(() => {
-            const inputTensor = this.gameStateToTensor(state);
+            const inputTensor = this.gameStatesToTensor([state]);
             const outTensor = this.model.predict(inputTensor);
             // console.log('Predicted!', outTensor.toString());
             return outTensor;
@@ -27,17 +27,18 @@ export class BaseAgent implements IBaseAgent {
         this.predict({ cells: [] });
     }
 
-    public gameStateToTensor(state: TGameState): tf.Tensor {
-        const n = 0;
-        const statesCount = 1;
-        const buffer = tf.buffer([statesCount, this.sideSize, this.sideSize, 2]);
-        state.cells.forEach(({ coordinate, type }) => buffer.set(
-            type === CellType.snake || type === CellType.snakeHead ? type - 2 : type - 1,
-            n,
-            coordinate[0],
-            coordinate[1],
-            type === CellType.snake || type === CellType.snakeHead ? 0 : 1,
-        ));
+    public gameStatesToTensor(states: Array<TGameState>): tf.Tensor {
+        const buffer = tf.buffer([states.length, this.sideSize, this.sideSize, 2]);
+
+        states.forEach((state, i) => {
+          state.cells.forEach(({ coordinate, type }) => buffer.set(
+              type === CellType.snake || type === CellType.snakeHead ? type - 2 : type - 1,
+              i,
+              coordinate[0],
+              coordinate[1],
+              type === CellType.snake || type === CellType.snakeHead ? 0 : 1,
+          ));
+        });
         return buffer.toTensor();
     }
 
