@@ -18,7 +18,6 @@ export class BaseAgent implements IBaseAgent {
         return tf.tidy(() => {
             const inputTensor = this.gameStatesToTensor([state]);
             const outTensor = this.model.predict(inputTensor);
-            // console.log('Predicted!', outTensor.toString());
             return outTensor;
         }).argMax(-1).dataSync();
     };
@@ -41,27 +40,4 @@ export class BaseAgent implements IBaseAgent {
         });
         return buffer.toTensor();
     }
-
-    // public getStateTensor(state: Array<TGoogleGameObjects>, sideSize: number): tf.Tensor {
-    //   const h = sideSize;
-    //   const w = sideSize;
-    //   const numExamples = state.length;
-    //   const buffer = tf.buffer([numExamples, h, w, 2]);
-    
-    //   for (let n = 0; n < numExamples; ++n) {
-    //     if (state[n] == null) {
-    //       continue;
-    //     }
-    //     // Mark the snake.
-    //     state[n].s.forEach((yx, i) => {
-    //       buffer.set(i === 0 ? 2 : 1, n, yx[0], yx[1], 0);
-    //     });
-    
-    //     // Mark the fruit(s).
-    //     state[n].f.forEach(yx => {
-    //       buffer.set(1, n, yx[0], yx[1], 1);
-    //     });
-    //   }
-    //   return buffer.toTensor();
-    // }
 };
