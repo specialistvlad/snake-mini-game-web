@@ -18,16 +18,16 @@ type TTrainAgentOptions = {
 };
 
 export class TrainAgent extends BaseAgent {
-  public frameCount: number = 0;
-  public epsilon: number = 0;
+  protected frameCount: number = 0;
+  protected epsilon: number = 0;
   private epsilonInit: number;
   private epsilonFinal: number;
   private epsilonDecayFrames: number;
   private epsilonIncrement_: number;
-  public model: tf.Sequential;
-  public trainingModel: tf.Sequential;
+  protected model: tf.Sequential;
+  protected trainingModel: tf.Sequential;
   private optimizer: tf.Optimizer;
-  public replayBufferSize: number;
+  protected replayBufferSize: number;
   private cumulativeReward_: number = 0;
   private fruitsEaten_: number = 0;
 
@@ -58,6 +58,14 @@ export class TrainAgent extends BaseAgent {
     this.game.reset();
   }
 
+  get currentStep() {
+    return this.frameCount;
+  }
+
+  get currentEpsilon() {
+    return this.epsilon;
+  }
+
   playStep() {
     this.epsilon = this.frameCount >= this.epsilonDecayFrames
       ? this.epsilonFinal
@@ -72,7 +80,7 @@ export class TrainAgent extends BaseAgent {
     } else {
       // Greedily pick an action based on online DQN output.
       tf.tidy(() => {
-        const stateTensor = this.getStateTensor([state], this.game.height, this.game.width)
+        const stateTensor = this.getStateTensor([state], this.sideSize)
         action = [RelativeDirection.Straight, RelativeDirection.Left, RelativeDirection.Right]
         // @ts-ignore
           [this.model.predict(stateTensor).argMax(-1).dataSync()[0]];
@@ -103,12 +111,12 @@ export class TrainAgent extends BaseAgent {
     // Get a batch of examples from the replay buffer.
     const batch = this.replayMemory.sample(batchSize);
     const lossFunction = () => tf.tidy(() => {
-      const stateTensor = this.getStateTensor(batch.map(example => example[0]), this.game.height, this.game.width);
+      const stateTensor = this.getStateTensor(batch.map(example => example[0]), this.sideSize);
       const actionTensor = tf.tensor1d(batch.map(example => example[1]), 'int32');
       // @ts-ignore
       const qs = this.model.apply(stateTensor, {training: true}).mul(tf.oneHot(actionTensor, NUM_ACTIONS)).sum(-1);
       const rewardTensor = tf.tensor1d(batch.map(example => example[2]));
-      const nextStateTensor = this.getStateTensor(batch.map(example => example[4]), this.game.height, this.game.width);
+      const nextStateTensor = this.getStateTensor(batch.map(example => example[4]), this.sideSize);
       // @ts-ignore
       const nextMaxQTensor = this.trainingModel.predict(nextStateTensor).max(-1);
       const doneMask = tf.scalar(1).sub(tf.tensor1d(batch.map(example => example[3])).asType('float32'));

@@ -41,7 +41,9 @@ export class BaseAgent implements IBaseAgent {
         return buffer.toTensor();
     }
 
-    public getStateTensor(state: Array<TGoogleGameObjects>, h: number, w: number) {
+    public getStateTensor(state: Array<TGoogleGameObjects>, sideSize: number) {
+      const h = sideSize;
+      const w = sideSize;
       const numExamples = state.length;
       // TODO(cais): Maintain only a single buffer for efficiency.
       const buffer = tf.buffer([numExamples, h, w, 2]);

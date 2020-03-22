@@ -45,7 +45,7 @@ export class TrainingManager {
     this.path = `${opts.saveModelTo}/${new Date().toISOString().replace(/\:/gi, '-')}`;
     this.summaryFileWriter = tf.node.summaryFileWriter(opts.logDir || '');
     this.tPrev = this.time();
-    this.frameCountPrev = this.agent.frameCount;
+    this.frameCountPrev = this.agent.currentStep;
   }
 
   async loop() {
@@ -69,7 +69,7 @@ export class TrainingManager {
     const { syncEveryFrames } = this.opts;
     const { agent } = this;
 
-    if (agent.frameCount % syncEveryFrames === 0) {
+    if (agent.currentStep % syncEveryFrames === 0) {
       this.agent.sync();
       // console.log('Sync\'ed weights from online network to target network');
     }
@@ -80,19 +80,19 @@ export class TrainingManager {
   }
 
   warm() {
-    for (let i = 0; i < this.agent.replayBufferSize; ++i) {
+    for (let i = 0; i < this.opts.replayBufferSize; ++i) {
       this.agent.playStep();
     }
     this.tPrev = this.time();
-    this.frameCountPrev = this.agent.frameCount;
+    this.frameCountPrev = this.agent.currentStep;
   }
 
   measureFPS(cumulativeReward: number, fruitsEaten: number) {
     const t = this.time();
-    this.framesPerSecond = (this.agent.frameCount - this.frameCountPrev) / (t - this.tPrev) * 1e3;
+    this.framesPerSecond = (this.agent.currentStep - this.frameCountPrev) / (t - this.tPrev) * 1e3;
     
     this.tPrev = t;
-    this.frameCountPrev = this.agent.frameCount;
+    this.frameCountPrev = this.agent.currentStep;
     this.rewardAverager.append(cumulativeReward);
     this.eatenAverager.append(fruitsEaten);
     this.averageReward = this.rewardAverager.average();
@@ -100,8 +100,8 @@ export class TrainingManager {
   }
 
   maxFramesReached() {
-    if (this.agent.frameCount >= this.opts.maxNumFrames) {
-      console.log(`Max frames(${this.opts.maxNumFrames}) count was reached(${this.agent.frameCount}). Exiting...`);
+    if (this.agent.currentStep >= this.opts.maxNumFrames) {
+      console.log(`Max frames(${this.opts.maxNumFrames}) count was reached(${this.agent.currentStep}). Exiting...`);
       process.exit(0);
     }
   }
@@ -109,10 +109,10 @@ export class TrainingManager {
   logToConsole() {
     const { agent, averageReward: averageReward100, averageEaten: averageEaten100, framesPerSecond } = this;
     console.log(
-      `Frame #${agent.frameCount}: ` +
+      `Frame #${agent.currentStep}: ` +
       `reward=${averageReward100.toFixed(1)}; ` +
       `eaten=${averageEaten100.toFixed(2)} ` +
-      `(epsilon=${agent.epsilon.toFixed(3)}) ` +
+      `(currentEpsilon=${agent.currentEpsilon.toFixed(3)}) ` +
       `${framesPerSecond.toFixed(1)}fps`);
   }
 
@@ -121,10 +121,10 @@ export class TrainingManager {
       return;
     }
     const { agent, averageReward: averageReward100, averageEaten: averageEaten100, framesPerSecond } = this;
-    this.summaryFileWriter.scalar('cumulativeReward', averageReward100, agent.frameCount);
-    this.summaryFileWriter.scalar('eaten', averageEaten100, agent.frameCount);
-    this.summaryFileWriter.scalar('epsilon', agent.epsilon, agent.frameCount);
-    this.summaryFileWriter.scalar('fps', framesPerSecond, agent.frameCount);
+    this.summaryFileWriter.scalar('cumulativeReward', averageReward100, agent.currentStep);
+    this.summaryFileWriter.scalar('eaten', averageEaten100, agent.currentStep);
+    this.summaryFileWriter.scalar('currentEpsilon', agent.currentEpsilon, agent.currentStep);
+    this.summaryFileWriter.scalar('fps', framesPerSecond, agent.currentStep);
   }
 
   async saveModel() {
@@ -133,7 +133,7 @@ export class TrainingManager {
     
     if (saveModelTo != null && this.averageReward > this.averageReward100Best) {
       this.averageReward100Best = this.averageReward;
-      const fullPath = `${this.path}/reward=${this.eatenAverager.average().toFixed(2)}-frame=${agent.frameCount}`;
+      const fullPath = `${this.path}/reward=${this.eatenAverager.average().toFixed(2)}-frame=${agent.currentStep}`;
       shell.mkdir('-p', fullPath);
       await agent.saveToFile(`file://${fullPath}/`);
       console.log(`Model saved to ${`file://${fullPath}`}`);

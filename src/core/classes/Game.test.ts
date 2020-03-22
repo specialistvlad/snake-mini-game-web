@@ -44,16 +44,4 @@ describe('Game', () => {
             done: false,
         });
     });
-
-    test('height', () => {
-        expect.assertions(1);
-        const game = new Game(17);
-        expect(game.height).toBe(17);
-    });
-
-    test('width', () => {
-        expect.assertions(1);
-        const game = new Game(13);
-        expect(game.width).toBe(13);
-    });
 });
