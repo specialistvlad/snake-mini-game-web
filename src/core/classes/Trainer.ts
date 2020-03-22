@@ -72,7 +72,7 @@ export class Trainer {
     const { agent } = this;
 
     if (agent.frameCount % syncEveryFrames === 0) {
-      copyWeights(agent.targetNetwork, agent.onlineNetwork);
+      copyWeights(agent.trainingModel, agent.model);
       // console.log('Sync\'ed weights from online network to target network');
     }
   }
@@ -137,7 +137,7 @@ export class Trainer {
       this.averageReward100Best = this.averageReward;
       const fullPath = `${this.path}/reward=${this.eatenAverager.average().toFixed(2)}-frame=${agent.frameCount}`;
       shell.mkdir('-p', fullPath);
-      await agent.onlineNetwork.save(`file://${fullPath}/`);
+      await agent.model.save(`file://${fullPath}/`);
       console.log(`Model saved to ${`file://${fullPath}`}`);
     }
   }

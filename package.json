@@ -23,7 +23,8 @@
     "eject": "react-scripts eject",
     "predeploy": "yarn build",
     "deploy": "gh-pages -d build",
-    "trainer": "ts-node  --project tsconfig-trainer.json src/trainer.ts"
+    "trainer": "ts-node  --project tsconfig-trainer.json src/trainer.ts",
+    "trainer-dev": "nodemon src/trainer.ts"
   },
   "dependencies": {
     "@tensorflow/tfjs": "^1.5.2",

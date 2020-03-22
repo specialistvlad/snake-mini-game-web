@@ -14,8 +14,8 @@ export class TrainAgent {
   private epsilonFinal: number;
   private epsilonDecayFrames: number;
   private epsilonIncrement_: number;
-  public onlineNetwork: tf.Sequential;
-  public targetNetwork: tf.Sequential;
+  public model: tf.Sequential;
+  public trainingModel: tf.Sequential;
   private optimizer: tf.Optimizer;
   public replayBufferSize: number;
   private cumulativeReward_: number = 0;
@@ -25,8 +25,6 @@ export class TrainAgent {
   private replayMemory: ReplayMemory;
 
   constructor(game: Game, config: any) {
-    this.assertPositiveInteger(config.epsilonDecayFrames, 'epsilonDecayFrames');
-
     this.game = game;
 
     this.epsilonInit = config.epsilonInit;
@@ -34,11 +32,11 @@ export class TrainAgent {
     this.epsilonDecayFrames = config.epsilonDecayFrames;
     this.epsilonIncrement_ = (this.epsilonFinal - this.epsilonInit) / this.epsilonDecayFrames;
 
-    this.onlineNetwork = createDeepQNetwork(game.height, game.width, NUM_ACTIONS);
-    this.targetNetwork = createDeepQNetwork(game.height, game.width, NUM_ACTIONS);
+    this.model = createDeepQNetwork(game.height, game.width, NUM_ACTIONS);
+    this.trainingModel = createDeepQNetwork(game.height, game.width, NUM_ACTIONS);
     // Freeze taget network: it's weights are updated only through copying from
     // the online network.
-    this.targetNetwork.trainable = false;
+    this.trainingModel.trainable = false;
 
     this.optimizer = tf.train.adam(config.learningRate);
 
@@ -76,7 +74,7 @@ export class TrainAgent {
         const stateTensor = this.getStateTensor([state], this.game.height, this.game.width)
         action = [RelativeDirection.Straight, RelativeDirection.Left, RelativeDirection.Right]
         // @ts-ignore
-          [this.onlineNetwork.predict(stateTensor).argMax(-1).dataSync()[0]];
+          [this.model.predict(stateTensor).argMax(-1).dataSync()[0]];
       });
     }
 
@@ -115,11 +113,11 @@ export class TrainAgent {
       const stateTensor = this.getStateTensor(batch.map(example => example[0]), this.game.height, this.game.width);
       const actionTensor = tf.tensor1d(batch.map(example => example[1]), 'int32');
       // @ts-ignore
-      const qs = this.onlineNetwork.apply(stateTensor, {training: true}).mul(tf.oneHot(actionTensor, NUM_ACTIONS)).sum(-1);
+      const qs = this.model.apply(stateTensor, {training: true}).mul(tf.oneHot(actionTensor, NUM_ACTIONS)).sum(-1);
       const rewardTensor = tf.tensor1d(batch.map(example => example[2]));
       const nextStateTensor = this.getStateTensor(batch.map(example => example[4]), this.game.height, this.game.width);
       // @ts-ignore
-      const nextMaxQTensor = this.targetNetwork.predict(nextStateTensor).max(-1);
+      const nextMaxQTensor = this.trainingModel.predict(nextStateTensor).max(-1);
       const doneMask = tf.scalar(1).sub(tf.tensor1d(batch.map(example => example[3])).asType('float32'));
       const targetQs = rewardTensor.add(nextMaxQTensor.mul(doneMask).mul(gamma));
       return tf.losses.meanSquaredError(targetQs, qs);
