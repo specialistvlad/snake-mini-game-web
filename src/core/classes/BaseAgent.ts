@@ -42,24 +42,24 @@ export class BaseAgent implements IBaseAgent {
     }
 
     public getStateTensor(state: Array<TGoogleGameObjects>, h: number, w: number) {
-        const numExamples = state.length;
-        // TODO(cais): Maintain only a single buffer for efficiency.
-        const buffer = tf.buffer([numExamples, h, w, 2]);
-      
-        for (let n = 0; n < numExamples; ++n) {
-          if (state[n] == null) {
-            continue;
-          }
-          // Mark the snake.
-          state[n].s.forEach((yx, i) => {
-            buffer.set(i === 0 ? 2 : 1, n, yx[0], yx[1], 0);
-          });
-      
-          // Mark the fruit(s).
-          state[n].f.forEach(yx => {
-            buffer.set(1, n, yx[0], yx[1], 1);
-          });
+      const numExamples = state.length;
+      // TODO(cais): Maintain only a single buffer for efficiency.
+      const buffer = tf.buffer([numExamples, h, w, 2]);
+    
+      for (let n = 0; n < numExamples; ++n) {
+        if (state[n] == null) {
+          continue;
         }
-        return buffer.toTensor();
+        // Mark the snake.
+        state[n].s.forEach((yx, i) => {
+          buffer.set(i === 0 ? 2 : 1, n, yx[0], yx[1], 0);
+        });
+    
+        // Mark the fruit(s).
+        state[n].f.forEach(yx => {
+          buffer.set(1, n, yx[0], yx[1], 1);
+        });
       }
+      return buffer.toTensor();
+    }
 };

@@ -58,12 +58,6 @@ export class TrainAgent extends BaseAgent {
     this.game.reset();
   }
 
-  /**
-   * Play one step of the game.
-   *
-   * @returns {number | null} If this step leads to the end of the game,
-   *   the total reward from the game as a plain number. Else, `null`.
-   */
   playStep() {
     this.epsilon = this.frameCount >= this.epsilonDecayFrames
       ? this.epsilonFinal
@@ -105,14 +99,6 @@ export class TrainAgent extends BaseAgent {
     return output;
   }
 
-  /**
-   * Perform training on a randomly sampled batch from the replay buffer.
-   *
-   * @param {number} batchSize Batch size.
-   * @param {number} gamma Reward discount rate. Must be >= 0 and <= 1.
-   * @param {tf.train.Optimizer} optimizer The optimizer object used to update
-   *   the weights of the online network.
-   */
   trainOnReplayBatch(batchSize: number, gamma: number, optimizer: tf.Optimizer) {
     // Get a batch of examples from the replay buffer.
     const batch = this.replayMemory.sample(batchSize);
