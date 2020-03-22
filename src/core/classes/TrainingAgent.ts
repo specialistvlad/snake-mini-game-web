@@ -23,13 +23,13 @@ export class TrainAgent extends BaseAgent {
   protected epsilonInit: number;
   protected epsilonFinal: number;
   protected epsilonDecayFrames: number;
-  protected epsilonIncrement_: number;
+  protected _epsilonStep: number;
   protected model: tf.Sequential;
   protected trainingModel: tf.Sequential;
   protected optimizer: tf.Optimizer;
   protected replayBufferSize: number;
-  protected cumulativeReward_: number = 0;
-  protected fruitsEaten_: number = 0;
+  protected totalReward: number = 0;
+  protected foodEaten: number = 0;
 
   protected game: Game;
   protected replayMemory: ReplayBuffer;
@@ -41,7 +41,7 @@ export class TrainAgent extends BaseAgent {
     this.epsilonInit = config.epsilonInit;
     this.epsilonFinal = config.epsilonFinal;
     this.epsilonDecayFrames = config.epsilonDecayFrames;
-    this.epsilonIncrement_ = (this.epsilonFinal - this.epsilonInit) / this.epsilonDecayFrames;
+    this._epsilonStep = (this.epsilonFinal - this.epsilonInit) / this.epsilonDecayFrames;
 
     this.model = new DeepLearningNetwork(config.sideSize, true).model;
     this.trainingModel = new DeepLearningNetwork(config.sideSize, false).model;
@@ -53,8 +53,8 @@ export class TrainAgent extends BaseAgent {
   }
 
   reset() {
-    this.cumulativeReward_ = 0;
-    this.fruitsEaten_ = 0;
+    this.totalReward = 0;
+    this.foodEaten = 0;
     this.game.reset();
   }
 
@@ -69,7 +69,7 @@ export class TrainAgent extends BaseAgent {
   playStep() {
     this.epsilon = this.frameCount >= this.epsilonDecayFrames
       ? this.epsilonFinal
-      : this.epsilonInit + this.epsilonIncrement_  * this.frameCount;
+      : this.epsilonInit + this._epsilonStep  * this.frameCount;
     this.frameCount++;
 
     // The epsilon-greedy algorithm.
@@ -91,15 +91,15 @@ export class TrainAgent extends BaseAgent {
 
     this.replayMemory.append([state, action, reward, done, nextState]);
 
-    this.cumulativeReward_ += reward;
+    this.totalReward += reward;
     if (fruitEaten) {
-      this.fruitsEaten_++;
+      this.foodEaten++;
     }
     const output = {
       action,
-      cumulativeReward: this.cumulativeReward_,
+      cumulativeReward: this.totalReward,
       done,
-      fruitsEaten: this.fruitsEaten_
+      fruitsEaten: this.foodEaten
     };
     if (done) {
       this.reset();

@@ -71,7 +71,7 @@ export class TrainingManager {
 
     if (agent.currentStep % syncEveryFrames === 0) {
       this.agent.sync();
-      // console.log('Sync\'ed weights from online network to target network');
+      console.log('Sync weights done');
     }
   }
 
