@@ -11,12 +11,18 @@ describe('Food', () => {
                 type: CellType.food,
                 coordinate: [0, 0]
             }],
+            reward: 0,
+            fruitEaten: 0,
+            done: false,
         });
         expect(food.reducer(state, false)).toMatchObject({
             cells: [{
                 type: CellType.food,
                 coordinate: [0, 0]
             }],
+            reward: 0,
+            fruitEaten: 0,
+            done: false,
         });
     });
 
@@ -26,9 +32,15 @@ describe('Food', () => {
         const state = food.reducer();
         expect(state).toMatchObject({
             cells: [],
+            reward: 0,
+            fruitEaten: 0,
+            done: false,
         });
         expect(food.reducer(state, false)).toMatchObject({
             cells: [],
+            reward: 0,
+            fruitEaten: 0,
+            done: false,
         });
     });
 
@@ -47,6 +59,9 @@ describe('Food', () => {
                 type: CellType.food,
                 coordinate: [-1, -1]
             }],
+            reward: 0,
+            fruitEaten: 0,
+            done: false,
         });
     });
 
@@ -63,7 +78,12 @@ describe('Food', () => {
         expect.assertions(1);
         const food = new Test(50, b);
         a = b + food.dinnerEachSeconds;
-        expect(food.reducer()).toEqual({ cells: [] });
+        expect(food.reducer()).toEqual({
+            cells: [],
+            reward: 0,
+            fruitEaten: 0,
+            done: false,
+        });
     });
 
     test('time condition works correct 2', () => {
@@ -84,6 +104,9 @@ describe('Food', () => {
                 type: CellType.food,
                 coordinate: [0, 0]
             }],
+            reward: 0,
+            fruitEaten: 0,
+            done: false,
         });
     });
 });

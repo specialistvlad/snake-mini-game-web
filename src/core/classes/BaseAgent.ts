@@ -1,4 +1,5 @@
 import * as tf from '@tensorflow/tfjs';
+import { defaultState } from './Game';
 import { RelativeDirection, TGameState, CellType } from '../types';
 
 interface IBaseAgent {
@@ -26,7 +27,7 @@ export class BaseAgent implements IBaseAgent {
     };
 
     protected async warm() {
-        this.predict({ cells: [] });
+        this.predict(defaultState);
     }
 
     public gameStatesToTensor(states: Array<TGameState> = []): tf.Tensor {

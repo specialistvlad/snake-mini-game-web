@@ -9,7 +9,6 @@ import {
     RelativeDirection,
     CellType,
     TCoordinate,
-    TGoogleGameState,
 } from '../types';
 
 interface IGame {
@@ -27,13 +26,19 @@ export type TGameConstructorParams = {
     food?: Array<Food>;
 };
 
+export const defaultState = {
+    cells: [],
+    reward: 0,
+    fruitEaten: 0,
+    done: false,
+};
+
 export class Game implements IGame {
-    protected defaultState = { cells: [] };
     protected size: number;
     protected fullSize: number;
     protected snakes: Array<LosingLengthSnake> = [];
     protected food: Array<Food> = [];
-    protected _state: TGameState = this.defaultState;
+    protected _state: TGameState = defaultState;
     protected _cellsForView: TCellTypes = [];
     protected opts: TGameConstructorParams;
 
@@ -65,12 +70,12 @@ export class Game implements IGame {
 
     public tick(): TCellTypes {
         const gameObjects = Array<GameObject>(...this.food, ...this.snakes);
-        this._state = this.reduce(gameObjects, this.reduce(gameObjects, this.defaultState), false);
+        this._state = this.reduce(gameObjects, this.reduce(gameObjects, defaultState), false);
         this._cellsForView = this.makeCellsForView();
         return this._cellsForView;
     }
 
-    public step(relativeDirection: RelativeDirection): TGoogleGameState {
+    public step(relativeDirection: RelativeDirection): TGameState {
         this.relativeDirection = relativeDirection;
         this.tick();
         return {
@@ -162,7 +167,7 @@ export class Game implements IGame {
         return this._state;
     }
 
-    public get getState(): TGoogleGameState {
+    public get getState(): TGameState {
         return {
             cells: this._state.cells,
             reward: this.snakes[0].reward || 0,

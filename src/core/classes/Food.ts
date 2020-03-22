@@ -19,6 +19,7 @@ export class Food extends GameObject {
       this.dinnerTime();
       this.point = this.randomCoordinate(this.tableSize);
       return this.localState = {
+        ...currentState,
         cells: [{
           coordinate: this.point,
           type: CellType.food,

@@ -3,6 +3,9 @@ import { TGameState, TCoordinate, TCells } from '../types';
 export abstract class GameObject {
   protected defaultState: TGameState = {
     cells: [],
+    reward: 0,
+    fruitEaten: 0,
+    done: false,
   };
   protected localState: TGameState = this.defaultState;
 

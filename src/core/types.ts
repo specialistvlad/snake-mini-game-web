@@ -35,6 +35,9 @@ export enum RelativeDirection {
 
 export type TGameState = {
     cells: TCells,
+    reward: number,
+    fruitEaten: number,
+    done: boolean,
 };
 
 export type TCell = {
@@ -45,11 +48,4 @@ export type TCell = {
 export type TCells = Array<TCell>;
 export type TCellTypes = Array<CellType>;
 
-export type TGoogleGameState = {
-    cells: TCells,
-    reward: number,
-    fruitEaten: number,
-    done: boolean,
-};
-
-export type TOptimizedState = [TGoogleGameState, RelativeDirection, number, boolean, TCells];
+export type TOptimizedState = [TGameState, RelativeDirection, number, boolean, TCells];

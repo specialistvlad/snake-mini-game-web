@@ -2,7 +2,7 @@ import * as tf from '@tensorflow/tfjs-node';
 
 import { BaseAgent } from './BaseAgent';
 import { DeepLearningNetwork } from './DeepLearningNetwork';
-import { Game } from './Game';
+import { Game, defaultState } from './Game';
 import { ReplayBuffer } from './ReplayBuffer';
 import { RelativeDirection, TOptimizedState } from '../types';
 
@@ -48,14 +48,7 @@ export class TrainingAgent extends BaseAgent {
     this.optimizer = tf.train.adam(config.learningRate);
 
     this.replayBufferSize = config.replayBufferSize;
-    this.replayMemory = new ReplayBuffer(config.replayBufferSize, [
-      {
-        cells: [],
-        reward: 0,
-        fruitEaten: 0,
-        done: false,
-      }, RelativeDirection.Straight, 0, false, []
-    ]);
+    this.replayMemory = new ReplayBuffer(config.replayBufferSize, [defaultState, RelativeDirection.Straight, 0, false, []]);
     this.reset();
   }
 
@@ -127,6 +120,7 @@ export class TrainingAgent extends BaseAgent {
       const qs = this.model.apply(stateTensor, {training: true}).mul(tf.oneHot(actionTensor, NUM_ACTIONS)).sum(-1);
       const rewardTensor = tf.tensor1d(batch.map(example => example[2]));
       const nextStateTensor = this.gameStatesToTensor(batch.map(example => ({
+        ...defaultState,
         cells: example[4],
       })));
       // @ts-ignore
