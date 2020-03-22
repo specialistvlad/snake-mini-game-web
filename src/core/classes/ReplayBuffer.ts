@@ -1,5 +1,4 @@
 import * as tf from '@tensorflow/tfjs';
-import { TOptimizedState } from '../types';
 
 export class ReplayBuffer<T> {
   protected size: number;
@@ -30,9 +29,6 @@ export class ReplayBuffer<T> {
   }
 
   sample(batchSize: number) {
-    if (batchSize > this.size) {
-      throw new Error(`batchSize (${batchSize}) exceeds buffer length (${this.size})`);
-    }
     tf.util.shuffle(this.bufferIndices_);
 
     const out = [];
