@@ -6,7 +6,7 @@ import { NumbersStack } from './NumbersStack';
 
 type TTrainerOptions = {
   sideSize: number,
-  numFruits: number,
+  foodCount: number,
   initLen: number,
   cumulativeRewardThreshold: number,
   maxNumFrames: number,

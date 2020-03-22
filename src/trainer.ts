@@ -5,11 +5,11 @@ import { TrainingManager } from './core/classes/TrainingManager';
 (async function () {
   const opts = {
     sideSize: 5,
-    numFruits: 1,
+    foodCount: 1,
     initLen: 2,
     cumulativeRewardThreshold: 100,
-    // maxNumFrames: 500000,
-    maxNumFrames: 10500,
+    maxNumFrames: 500000,
+    // maxNumFrames: 10500,
     replayBufferSize: 10000,
     epsilonInit: 0.5,
     epsilonFinal: 0.01,
