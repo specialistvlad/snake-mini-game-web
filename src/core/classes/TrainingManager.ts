@@ -2,7 +2,7 @@ import * as tf from '@tensorflow/tfjs-node';
 import shell from 'shelljs';
 
 import { TrainingAgent } from './TrainingAgent';
-import { MovingAverager } from './MovingAverager';
+import { NumbersStack } from './NumbersStack';
 
 type TTrainerOptions = {
   sideSize: number,
@@ -34,8 +34,8 @@ export class TrainingManager {
   protected averageReward: number = 0;
   protected averageEaten: number = 0;
   
-  protected rewardAverager: MovingAverager = new MovingAverager(100);
-  protected eatenAverager: MovingAverager = new MovingAverager(100);
+  protected rewardAverager: NumbersStack = new NumbersStack(100);
+  protected eatenAverager: NumbersStack = new NumbersStack(100);
   protected summaryFileWriter: any;
 
   constructor (agent: TrainingAgent, opts: TTrainerOptions) {
