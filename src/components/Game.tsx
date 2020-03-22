@@ -4,8 +4,8 @@ import useEventListener from '@use-it/event-listener';
 import { useSwipeable } from 'react-swipeable'
 import { isMobile } from 'react-device-detect';
 
-import { GameState, TCellTypes } from '../core/types';
-import { game, agent } from '../core/instance';
+import { GameState, TCellTypes, Direction } from '../core/types';
+import { visualGame, agent } from '../core/instance';
 
 import Table from './Table';
 import Popup from './Popup';
@@ -39,9 +39,10 @@ const styles = {
 
 const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
   const [state, setState] = useState<GameState>(GameState.ready);
-  const [cells, setCells] = useState<TCellTypes>(game.cells);
-  const [score, setScore] = useState<number>(game.score);
-  const [stepsLeft, setStepsLeft] = useState<number>(game.stepsLeft);
+  const [direction, setDirection] = useState<Direction>(visualGame.direction);
+  const [cells, setCells] = useState<TCellTypes>(visualGame.cells);
+  const [score, setScore] = useState<number>(visualGame.score);
+  const [stepsLeft, setStepsLeft] = useState<number>(visualGame.stepsLeft);
   const [autoPlay, setAutoPlay] = useState<boolean>(true);
 
   const callback = useCallback(event => {
@@ -49,25 +50,25 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
       case 'Right':
       case 'ArrowRight':
       case 'KeyD':
-        game.direction = 0;
+        setDirection(Direction.Right);
         break;
   
       case 'Down':
       case 'ArrowDown':
       case 'KeyS':
-        game.direction = 90;
+        setDirection(Direction.Down);
         break;
   
       case 'Left':
       case 'ArrowLeft':
       case 'KeyA':
-        game.direction = 180;
+        setDirection(Direction.Left);
         break;
   
       case 'Up':
       case 'ArrowUp':
       case 'KeyW':
-        game.direction = 270;
+        setDirection(Direction.Up);
         break;
 
       case 'Space':
@@ -75,8 +76,8 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
       case 'Enter':
       case 'Menu':
       case 'StartGame':
-        if (game.gameOver) {
-          game.reset();
+        if (visualGame.gameOver) {
+          visualGame.reset();
         }
         if (state === GameState.running) {
           setState(GameState.pause);
@@ -87,7 +88,7 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
           
       case 'KeyR':
       case 'ResetGame':
-        game.reset();
+        visualGame.reset();
         setState(GameState.running);
         break;
     }
@@ -117,24 +118,25 @@ const Game: FC<WithStylesProps<typeof styles>> = ({ classes }) => {
       if (state === GameState.running) {
         if (autoPlay) {
           if (agent.ready) {
-            game.direction = agent.predict(game.state);
-            setCells(game.tick());
+            visualGame.step(agent.predict(visualGame.state));
+            setCells(visualGame.cells);
           }
         } else {
-          setCells(game.tick());
+          visualGame.step(direction);
+          setCells(visualGame.cells);
         }
       }
 
-      if (game.gameOver) {
+      if (visualGame.gameOver) {
         setState(GameState.gameOver);
       }
 
-      setScore(game.score);
-      setStepsLeft(game.stepsLeft);
+      setScore(visualGame.score);
+      setStepsLeft(visualGame.stepsLeft);
     }, isMobile ? 350 : 150);
 
     return () => clearTimeout(tmp);
-  }, [state, cells, autoPlay]);
+  }, [state, direction, cells, autoPlay]);
 
   const start = useCallback(() => callback({ code: 'StartGame' }), [callback]);
   const reset = useCallback(() => callback({ code: 'ResetGame' }), [callback]);

@@ -1,7 +1,7 @@
-import { Game } from './classes/Game';
+import { VisualGame } from './classes/VisualGame';
 import { PlayAgent } from './classes/PlayAgent';
 
 const size = 5;
 
-export const game = new Game(size);
+export const visualGame = new VisualGame(size);
 export const agent = new PlayAgent(size, '/snake-mini-game-web/model/model.json');

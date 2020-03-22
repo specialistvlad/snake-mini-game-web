@@ -70,11 +70,12 @@ export class TrainingAgent extends BaseAgent {
       : this.epsilonInit + this._epsilonStep * this.frameCount;
     this.frameCount++;
 
-    const state = this.game.getState;
-    const action: Direction = Math.random() < this.epsilon ? this.getRandomAction() : super.predict(state);
+    const action: Direction = Math.random() < this.epsilon
+      ? this.getRandomAction()
+      : super.predict(this.game.state);
     
     const {cells: nextState, reward, done, fruitEaten} = this.game.step(action);
-    this.replayMemory.append([state, action, reward, done, nextState]);
+    this.replayMemory.append([this.game.state, action, reward, done, nextState]);
 
     this.totalReward += reward;
     if (fruitEaten) {
