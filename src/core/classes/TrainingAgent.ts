@@ -1,10 +1,10 @@
 import * as tf from '@tensorflow/tfjs-node';
 
 import { BaseAgent } from './BaseAgent';
-import { createDeepQNetwork } from './dqn';
+import { DeepLearningNetwork } from './DeepLearningNetwork';
 import { Game } from './Game';
 import { ReplayMemory } from './ReplayMemory';
-import { TGoogleGameObjects, RelativeDirection } from '../types';
+import { RelativeDirection } from '../types';
 
 const NUM_ACTIONS = 3;
 
@@ -43,12 +43,8 @@ export class TrainAgent extends BaseAgent {
     this.epsilonDecayFrames = config.epsilonDecayFrames;
     this.epsilonIncrement_ = (this.epsilonFinal - this.epsilonInit) / this.epsilonDecayFrames;
 
-    this.model = createDeepQNetwork(game.height, game.width, NUM_ACTIONS);
-    this.trainingModel = createDeepQNetwork(game.height, game.width, NUM_ACTIONS);
-    // Freeze taget network: it's weights are updated only through copying from
-    // the online network.
-    this.trainingModel.trainable = false;
-
+    this.model = new DeepLearningNetwork(config.sideSize, true).model;
+    this.trainingModel = new DeepLearningNetwork(config.sideSize, false).model;
     this.optimizer = tf.train.adam(config.learningRate);
 
     this.replayBufferSize = config.replayBufferSize;
@@ -134,32 +130,35 @@ export class TrainAgent extends BaseAgent {
       return tf.losses.meanSquaredError(targetQs, qs);
     });
 
-    // Calculate the gradients of the loss function with repsect to the weights
-    // of the online DQN.
     // @ts-ignore
     const grads = tf.variableGrads(lossFunction);
-    // Use the gradients to update the online DQN's weights.
     optimizer.applyGradients(grads.grads);
     tf.dispose(grads);
-    // TODO(cais): Return the loss value here?
   }
 
   getRandomInteger(min: number, max: number) {
-    // Note that we don't reuse the implementation in the more generic
-    // `getRandomIntegers()` (plural) below, for performance optimization.
     return Math.floor((max - min) * Math.random()) + min;
   }
-  
-  /**
-   * Generate a random action among all possible actions.
-   *
-   * @return {0 | 1 | 2} Action represented as a number.
-   */
+
   getRandomAction() {
     return this.getRandomInteger(0, NUM_ACTIONS);
   }
 
   saveToFile(filepath: string) {
     return this.model.save(filepath);
+  }
+
+  sync() {
+    // https://github.com/tensorflow/tfjs/issues/1807:
+    let originalDestNetworkTrainable;
+    if (this.trainingModel.trainable !== this.model.trainable) {
+      originalDestNetworkTrainable = this.trainingModel.trainable;
+      this.trainingModel.trainable = this.model.trainable;
+    }
+  
+    this.trainingModel.setWeights(this.model.getWeights());
+    if (originalDestNetworkTrainable != null) {
+      this.trainingModel.trainable = originalDestNetworkTrainable;
+    }
   }
 }

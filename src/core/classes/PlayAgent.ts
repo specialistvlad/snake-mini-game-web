@@ -1,5 +1,5 @@
 import * as tf from '@tensorflow/tfjs';
-import { RelativeDirection, TGameState, CellType } from '../types';
+import { RelativeDirection, TGameState } from '../types';
 import { BaseAgent } from './BaseAgent';
 
 interface IPlayAgent {

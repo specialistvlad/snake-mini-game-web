@@ -2,7 +2,6 @@ import * as tf from '@tensorflow/tfjs-node';
 import shell from 'shelljs';
 
 import { TrainAgent } from './TrainingAgent';
-import { copyWeights } from './dqn';
 import { MovingAverager } from './MovingAverager';
 
 type TTrainerOptions = {
@@ -71,7 +70,7 @@ export class TrainingManager {
     const { agent } = this;
 
     if (agent.frameCount % syncEveryFrames === 0) {
-      copyWeights(agent.trainingModel, agent.model);
+      this.agent.sync();
       // console.log('Sync\'ed weights from online network to target network');
     }
   }
