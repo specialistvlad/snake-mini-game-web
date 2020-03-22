@@ -6,8 +6,7 @@ import { copyWeights } from './dqn';
 import { MovingAverager } from './MovingAverager';
 
 type TTrainerOptions = {
-  height: number,
-  width: number,
+  sideSize: number,
   numFruits: number,
   initLen: number,
   cumulativeRewardThreshold: number,
@@ -24,7 +23,7 @@ type TTrainerOptions = {
   logDir: string,
 };
 
-export class Trainer {
+export class TrainingManager {
   private agent: TrainAgent;
   private opts: any;
   private optimizer: any;

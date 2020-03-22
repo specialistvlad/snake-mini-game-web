@@ -1,16 +1,15 @@
 import { TrainAgent } from './core/classes/TrainAgent';
 import { Game } from './core/classes/Game';
-import { Trainer } from './core/classes/Trainer';
+import { TrainingManager } from './core/classes/TrainingManager';
 
 (async function () {
   const opts = {
-    height: 5,
-    width: 5,
+    sideSize: 5,
     numFruits: 1,
     initLen: 2,
     cumulativeRewardThreshold: 100,
-    // maxNumFrames: 500000,
-    maxNumFrames: 500,
+    maxNumFrames: 500000,
+    // maxNumFrames: 500,
     replayBufferSize: 10000,
     epsilonInit: 0.5,
     epsilonFinal: 0.01,
@@ -25,15 +24,17 @@ import { Trainer } from './core/classes/Trainer';
 
   console.log(`Parameters: ${JSON.stringify(opts, null, 2)}`);
 
-  const game = new Game(opts.height);
+  const game = new Game(opts.sideSize);
 
-  const agent = new TrainAgent(game, {
+  const agent = new TrainAgent({
+    sideSize: opts.sideSize,
     replayBufferSize: opts.replayBufferSize,
     epsilonInit: opts.epsilonInit,
     epsilonFinal: opts.epsilonFinal,
     epsilonDecayFrames: opts.epsilonDecayFrames,
-  });
+    learningRate: opts.learningRate,
+  }, game);
 
-  const trainer = new Trainer(agent, opts);
+  const trainer = new TrainingManager(agent, opts);
   await trainer.loop();
 })().catch(console.error);

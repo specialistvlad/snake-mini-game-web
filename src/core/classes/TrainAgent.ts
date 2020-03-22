@@ -1,5 +1,6 @@
 import * as tf from '@tensorflow/tfjs-node';
 
+import { BaseAgent } from './BaseAgent';
 import { createDeepQNetwork } from './dqn';
 import { Game } from './Game';
 import { ReplayMemory } from './ReplayMemory';
@@ -7,7 +8,16 @@ import { TGoogleGameObjects, RelativeDirection } from '../types';
 
 const NUM_ACTIONS = 3;
 
-export class TrainAgent {
+type TTrainAgentOptions = {
+  sideSize: number,
+  replayBufferSize: number,
+  epsilonInit: number,
+  epsilonFinal: number,
+  epsilonDecayFrames: number,
+  learningRate: number,
+};
+
+export class TrainAgent extends BaseAgent {
   public frameCount: number = 0;
   public epsilon: number = 0;
   private epsilonInit: number;
@@ -24,7 +34,8 @@ export class TrainAgent {
   private game: Game;
   private replayMemory: ReplayMemory;
 
-  constructor(game: Game, config: any) {
+  constructor(config: TTrainAgentOptions, game: Game) {
+    super(config.sideSize);
     this.game = game;
 
     this.epsilonInit = config.epsilonInit;
@@ -146,38 +157,5 @@ export class TrainAgent {
    */
   getRandomAction() {
     return this.getRandomInteger(0, NUM_ACTIONS);
-  }
-  
-  assertPositiveInteger(x: number, name: string) {
-    if (!Number.isInteger(x)) {
-      throw new Error(
-          `Expected ${name} to be an integer, but received ${x}`);
-    }
-    if (!(x > 0)) {
-      throw new Error(
-          `Expected ${name} to be a positive number, but received ${x}`);
-    }
-  }
-  
-  getStateTensor(state: Array<TGoogleGameObjects>, h: number, w: number) {
-    const numExamples = state.length;
-    // TODO(cais): Maintain only a single buffer for efficiency.
-    const buffer = tf.buffer([numExamples, h, w, 2]);
-  
-    for (let n = 0; n < numExamples; ++n) {
-      if (state[n] == null) {
-        continue;
-      }
-      // Mark the snake.
-      state[n].s.forEach((yx, i) => {
-        buffer.set(i === 0 ? 2 : 1, n, yx[0], yx[1], 0);
-      });
-  
-      // Mark the fruit(s).
-      state[n].f.forEach(yx => {
-        buffer.set(1, n, yx[0], yx[1], 1);
-      });
-    }
-    return buffer.toTensor();
   }
 }
